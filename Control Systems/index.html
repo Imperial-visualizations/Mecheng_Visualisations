@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Control Systems</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!--css link-->
+        <link rel ="stylesheet" href="https://rawgit.com/cydcowley/public-test-data/master/Style2.css">
+        <!--PLOTLY.JS-->
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+        <!--TABLE STYLE (CAN BE DONE IN CSS)-->
+        <style>
+            table, th, td {
+                border: 1px solid black;
+                border-collapse: collapse;
+            }
+        </style>
+    </head>
+
+
+
+    <body>
+        <div class="container"> <!--linked to css-->
+                    <h1>P-I-D Control Systems</h1> 
+            <div class="row">
+                <div class="six columns"><!--column1-->
+
+
+        <div> <!--BLOCK DIAGRAM-->
+
+            <p><img src="FlowDiagram.png" name="Image1" style =" left=2vw;  height=50vh " alt="Diagram of typical P-I-D Control System">
+                <br clear="left"/>
+                </img>
+                <br/>
+        </div><!--end of Diagram-->
+                </div> <!--end of column 1-->
+
+                <div class="six columns">
+        <!--INPUT PARAMETERS-->
+        <div id="UserInput">
+             <form name="InputParameter">
+                <p>K<sub>P</sub>:<input id= "numb"> K<sub>I</sub>:<input id= "numb"> K<sub>D</sub>:<input id= "numb"</p>             
+            </form>
+            <button type="button" onclick="plotStepResponse()">Submit</button>
+        </div>  <!--end INPUT PARAMETERS-->   
+                </div>  <!--end of column2-->      
+            </div> <!--end of row-->
+
+
+        <!--PLOT STEP RESPONSE-->
+        <div id="myDiv"> </div> <!--PLOTLY CHART-->
+
+
+
+        <div> <!--EXPLANATION-->
+
+            <table>
+                <tr>
+                    <td>H(s)</td>
+                    <td>First / Second order process</td>
+                </tr>
+                <tr>
+                    <td> u(t)</td>
+                    <td>input signal </td>
+                </tr>
+                <tr>
+                    <td>y(t):</td>
+                    <td>output signal</td>
+                </tr>
+            </table>
+
+            <!--TABLE EXPLAINING USES OF PID-->
+            <table style="width:90%" , th, td>
+                   <tr>
+                    <th>Control</th>
+                    <th>Steady State Response</th> 
+                    <th>Transient Response</th>
+                </tr>
+                <tr>
+                    <td>Proportional <br>K<sub>P</sub></td>
+                    <td>Increasing K<sub>P</sub> reduces steady state error</td>
+                    <td>Increasing K<sub>P</sub> speeds up response of the system</td>
+                </tr>
+                <tr>
+                    <td>Integral <br>K<sub>I</sub></td>
+                    <td>K<sub>I</sub> eliminates steady state error</td>
+                    <td>K<sub>I</sub> use to tune the of dynamics of the transient response</td>
+                </tr>
+                <tr>
+                    <td>Derivative <br>K<sub>D</sub></td>
+                    <td>K<sub>D</sub> has no effect on steady state error</td>
+                    <td>K<sub>D</sub> use to tune the dynamics of the transient response</td>
+                </tr>
+            </table>
+
+        </div> <!--end of EXPLANATION-->
+
+    </p>
+    </div>
+    <!--calling the js files-->
+    <script src=ControlSystemJavascript.js></script>
+</body>
+</html>
