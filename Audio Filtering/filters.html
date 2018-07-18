@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+<head>
+    <title>Filters</title>
+    <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=2">
+    <link rel = "icon" href = "images/favicon.ico" type="image/x-icon">
+
+    <style type="text/css">
+        input[type=range] {
+        .graphs{
+            height: 300px;
+            border: 1px solid #EBEEEE;
+            box-sizing: border-box;
+            box-shadow: 1px 1px 0px 2px #EBEEEE;
+        }
+
+        }
+
+    </style>
+    <script src="simpleTones/simpleTones.js" ></script>
+    <script type="text/javascript" src="./scripts/filters.js"></script>
+            <script src="https://unpkg.com/oscilloscope@1.1.0/dist/oscilloscope.min.js"></script>
+    </head>
+<body>
+<div class="container">
+    <h1>Active Filter: High Pass</h1>
+    <script>
+var Oscilloscope = require('oscilloscope');
+var audioContext = new window.AudioContext();
+    // setup audio element
+var audioElement = document.createElement('audio');
+audioElement.controls = true;
+audioElement.autoplay = true;
+audioElement.src = 'audio.mp3';
+document.body.appendChild(audioElement);
+    // create source from html5 audio element
+function toPlay(buffer) {
+    var source = context.createBufferSource();
+    source.buffer = buffer;
+    // attach oscilloscope
+    var scope = new Oscilloscope(source);
+    // start default animation loop
+    scope.animate(canvas.getContext("2d"));
+}
+
+    </script>
+    <!--Sample buttons-->
+    <div class="row">
+        <div class="eight columns">
+            <div>
+                <script>
+                    scope = new Oscilloscope(source);
+                    scope.draw(context);
+                    scope.animate(context);
+                </script>
+            </div>
+            <button onclick="playSound('sine', a , 3) ; onclick=playSound('sine', b , 3) ; onclick=playSound('sine', c , 3)" >Sine wave</button>
+            <button onclick="playSound('triangle', a , 3) ; onclick=playSound('triangle', b , 3) ; onclick=playSound('triangle', c , 3)" >Triangle wave</button>
+            <button onclick="playSound('square', a , 3) ; onclick=playSound('square', b , 3) ; onclick=playSound('square', b , 3)" >Square wave</button>
+
+              <!-- cutoff slider -->
+               <div class="slidecontainer">
+                   <label class="sliderTitle" style="padding-bottom: 10px">Cut-off frequency:
+                      <span id="sliderValue">100</span><span>Hz</span>
+            </label>
+                   <form action="#" method="post">
+                     <input type="range" min="100" max="10000" value="100" step="100" class="slider" id="myRange" oninput="sliderChange()">
+                       <span class="sliderMin">100</span><span class="sliderMax">10,000</span>
+                   </form>
+
+
+
+
+            </div>
+
+    </div>
+
+
+</div>
+
+
+
+</body>
+</html>
+
+
+
