@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Second Order Process</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!--css link-->
+        <link rel ="stylesheet" href="https://rawgit.com/cydcowley/public-test-data/master/Style2.css">
+        <!--PLOTLY.JS-->
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>  
+        <style>
+            /*This code overwrite Style2.css setting on checkbox*/
+            input[type="checkbox"]
+            {
+                display: inline;
+                /*  -webkit-appearance: none;
+                  -moz-appearance: none;*/
+                border: 0;
+                background-color: #fff;
+                margin: 0;
+                padding: 0;
+                opacity: 1; /*Style2.css set this value to 0 therefore checkbox totaly transparence can not see*/
+                width: 3%;/* Style2.css  set this to 100%, this means every checkbox occupy one line*/
+                height: 12px;
+            }
+        </style>
+    </head>
+
+
+    <body>
+        <div class="container"> <!--linked to css-->            
+            <h1>Second Order Process</h1>   
+
+            <div class="row"> <!--implementing columns-->
+
+                <div class="four columns"> <!--left column--> <!--four because want to divide the page to 3 sections, and in the css the style is set to 12, so for division, it needs to be 4 to have 3 columns-->
+                    <p><b>Process Parameter Settings </b>
+                        <br>
+                        Process Gain K<sub>H</sub> <input type="number" name="kH" value="2" id= "kH" align="right"> 
+                        <br>
+                        Process time constant τ<sub>H</sub><input type="number" name="tauH" value="1" id= "tauH" min="0"  align="right">
+                        <br>
+                        Damping Ratio ζ<input type="number" name="zeta" value="1" id="zeta">
+                        <br>
+                        Natural frequency ω<sub>n</sub>(rad s<sup>-1</sup>)<input type="number" name="omegan" value="1" id="omegan"  align="right"> </p>
+                </div><!--end of column 1-->
+
+                <div class="four columns"> <!--middle column-->
+                    <p><b>Step and Plotting Time Setting &nbsp</b>
+                        <br>
+                        Setting (step function)<input type="number" name="c" value="1" id= "c"  > &nbsp          
+                        <br>
+                        Total time to plot (s)<input type="number" name="totalTime" value="20" min="0" id= "totalTime">&nbsp
+                        <br>
+                        Time step (s)<input type="number" name="dt" value="0.1"  step="0.1"  min="0" id="dt"></p>
+                </div> <!-- end of 2nd column-->
+
+                <div class="four columns"> <!-- last column-->
+                    <p><b>Feedback Gain Setting &nbsp</b><br>
+                        Proportional control (K <sub>P</sub>)<input type="number" name="kp" value="1" id= "kp" step="0.05" >&nbsp
+                        <br>
+                        integral control (K <sub>I</sub>)<input type="number" name="ki" value="1" id= "ki" step="0.05" >&nbsp
+                        <br>
+                        differential control (K <sub>D</sub>)<input type="number" name="kd" value="1" id= "kd" step="0.05" ><br></p>
+                </div><!--end of last column-->
+
+            </div>  <!--end of implementing columns-->
+
+            <input type="checkbox" id="plotStep" checked class="new">Plot Step Setting &nbsp
+            <input type="checkbox" id="plotOpen" checked>Plot Open loop &nbsp
+            <input type="checkbox" id="plotKp" checked>Plot Proportional &nbsp
+            <input type="checkbox" id="plotKi" checked>Plot Integral &nbsp
+            <input type="checkbox" id="plotKd" checked>Plot Differential &nbsp
+            <input type="checkbox" id="plotKpKi" >Plot PI &nbsp
+            <input type="checkbox" id="plotKpKd" >Plot PD &nbsp
+            <input type="checkbox" id="plotKpKiKd" >Plot PID &nbsp
+            <br> 
+
+            <input type="button" onclick= "do1stOrder();"  value="Click to plot graph">   <!--Button to do plot-->
+            <br>
+            <a href="index.html">Back</a> <!--linking home, allow user to go back-->
+            <br>
+            <a href="laplace.html">First Order Systems</a> <!--providing a link to go to first order laplace page-->
+
+            <!--PLOT STEP RESPONSE-->
+            <div id="chartDiv"> </div> <!--PLOTLY CHART-->
+
+        </div>
+
+        <!--calling the js files-->
+        <script src=secondOrderHs.js></script>  
+        <script src=laplaceHelper.js></script>  
+    </body>
+</html>
+

@@ -21,6 +21,7 @@ and open the template in the editor.
                 border-collapse: collapse;
             }
         </style>
+        
     </head>
 
 
@@ -28,38 +29,29 @@ and open the template in the editor.
     <body>
         <div class="container"> <!--linked to css-->
                     <h1>P-I-D Control Systems</h1> 
-            <div class="row">
-                <div class="six columns"><!--column1-->
 
+             <a href="laplace.html">First Order Systems</a> <!--providing a link to go to first order laplace page-->
+             <br>
+             <a href="laplace2nd.html">Second Order Systems</a><!--link to got the second order page-->
 
-        <div> <!--BLOCK DIAGRAM-->
-
-            <p><img src="FlowDiagram.png" name="Image1" style =" left=2vw;  height=50vh " alt="Diagram of typical P-I-D Control System">
-                <br clear="left"/>
-                </img>
-                <br/>
-        </div><!--end of Diagram-->
-                </div> <!--end of column 1-->
-
-                <div class="six columns">
-        <!--INPUT PARAMETERS-->
-        <div id="UserInput">
-             <form name="InputParameter">
-                <p>K<sub>P</sub>:<input id= "numb"> K<sub>I</sub>:<input id= "numb"> K<sub>D</sub>:<input id= "numb"</p>             
-            </form>
-            <button type="button" onclick="plotStepResponse()">Submit</button>
-        </div>  <!--end INPUT PARAMETERS-->   
-                </div>  <!--end of column2-->      
-            </div> <!--end of row-->
-
-
-        <!--PLOT STEP RESPONSE-->
-        <div id="myDiv"> </div> <!--PLOTLY CHART-->
-
-
-
+             
         <div> <!--EXPLANATION-->
 
+            <p> Control systems are used in many applications that require control of physical variables such as position, temperature and speed. 
+            It is widely used in robots, aircrafts, chemical processing plants and many more.
+            <br>
+            
+            <br>
+            <br>
+            
+            <div class="eight columns"> <!--left column--> 
+                 <!--BLOCK DIAGRAM-->
+            <img src="FlowDiagram.png"  alt="Diagram of a typical P-I-D Control System">
+            <p>Block diagram is used to represent a system based on transfer functions and signal flows.</p>
+                <br>
+            </div> <!--end of left column-->
+            
+            <div class="four columns"> <!--left column--> 
             <table>
                 <tr>
                     <td>H(s)</td>
@@ -70,10 +62,65 @@ and open the template in the editor.
                     <td>input signal </td>
                 </tr>
                 <tr>
-                    <td>y(t):</td>
+                    <td>y(t)</td>
                     <td>output signal</td>
                 </tr>
+                <tr>
+                    <td>K<sub>p</sub></td>
+                    <td>Proportional control</td>
+                </tr>
+                <tr>
+                    <td>K<sub>I</sub></td>
+                    <td>Integral control</td>
+                </tr>
+                <td>K<sub>D</sub></td>
+                <td>Derivative control</td>
+            </tr>
             </table>
+            </div> <!--end of right column-->    
+            
+            <h3>Open-loop control</h3>
+            <br>
+            <img src="OpenLoopControl.png"  alt="Diagram of a Open-loop Control">
+            <br>
+            Open-loop control computes the input without continuous variable measurements. It is simple to implement however every variables need to be known for it to work.
+            Open-loop control will fail when there are changes or errors.
+            <br>
+            
+            <h3>Closed-loop control</h3>
+            <br>
+            <img src="ClosedLoopControl.png"  alt="Diagram of a Closed-loop control">
+            <br>
+            Closed-loop control measures the variables continuously and uses it to compute the control input.
+            It is more complicated to implement. However, closed-loop control allows the system to obtain the desired outcome without knowing all the variables and when there are disturbance.
+            
+            <br>
+            <h4>Advantages of using feedback control</h4> 
+            <ul>
+                <li>Adaptive resource management heuristics</li>
+                <li>Systematic theoretical approach for analysis and design</li>
+                <li>Predict system response and stability to input</li>
+            </ul>
+            <br>
+            
+            <h3>First order systems </h3>
+            <strong>Proportional control of a first order system: </strong>
+            <br>
+            Increasing the K<sub>P</sub> value increase the transient response. As K<sub>P</sub> approach infinity, the system would react instantaneously.
+            <br>
+            The steady state error reduces as the K<sub>P</sub> value increase. This can be proven as below:
+<!--include equations on page 18-->
+
+<br>
+          <h3>Second order systems</h3>
+                First order system responds to the step input smoothly with an exponential rise till the steady state value is reached. 
+                Second order systems can overshoot the targeted value and even oscillate.
+                <br>
+                Increase in K<sub>P</sub> reduces the overall damping ratio, ζ<sub>G</sub>. This allows the system to have a faster response but also causes higher overshooting.
+                Increase in K<sub>P</sub> also increases the natural frequency of the system,  ω <sub>G</sub>, causing the system to be more oscillatory in the transient region.
+           </p>
+            
+           
 
             <!--TABLE EXPLAINING USES OF PID-->
             <table style="width:90%" , th, td>
@@ -98,10 +145,9 @@ and open the template in the editor.
                     <td>K<sub>D</sub> use to tune the dynamics of the transient response</td>
                 </tr>
             </table>
-
+           
         </div> <!--end of EXPLANATION-->
 
-    </p>
     </div>
     <!--calling the js files-->
     <script src=ControlSystemJavascript.js></script>
