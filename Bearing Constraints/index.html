@@ -1,17 +1,16 @@
 <!doctype html>
-
 <html>
-
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Bearing Constraints Model</title>
-  <link rel="icon" href="https://www.imperial.ac.uk/T4Assets/favicon-196x196.png" type="image/x-icon">  
-  <link rel="stylesheet" href="https://rawgit.com/cydcowley/public-test-data/master/Style2.css">
+  <link rel="icon" href="https://www.imperial.ac.uk/T4Assets/favicon-196x196.png" type="image/x-icon">
 
+  <link rel="stylesheet" href="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/skeleton.css">
+  <link rel="stylesheet" href="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/style.css">
+  
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/p5.js"></script>
   <script src="scripts/model.js"></script>
-
 </head>
 
 <body>
@@ -22,11 +21,11 @@
   <div class="container">
     <div class="row">
       <div class="eight columns">
-          <div id="model.ID"></div>
+        <div id="model.ID"></div>
       </div>
 
       <div class="four columns">
-          <p>Placeholder...</p>
+        <p>Placeholder...</p>
       </div>
     </div>
   </div>
@@ -34,8 +33,12 @@
   <div class="container">
     <input id="intCirclip" value="External Circlip" type="button" onclick="feature('intCirclip')">
     <input id="extCirclip" value="Internal Circlip" type="button" onclick="feature('extCirclip')">
-    <input id="reset" value="Reset" type="button" onclick="resetDraw()">
+    <input id="collar" value="Shaft Collar" type="button" onclick="feature('collar')">
+    <input id="spacer" value="Spacer" type="button" onclick="feature('spacer')">
+    <input id="reset" value="Reset" type="button" onclick="resetModel()">
   </div>
+
+  <script src="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/navigator.js"></script>  
 </body>
 
 </html>
