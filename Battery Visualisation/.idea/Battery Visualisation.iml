@@ -11,5 +11,8 @@
     <orderEntry type="library" name="@types/jquery" level="application" />
     <orderEntry type="library" name="p5" level="application" />
     <orderEntry type="library" name="jquery-3.2.1" level="application" />
+    <orderEntry type="library" name="jquery-3.2.1" level="application" />
+    <orderEntry type="library" name="p5" level="application" />
+    <orderEntry type="library" name="plotly-latest" level="application" />
   </component>
 </module>

@@ -1,5 +1,5 @@
-let canvasWidth = 700;
-let canvasHeight = 500;
+let canvasWidth = 425;
+let canvasHeight = 275;
 
 let isRunning = false;
 let timeScale = 0.015; //Arbitrary scaling on discharge speed
@@ -12,19 +12,31 @@ let negElec = {x: canvasWidth*0.75, y: canvasHeight*0.4, width: canvasWidth*0.1,
 
 let p = new p5();
 
+let currentTemp;
+let soc;
+
+
 function setup() {
     // Have Canvas replace loading message
     let myCanvas = createCanvas(canvasWidth, canvasHeight);
     let loadMessage = document.getElementById("loadingMessage");
     loadMessage.parentNode.removeChild(loadMessage);
     myCanvas.parent('canvasWrapper');
+    let voltageData = {};
+
+    for (currentTemp = -10; currentTemp<10.5; currentTemp += 0.5) {
+        voltageData[currentTemp] = {};
+        for (soc = 0; soc < 100.1; soc += 0.1) {
+            voltageData[currentTemp][soc] = -0.05 * currentTemp + 4.2 - 0.037 * soc;
+        }
+    }
 
     // Draw background schematic; visualisation will be with animation above this
     background(255);
 
     strokeWeight(5);
     stroke(0);
-    fill(200);
+    fill('#00b2ff');
     rect(canvasWidth*0.01,canvasHeight*0.25,canvasWidth*0.98,canvasHeight*0.7);
 
     strokeWeight(10);
@@ -43,12 +55,22 @@ function setup() {
 
     line(canvasWidth*0.55,canvasHeight*0.1,negElec.x + (negElec.width/2),canvasHeight*0.1);
     line(negElec.x + (negElec.width/2),canvasHeight*0.1,negElec.x + (negElec.width/2),negElec.y);
+
+    let voltagePlot = document.getElementById("VoltagePlot");
+    let socPlot = [];
+    for (var i = 0; i<1001; i++){socPlot.push(i/10);}
+    Plotly.plot(voltagePlot, [{x : socPlot, y : voltageData[1][75]}], {
+            margin: { t: 0 } } );
+    // Plotly.plot(voltagePlot, [{x: [1, 2, 3, 4, 5],
+    //     y: [1, 2, 4, 8, 16] }], {
+    //     margin: { t: 0 } } );
 }
 
 function draw() {
     let SoC = document.getElementById("SoCslider").value;
     let current = document.getElementById("currentSlider").value;
-    let voltage = document.getElementById("voltageSlider").value;
+    let voltage = 4.2;
+    // let voltage = document.getElementById("voltageSlider").value;
     let newSoC;
 
     stroke(0);
