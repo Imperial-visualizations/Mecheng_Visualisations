@@ -70,7 +70,10 @@ function setup() {
 function draw() {
     let SoC = document.getElementById("SoCslider").value;
     let current = document.getElementById("currentSlider").value;
-    let voltage = 4.2;
+    let voltage = -(0.05 * current) + 4.2 - (0.037 * soc/50);
+    if (typeof(voltage) === "undefined"){
+        debugger;
+    }
     // let voltage = document.getElementById("voltageSlider").value;
     let newSoC;
 
@@ -82,12 +85,13 @@ function draw() {
     drawElectrode(negElec.x,negElec.y,negElec.width,negElec.height,1-SoC*0.01);
     drawLoad(current * voltage);
 
+    //TODO: State of charge is backwards...
     let plot = {
         x : socPlot,
         y : voltageData[current]};
     let currentStatus = {
         x: [SoC],
-        y: [voltageData[current][SoC*10]],
+        y: [voltageData[current][Math.round(SoC*10)]],
         type: "scatter",
         mode: "markers",
         marker: {
@@ -97,7 +101,6 @@ function draw() {
     let layout = {margin: { t: 0, l: 50, r: 40, b: 40},
         xaxis: { dtick: 25, range: [0,100], title: "State of Charge (%)"},
         yaxis: { dtick: 0.5, range: [2.5,5.4], title: "Voltage (V)"}};
-    debugger;
     Plotly.react(voltagePlot, [plot, currentStatus],layout);
 
     if (isRunning) {
