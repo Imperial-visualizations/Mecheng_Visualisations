@@ -58,7 +58,7 @@ function setup() {
     for (currentTemp = -10; currentTemp<10.5; currentTemp += 0.5) {
         voltageData[currentTemp] = [];
         for (soc = 0; soc < 1001; soc++) {
-            voltageData[currentTemp][soc] = -(0.05 * currentTemp) + 4.2 - (0.037 * soc/50);
+            voltageData[currentTemp][soc] = -(0.05 * currentTemp) + 4.2 - (0.037 * (1000-soc)/25);
         }
     }
     Plotly.plot(voltagePlot, [{x : socPlot, y : voltageData[1]}], {
@@ -70,7 +70,7 @@ function setup() {
 function draw() {
     let SoC = document.getElementById("SoCslider").value;
     let current = document.getElementById("currentSlider").value;
-    let voltage = -(0.05 * current) + 4.2 - (0.037 * soc/50);
+    let voltage = -(0.05 * current) + 4.2 - (0.037 * (1000-soc)/50);
     if (typeof(voltage) === "undefined"){
         debugger;
     }
@@ -88,19 +88,21 @@ function draw() {
     //TODO: State of charge is backwards...
     let plot = {
         x : socPlot,
-        y : voltageData[current]};
+        y : voltageData[current],
+        name: "Voltage Characteristic"};
     let currentStatus = {
         x: [SoC],
         y: [voltageData[current][Math.round(SoC*10)]],
+        name: "Current Operating Point",
         type: "scatter",
         mode: "markers",
         marker: {
-            size: 7,
+            size: 10,
             line: {width: 0.5}}};
 
     let layout = {margin: { t: 0, l: 50, r: 40, b: 40},
-        xaxis: { dtick: 25, range: [0,100], title: "State of Charge (%)"},
-        yaxis: { dtick: 0.5, range: [2.5,5.4], title: "Voltage (V)"}};
+        xaxis: { dtick: 25, autorange: "reversed", range: [-10,100], title: "State of Charge (%)"},
+        yaxis: { dtick: 0.5, range: [1.9,5.2], title: "Voltage (V)"}};
     Plotly.react(voltagePlot, [plot, currentStatus],layout);
 
     if (isRunning) {
