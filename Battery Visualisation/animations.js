@@ -14,6 +14,8 @@ let p = new p5();
 
 let currentTemp;
 let soc;
+let voltageData = {};
+
 
 
 function setup() {
@@ -22,14 +24,7 @@ function setup() {
     let loadMessage = document.getElementById("loadingMessage");
     loadMessage.parentNode.removeChild(loadMessage);
     myCanvas.parent('canvasWrapper');
-    let voltageData = {};
 
-    for (currentTemp = -10; currentTemp<10.5; currentTemp += 0.5) {
-        voltageData[currentTemp] = {};
-        for (soc = 0; soc < 100.1; soc += 0.1) {
-            voltageData[currentTemp][soc] = -0.05 * currentTemp + 4.2 - 0.037 * soc;
-        }
-    }
 
     // Draw background schematic; visualisation will be with animation above this
     background(255);
@@ -56,14 +51,20 @@ function setup() {
     line(canvasWidth*0.55,canvasHeight*0.1,negElec.x + (negElec.width/2),canvasHeight*0.1);
     line(negElec.x + (negElec.width/2),canvasHeight*0.1,negElec.x + (negElec.width/2),negElec.y);
 
-    let voltagePlot = document.getElementById("VoltagePlot");
-    let socPlot = [];
+    voltagePlot = document.getElementById("VoltagePlot");
+    socPlot = [];
     for (var i = 0; i<1001; i++){socPlot.push(i/10);}
-    Plotly.plot(voltagePlot, [{x : socPlot, y : voltageData[1][75]}], {
-            margin: { t: 0 } } );
-    // Plotly.plot(voltagePlot, [{x: [1, 2, 3, 4, 5],
-    //     y: [1, 2, 4, 8, 16] }], {
-    //     margin: { t: 0 } } );
+
+    for (currentTemp = -10; currentTemp<10.5; currentTemp += 0.5) {
+        voltageData[currentTemp] = [];
+        for (soc = 0; soc < 1001; soc++) {
+            voltageData[currentTemp][soc] = -(0.05 * currentTemp) + 4.2 - (0.037 * soc/50);
+        }
+    }
+    Plotly.plot(voltagePlot, [{x : socPlot, y : voltageData[1]}], {
+        margin: { t: 0, l: 50, r: 40, b: 40},
+        xaxis: { title: "State of Charge (%)"},
+        yaxis: { title: "Voltage (V)"}} );
 }
 
 function draw() {
@@ -80,6 +81,24 @@ function draw() {
     drawElectrode(posElec.x,posElec.y,posElec.width,posElec.height,SoC*0.01);
     drawElectrode(negElec.x,negElec.y,negElec.width,negElec.height,1-SoC*0.01);
     drawLoad(current * voltage);
+
+    let plot = {
+        x : socPlot,
+        y : voltageData[current]};
+    let currentStatus = {
+        x: [SoC],
+        y: [voltageData[current][SoC*10]],
+        type: "scatter",
+        mode: "markers",
+        marker: {
+            size: 7,
+            line: {width: 0.5}}};
+
+    let layout = {margin: { t: 0, l: 50, r: 40, b: 40},
+        xaxis: { dtick: 25, range: [0,100], title: "State of Charge (%)"},
+        yaxis: { dtick: 0.5, range: [2.5,5.4], title: "Voltage (V)"}};
+    debugger;
+    Plotly.react(voltagePlot, [plot, currentStatus],layout);
 
     if (isRunning) {
         newSoC = (SoC - (timeScale * current));
