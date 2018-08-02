@@ -38,7 +38,7 @@
     <div class="row">
         <div class="seven columns">
             <h1>Single Cell Charge/Discharge</h1>
-            <div id="canvasWrapper"><span id="loadingMessage">Loading Canvas...</span></div>
+            <div id="canvasWrapper"><span id="loadingMessage">Error loading canvas</span></div>
         </div>
         <div class="four columns">
             <h4 class="Title">Cell Status</h4>
@@ -53,7 +53,6 @@
                 <span class="sliderMax">100</span>
             </label>
 
-            <br>
 
             <label class="sliderTitle">Current (C-rate):
                 <span id="currentDisplay" class="Display" data-unit="C">1C</span>
@@ -73,7 +72,7 @@
             </span>
 
             <br>
-    <!-- TODO: Change the voltage display into a Plotly chart showing voltage as a function of SoC @ current C-rate -->
+
             <label>Voltage (V):
                 <span id="voltageDisplay" class="voltageDisplay" data-unit="V">4.2V</span>
             </label>
@@ -93,6 +92,7 @@
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/p5.min.js"></script>
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script src="particles.js"></script>
 <script src="animations.js"></script>
 <script src="main.js"></script>
 </body>

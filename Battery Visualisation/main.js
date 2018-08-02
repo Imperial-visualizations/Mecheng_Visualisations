@@ -1,7 +1,3 @@
-// TODO: Make sliders update the value
-// TODO: Make a graph for voltage
-// TODO: Make the battery diagram
-// TODO: Program battery animations
 
 //Run button toggling
 // let isRunning = false;

@@ -16,7 +16,8 @@ let currentTemp;
 let soc;
 let voltageData = {};
 
-
+let ElectronSystem = new ParticleSystem("Electron");
+let LithiumSystem = new ParticleSystem("Lithium");
 
 function setup() {
     // Have Canvas replace loading message
@@ -24,7 +25,6 @@ function setup() {
     let loadMessage = document.getElementById("loadingMessage");
     loadMessage.parentNode.removeChild(loadMessage);
     myCanvas.parent('canvasWrapper');
-
 
     // Draw background schematic; visualisation will be with animation above this
     background(255);
@@ -85,11 +85,16 @@ function draw() {
     drawElectrode(negElec.x,negElec.y,negElec.width,negElec.height,1-SoC*0.01);
     drawLoad(current * voltage);
 
-    //TODO: State of charge is backwards...
     let plot = {
         x : socPlot,
         y : voltageData[current],
         name: "Voltage Characteristic"};
+    let OCV = {
+        x : socPlot,
+        y : voltageData[0],
+        name: "Open Circuit Voltage",
+        marker: {color: "#5f5c5b"},
+        line: {dash: "dot"}};
     let currentStatus = {
         x: [SoC],
         y: [voltageData[current][Math.round(SoC*10)]],
@@ -98,15 +103,17 @@ function draw() {
         mode: "markers",
         marker: {
             size: 10,
-            line: {width: 0.5}}};
+            line: {width: 0.5},
+            color: "#000000"}};
 
     let layout = {margin: { t: 0, l: 50, r: 40, b: 40},
         xaxis: { dtick: 25, autorange: "reversed", range: [-10,100], title: "State of Charge (%)"},
         yaxis: { dtick: 0.5, range: [1.9,5.2], title: "Voltage (V)"}};
-    Plotly.react(voltagePlot, [plot, currentStatus],layout);
+    Plotly.react(voltagePlot, [plot,OCV, currentStatus],layout);
 
     if (isRunning) {
         newSoC = (SoC - (timeScale * current));
+        generateIons(current*2);
     } else {
         newSoC = SoC;
     }
@@ -151,6 +158,12 @@ function drawLoad(power) {
         p.fill(0);
     }
     p.ellipse(canvasWidth * 0.5, canvasHeight * 0.1, canvasWidth * 0.1, canvasWidth * 0.1);
+}
+
+function generateIons(number) {
+    for (i = 1; i <= number; i++) {
+        //Generate an ion each time!
+    }
 }
 
 //Run button toggling
