@@ -1,3 +1,6 @@
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  Global variables
+
 let canvasWidth = 425;
 let canvasHeight = 275;
 
@@ -10,7 +13,7 @@ canvasHeight = canvasHeight * window.devicePixelRatio;
 let posElec = {x: canvasWidth*0.15, y: canvasHeight*0.4, width: canvasWidth*0.1, height: canvasHeight*0.3};
 let negElec = {x: canvasWidth*0.75, y: canvasHeight*0.4, width: canvasWidth*0.1, height: canvasHeight*0.3};
 
-let p = new p5();
+let p = new p5(); //TODO: find out if it's possible to remove this
 
 let currentTemp;
 let soc;
@@ -19,11 +22,17 @@ let voltageData = {};
 let ElectronSystem = new ParticleSystem("Electron");
 let LithiumSystem = new ParticleSystem("Lithium");
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  Top-level p5.js functions
+//  setup() sets up the canvas and draws the background
+//  draw() runs repeatedly to animate the canvas in response to user input
+
 function setup() {
-    let myCanvas = prepareBackground();
+    let myCanvas = prepareBackground(); //TODO: Consider removing returning myCanvas
 
     voltagePlot = document.getElementById("VoltagePlot");
     socPlot = [];
+
     for (var i = 0; i<1001; i++){socPlot.push(i/10);}
 
     for (currentTemp = -10; currentTemp<10.5; currentTemp += 0.5) {
@@ -32,12 +41,61 @@ function setup() {
             voltageData[currentTemp][soc] = -(0.05 * currentTemp) + 4.2 - (0.037 * (1000-soc)/25);
         }
     }
+
     Plotly.plot(voltagePlot, [{x : socPlot, y : voltageData[1]}], {
         margin: { t: 0, l: 50, r: 40, b: 40},
         xaxis: { title: "State of Charge (%)"},
         yaxis: { title: "Voltage (V)"}} );
 }
 
+function draw() {
+    let SoC = document.getElementById("SoCslider").value;
+    let current = document.getElementById("currentSlider").value;
+    let voltage = -(0.05 * current) + 4.2 - (0.037 * (1000-soc)/50); //TODO: Try using the pre-calculated data again
+    if (typeof(voltage) === "undefined"){
+        debugger;
+    }
+
+    let newSoC;
+
+    stroke(0);
+    strokeWeight(5);
+    fill(100);
+
+    drawElectrode(posElec.x,posElec.y,posElec.width,posElec.height,SoC*0.01);
+    drawElectrode(negElec.x,negElec.y,negElec.width,negElec.height,1-SoC*0.01);
+    drawLoad(current * voltage);
+
+    updateVoltagePlot(current, SoC);
+
+    if (isRunning) {
+        newSoC = (SoC - (timeScale * current));
+        generateIons(current*2);
+    } else {
+        newSoC = SoC;
+    }
+
+    if (newSoC < 0){
+        document.getElementById("SoCslider").value = 0;
+        $("#SoCDisplay").text("0%");
+        $("#currentSlider").val("0");
+        $("#currentDisplay").text("0C");
+    } else if (newSoC > 100) {
+        document.getElementById("SoCslider").value = 100;
+        $("#SoCDisplay").text("100%");
+        $("#currentSlider").val("0");
+        $("#currentDisplay").text("0C");
+    } else {
+        document.getElementById("SoCslider").value = newSoC;
+        $("#SoCDisplay").text(Math.round(newSoC*10)/10 + "%");
+        $("#currentDisplay").text(current + "C");
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  Functions for dynamic drawing of visualisation images
+
+//Sets up the canvas
 function prepareBackground() {
     // Have Canvas replace loading message
     let myCanvas = createCanvas(canvasWidth, canvasHeight);
@@ -73,24 +131,35 @@ function prepareBackground() {
     return myCanvas;
 }
 
-function draw() {
-    let SoC = document.getElementById("SoCslider").value;
-    let current = document.getElementById("currentSlider").value;
-    let voltage = -(0.05 * current) + 4.2 - (0.037 * (1000-soc)/50);
-    if (typeof(voltage) === "undefined"){
-        debugger;
-    }
-    // let voltage = document.getElementById("voltageSlider").value;
-    let newSoC;
-
-    stroke(0);
+//Draws a single electrode based on location and current state of charge (effectively an extended rect() function)
+function drawElectrode(x,y,width,height,SoC) {
+    let fill = height * SoC;
+    let empty = height - fill;
     strokeWeight(5);
-    fill(100);
+    p.fill(255);
+    rect(x,y,width,empty);
+    p.fill(100);
+    rect(x,y + empty,width,fill);
+}
 
-    drawElectrode(posElec.x,posElec.y,posElec.width,posElec.height,SoC*0.01);
-    drawElectrode(negElec.x,negElec.y,negElec.width,negElec.height,1-SoC*0.01);
-    drawLoad(current * voltage);
+//Changes colour of battery load based on charge/discharge power from the battery
+function drawLoad(power) {
+    p.stroke(100);
+    p.strokeWeight(5);
+    if (isRunning) {
+        if (power > 0) {
+            p.fill((power) * 255 / 42, (power) * 255 / 42, 0);
+        } else {
+            p.fill((-power) * 255 / 42, 0, 0);
+        }
+    } else {
+        p.fill(0);
+    }
+    p.ellipse(canvasWidth * 0.5, canvasHeight * 0.1, canvasWidth * 0.1, canvasWidth * 0.1);
+}
 
+//Updates the Plotly voltage plot
+function updateVoltagePlot(current, SoC) {
     let plot = {
         x : socPlot,
         y : voltageData[current],
@@ -116,61 +185,20 @@ function draw() {
         xaxis: { dtick: 25, autorange: "reversed", range: [-10,100], title: "State of Charge (%)"},
         yaxis: { dtick: 0.5, range: [1.9,5.2], title: "Voltage (V)"}};
     Plotly.react(voltagePlot, [plot,OCV, currentStatus],layout);
-
-    if (isRunning) {
-        newSoC = (SoC - (timeScale * current));
-        generateIons(current*2);
-    } else {
-        newSoC = SoC;
-    }
-
-    if (newSoC < 0){
-        document.getElementById("SoCslider").value = 0;
-        $("#SoCDisplay").text("0%");
-        $("#currentSlider").val("0");
-        $("#currentDisplay").text("0C");
-    } else if (newSoC > 100) {
-        document.getElementById("SoCslider").value = 100;
-        $("#SoCDisplay").text("100%");
-        $("#currentSlider").val("0");
-        $("#currentDisplay").text("0C");
-    } else {
-        document.getElementById("SoCslider").value = newSoC;
-        $("#SoCDisplay").text(Math.round(newSoC*10)/10 + "%");
-        $("#currentDisplay").text(current + "C");
-    }
 }
 
-function drawElectrode(x,y,width,height,SoC) {
-    let fill = height * SoC;
-    let empty = height - fill;
-    strokeWeight(5);
-    p.fill(255);
-    rect(x,y,width,empty);
-    p.fill(100);
-    rect(x,y + empty,width,fill);
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  Particle functions
 
-}
-function drawLoad(power) {
-    p.stroke(100);
-    p.strokeWeight(5);
-    if (isRunning) {
-        if (power > 0) {
-            p.fill((power) * 255 / 42, (power) * 255 / 42, 0);
-        } else {
-            p.fill((-power) * 255 / 42, 0, 0);
-        }
-    } else {
-        p.fill(0);
-    }
-    p.ellipse(canvasWidth * 0.5, canvasHeight * 0.1, canvasWidth * 0.1, canvasWidth * 0.1);
-}
-
+//Generates a number of Li+ ions at the negative electrode
 function generateIons(number) {
     for (i = 1; i <= number; i++) {
         //Generate an ion each time!
     }
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  Button callbacks
 
 //Run button toggling
 $("#runButton").on('click', function () {

@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1f98102a-a7b2-4c5d-82f9-050e76c4d609" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/animations.js" beforeDir="false" afterPath="$PROJECT_DIR$/animations.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/particles.js" beforeDir="false" afterPath="$PROJECT_DIR$/particles.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -90,13 +88,13 @@
         <counts>
           <entry key="JavaScript Console" value="34" />
           <entry key="html" value="89" />
-          <entry key="js" value="2942" />
+          <entry key="js" value="3908" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="HTML" value="89" />
-          <entry key="JavaScript" value="2976" />
+          <entry key="JavaScript" value="3942" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -137,8 +135,11 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/animations.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1054">
-              <caret line="72" column="20" selection-start-line="72" selection-start-column="20" selection-end-line="72" selection-end-column="20" />
+            <state relative-caret-position="496">
+              <caret line="59" lean-forward="true" selection-start-line="59" selection-end-line="59" />
+              <folding>
+                <element signature="n#!!doc" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -212,8 +213,8 @@
         <option value="$PROJECT_DIR$/DataGeneration.js" />
         <option value="$PROJECT_DIR$/battery.html" />
         <option value="$PROJECT_DIR$/main.js" />
-        <option value="$PROJECT_DIR$/animations.js" />
         <option value="$PROJECT_DIR$/particles.js" />
+        <option value="$PROJECT_DIR$/animations.js" />
       </list>
     </option>
   </component>
@@ -330,12 +331,12 @@
       <workItem from="1533055534198" duration="750000" />
       <workItem from="1533068178809" duration="626000" />
       <workItem from="1533120233478" duration="2858000" />
-      <workItem from="1533123111093" duration="28588000" />
+      <workItem from="1533123111093" duration="30829000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="85151000" />
+    <option name="totallyTimeSpent" value="87392000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -437,8 +438,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/animations.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1054">
-          <caret line="72" column="20" selection-start-line="72" selection-start-column="20" selection-end-line="72" selection-end-column="20" />
+        <state relative-caret-position="496">
+          <caret line="59" lean-forward="true" selection-start-line="59" selection-end-line="59" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
