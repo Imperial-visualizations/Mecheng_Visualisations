@@ -20,6 +20,25 @@ let ElectronSystem = new ParticleSystem("Electron");
 let LithiumSystem = new ParticleSystem("Lithium");
 
 function setup() {
+    let myCanvas = prepareBackground();
+
+    voltagePlot = document.getElementById("VoltagePlot");
+    socPlot = [];
+    for (var i = 0; i<1001; i++){socPlot.push(i/10);}
+
+    for (currentTemp = -10; currentTemp<10.5; currentTemp += 0.5) {
+        voltageData[currentTemp] = [];
+        for (soc = 0; soc < 1001; soc++) {
+            voltageData[currentTemp][soc] = -(0.05 * currentTemp) + 4.2 - (0.037 * (1000-soc)/25);
+        }
+    }
+    Plotly.plot(voltagePlot, [{x : socPlot, y : voltageData[1]}], {
+        margin: { t: 0, l: 50, r: 40, b: 40},
+        xaxis: { title: "State of Charge (%)"},
+        yaxis: { title: "Voltage (V)"}} );
+}
+
+function prepareBackground() {
     // Have Canvas replace loading message
     let myCanvas = createCanvas(canvasWidth, canvasHeight);
     let loadMessage = document.getElementById("loadingMessage");
@@ -51,20 +70,7 @@ function setup() {
     line(canvasWidth*0.55,canvasHeight*0.1,negElec.x + (negElec.width/2),canvasHeight*0.1);
     line(negElec.x + (negElec.width/2),canvasHeight*0.1,negElec.x + (negElec.width/2),negElec.y);
 
-    voltagePlot = document.getElementById("VoltagePlot");
-    socPlot = [];
-    for (var i = 0; i<1001; i++){socPlot.push(i/10);}
-
-    for (currentTemp = -10; currentTemp<10.5; currentTemp += 0.5) {
-        voltageData[currentTemp] = [];
-        for (soc = 0; soc < 1001; soc++) {
-            voltageData[currentTemp][soc] = -(0.05 * currentTemp) + 4.2 - (0.037 * (1000-soc)/25);
-        }
-    }
-    Plotly.plot(voltagePlot, [{x : socPlot, y : voltageData[1]}], {
-        margin: { t: 0, l: 50, r: 40, b: 40},
-        xaxis: { title: "State of Charge (%)"},
-        yaxis: { title: "Voltage (V)"}} );
+    return myCanvas;
 }
 
 function draw() {

@@ -49,9 +49,25 @@ class Particle {
     constructor(x,y) {
         this.charge = 0;
 
-        this.position = [x,y];
+        this.position = {x: x, y: y};
         this.velocity = 0;
         this.acceleration = 0;
+    }
+
+    run() {
+        let isDead = this.update();
+        if (!isDead) {
+            this.render();
+        }
+    }
+
+    update() {
+        // Empty function; overwritten in subclasses
+        return undefined
+    }
+
+    render() {
+        // Empty function; overwritten in subclasses
     }
 }
 
@@ -61,10 +77,17 @@ class Electron extends Particle {
         this.charge = -1;
     }
 
-    run() {
+    update() {
         //TODO: Implement this
         let isDead = 0;
         return isDead;
+    }
+
+    render() {
+        //TODO: Implement this
+        fill('#fffc00');
+        strokeWeight(0.1);
+        ellipse(this.position.x, this.position.y,2,2);
     }
 }
 
@@ -79,11 +102,29 @@ class Lithium extends Particle {
         this.isSplit = split;
     }
 
-    run() {
+    update() {
         //TODO: Implement this
         let isDead = 0;
         return isDead;
     }
+
+    render() {
+        //TODO: Implement this
+        textAlign(CENTRE,CENTRE);
+        textSize(3);
+        if (this.isSplit) {
+            fill('#ff0100');
+            text('Li+',this.position.x,this.position.y);
+        } else {
+            fill('#000000');
+            text('Li',this.position.x,this.position.y);
+        }
+
+        strokeWeight(0.1);
+        ellipse(this.position.x, this.position.y,4,4);
+
+    }
+
     split(Electrons) {
         if (this.isSplit === false) {
             Electrons.add(new Electron(this.position));
