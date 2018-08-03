@@ -13,7 +13,7 @@ canvasHeight = canvasHeight * window.devicePixelRatio;
 let posElec = {x: canvasWidth*0.15, y: canvasHeight*0.4, width: canvasWidth*0.1, height: canvasHeight*0.3};
 let negElec = {x: canvasWidth*0.75, y: canvasHeight*0.4, width: canvasWidth*0.1, height: canvasHeight*0.3};
 
-let p = new p5(); //TODO: find out if it's possible to remove this
+let p = new p5(); //TODO: figure out if it's possible to remove this
 
 let currentTemp;
 let soc;
@@ -22,6 +22,21 @@ let voltageData = {};
 let ElectronSystem = new ParticleSystem("Electron");
 let LithiumSystem = new ParticleSystem("Lithium");
 
+let batteryCurve = new Polynomial([4.19330830928672,-0.0127201842105800,-0.000625938577852004,-0.000171517745926117,
+    8.08129863878882e-05,-1.19718299176456e-05,9.68038403508205e-07,-4.93818733617536e-08,1.69682312038018e-09,
+    -4.05858298573674e-11,6.84730179880260e-13,-8.12370593060948e-15,6.63471674421775e-17,-3.55205161076871e-19,
+    1.12236392174576e-21,-1.58668730017118e-24]); //Data fitted from Matlab battery example (15th degree polynomial)
+// Highest order term adjusted to give slightly more drop-off at low SoC
+
+// [4.21936207058475, -0.0160284234863552, 0.00356925616233414, -0.00148272087885101,
+//     0.000274516077995473, -2.85842805121252e-05, 1.87913479959053e-06, -8.30776297987477e-08, 2.56189018677041e-09,
+//     -5.61886902786545e-11, 8.81800059483731e-13, -9.83018343785819e-15, 7.59969467148329e-17, -3.87298358213155e-19,
+//     1.16996618129698e-21, -1.58668874704363e-24]
+
+    // [4.2, -0.1223, -0.1350, -0.1985, 1.060, 0.7930, -2.1375, -1.8264, 1.4856, 1.6486,
+    // -0.1526, -0.5079, -0.1247]
+// ([-0.1247,-0.5079,-0.1526,1.6486,1.4856,-1.8264,-2.1375,0.7930,1.0600,-0.1985, -0.1350,-0.1223,4.2]
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  Top-level p5.js functions
 //  setup() sets up the canvas and draws the background
@@ -29,7 +44,6 @@ let LithiumSystem = new ParticleSystem("Lithium");
 
 function setup() {
     let myCanvas = prepareBackground(); //TODO: Consider removing returning myCanvas
-
     voltagePlot = document.getElementById("VoltagePlot");
     socPlot = [];
 
@@ -38,10 +52,15 @@ function setup() {
     for (currentTemp = -10; currentTemp<10.5; currentTemp += 0.5) {
         voltageData[currentTemp] = [];
         for (soc = 0; soc < 1001; soc++) {
-            voltageData[currentTemp][soc] = -(0.05 * currentTemp) + 4.2 - (0.037 * (1000-soc)/25);
+            // voltageData[currentTemp][soc] = -(0.05 * currentTemp) + 4.2 - (0.037 * (1000-soc)/25);
+            voltageData[currentTemp][soc] = batteryCurve.eval(100-soc/10) - 0.084 * currentTemp;
+            //Delete anything below the arbitrary 2.5V cut-off
+            if (voltageData[currentTemp][soc] < 2.48) {
+                voltageData[currentTemp][soc] = undefined;
+            }
         }
     }
-
+    
     Plotly.plot(voltagePlot, [{x : socPlot, y : voltageData[1]}], {
         margin: { t: 0, l: 50, r: 40, b: 40},
         xaxis: { title: "State of Charge (%)"},
@@ -70,7 +89,9 @@ function draw() {
     } else {
         newSoC = SoC;
     }
-    $("#voltageDisplay").text(Math.round(voltage*100)/100 +"V")
+
+    //Update all of the slider displays each frame
+    $("#voltageDisplay").text(Math.round(voltage*100)/100 +"V");
     if (newSoC < 0){
         document.getElementById("SoCslider").value = 0;
         $("#SoCDisplay").text("0%");
