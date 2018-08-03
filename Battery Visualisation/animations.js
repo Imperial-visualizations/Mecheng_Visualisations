@@ -51,11 +51,7 @@ function setup() {
 function draw() {
     let SoC = document.getElementById("SoCslider").value;
     let current = document.getElementById("currentSlider").value;
-    let voltage = -(0.05 * current) + 4.2 - (0.037 * (1000-soc)/50); //TODO: Try using the pre-calculated data again
-    if (typeof(voltage) === "undefined"){
-        debugger;
-    }
-
+    let voltage = voltageData[current][Math.round(SoC*10)];
     let newSoC;
 
     stroke(0);
@@ -74,7 +70,7 @@ function draw() {
     } else {
         newSoC = SoC;
     }
-
+    $("#voltageDisplay").text(Math.round(voltage*100)/100 +"V")
     if (newSoC < 0){
         document.getElementById("SoCslider").value = 0;
         $("#SoCDisplay").text("0%");
@@ -163,7 +159,7 @@ function updateVoltagePlot(current, SoC) {
     let plot = {
         x : socPlot,
         y : voltageData[current],
-        name: "Voltage Characteristic"};
+        name: "Voltage"};
     let OCV = {
         x : socPlot,
         y : voltageData[0],
@@ -176,6 +172,7 @@ function updateVoltagePlot(current, SoC) {
         name: "Current Operating Point",
         type: "scatter",
         mode: "markers",
+        showlegend: false,
         marker: {
             size: 10,
             line: {width: 0.5},
@@ -192,8 +189,15 @@ function updateVoltagePlot(current, SoC) {
 
 //Generates a number of Li+ ions at the negative electrode
 function generateIons(number) {
+    let x = negElec.x + negElec.width;
+    let y = negElec.y;
+    let range = negElec.height;
+    let location;
+
     for (i = 1; i <= number; i++) {
-        //Generate an ion each time!
+        //Put each generated ion in a random vertical position on the negative electrode
+        location = map(Math.random(),0,1,y,y+range);
+        LithiumSystem.addParticle(x,y);
     }
 }
 

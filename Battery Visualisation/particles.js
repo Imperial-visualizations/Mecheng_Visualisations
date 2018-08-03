@@ -26,11 +26,11 @@ class ParticleSystem {
         }
     };
 
-    addParticle(position) {
+    addParticle(x,y) {
         if (this.particleType === "Electron"){
-            this.particles.push(new Electron(position));
+            this.particles.push(new Electron(x,y));
         } else if (this.particleType === "Lithium") {
-            this.particles.push(new Lithium(position));
+            this.particles.push(new Lithium(x,y));
         }
     }
 }
