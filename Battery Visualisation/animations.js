@@ -39,6 +39,8 @@ for (var i = 0; i<1001; i++){socPlot.push(i/10);}
 
 let voltagePlot = document.getElementById("VoltagePlot");
 
+let voltageCutoff = 2.45;
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  Top-level p5.js functions
 //  setup() sets up the canvas and draws the background
@@ -52,8 +54,8 @@ function setup() {
         for (soc = 0; soc < 1001; soc++) {
             voltageData[currentTemp][soc] = batteryCurve.eval(100-soc/10) - 0.084 * currentTemp;
             //Delete anything below the arbitrary 2.45V cut-off
-            if (voltageData[currentTemp][soc] < 2.45) {
-                voltageData[currentTemp][soc] = undefined;
+            if (voltageData[currentTemp][soc] < voltageCutoff) {
+                voltageData[currentTemp][soc] = undefined; //So that the curve under the cutoff isn't shown on the plot
             }
         }
     }
@@ -82,11 +84,11 @@ function draw() {
     let SoC = document.getElementById("SoCslider").value;
     let current = document.getElementById("currentSlider").value;
     let voltage = voltageData[current][Math.round(SoC*10)];
-    if (voltage === undefined) {
+    if (voltage === undefined) { //undefined if would be under cut-off; for display use 0
         voltage = 0;
     }
-    let newSoC;
 
+    let newSoC;
     stroke(0);
     strokeWeight(5);
     fill(100);
@@ -102,6 +104,18 @@ function draw() {
         generateIons(current*2);
     } else {
         newSoC = SoC;
+    }
+
+    if (voltage === 0) {
+        if (isRunning) {
+            isRunning = false;
+            $("#runButton").val("Run");
+            newSoC = parseInt(SoC, 10);
+            while (voltageData[current][Math.round(newSoC*10)] === undefined) {
+                newSoC += 0.01;
+            }
+        }
+        // current = 0;
     }
 
     //Update all of the slider displays each frame
@@ -120,7 +134,9 @@ function draw() {
         document.getElementById("SoCslider").value = newSoC;
         $("#SoCDisplay").text(Math.round(newSoC*10)/10 + "%");
         $("#currentDisplay").text(current + "C");
+        // $("#currentSlider").val(current);
     }
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -263,17 +279,17 @@ function generateIons(number) {
 //  Button callbacks
 
 //Run button toggling
-$("#runButton").on('click', function () {
+$("#runButton").on('click', function runButtonCallback() {
     if (!isRunning) {
         isRunning = true;
         $("#runButton").val("Stop");
     } else if (isRunning) {
-        //Run reset code
         isRunning = false;
         $("#runButton").val("Run");
     }
-    //console.log("Pre Collision KE:" + getLabKE().toString());
 });
+
+
 
 //Reset button callback
 $("#resetButton").on('click', function () {
