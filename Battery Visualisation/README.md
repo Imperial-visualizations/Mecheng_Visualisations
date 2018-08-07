@@ -11,4 +11,5 @@ See also [UROP project list](https://github.com/Imperial-visualizations).
 
 ## Acknowledgments
 
-* Dr Richard Jan van Arkel - *Project Supervisor*
+* Dr Monica Marinescu - *Project Supervisor*
+* Dr Caroline Clewley - *Imperial Visualisations Co-ordinator*
