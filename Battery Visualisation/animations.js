@@ -4,14 +4,20 @@
 let canvasWidth = 425;
 let canvasHeight = 275;
 
-let isRunning = false;
-let timeScale = 0.015; //Arbitrary scaling on discharge speed
-
 canvasWidth = canvasWidth * window.devicePixelRatio;
 canvasHeight = canvasHeight * window.devicePixelRatio;
 
-let posElec = {x: canvasWidth*0.15, y: canvasHeight*0.4, width: canvasWidth*0.1, height: canvasHeight*0.3};
-let negElec = {x: canvasWidth*0.75, y: canvasHeight*0.4, width: canvasWidth*0.1, height: canvasHeight*0.3};
+let isRunning = false;
+const timeScale = 0.015; //Arbitrary scaling on discharge speed
+const voltageCutoff = 2.45; //Arbitrary voltage cutoff
+
+const negElec = {x: canvasWidth*0.15, y: canvasHeight*0.4, width: canvasWidth*0.1, height: canvasHeight*0.3};
+const posElec = {x: canvasWidth*0.75, y: canvasHeight*0.4, width: canvasWidth*0.1, height: canvasHeight*0.3};
+const wire = {
+    negX: negElec.y + 0.5*negElec.width,
+    negY: negElec.y,
+    height: canvasHeight*0.1-negElec.y,
+    posX: posElec.x + 0.5*posElec.width};
 
 let p = new p5(); //TODO: figure out if it's possible to remove this
 
@@ -35,11 +41,11 @@ let batteryCurve = new Polynomial([4.19330830928672,-0.0127201842105800,-0.00062
 
 let socPlot = [];
 
-for (var i = 0; i<1001; i++){socPlot.push(i/10);}
+for (let i = 0; i<1001; i++){socPlot.push(i/10);}
 
 let voltagePlot = document.getElementById("VoltagePlot");
 
-let voltageCutoff = 2.45;
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  Top-level p5.js functions
@@ -59,6 +65,8 @@ function setup() {
             }
         }
     }
+
+    initialiseParticles();
 
     Plotly.plot(voltagePlot,
         [
@@ -80,28 +88,37 @@ function setup() {
         {displayModeBar: false} );
 }
 
+let frameCounter = 0;
+
 function draw() {
     let SoC = document.getElementById("SoCslider").value;
     let current = document.getElementById("currentSlider").value;
     let voltage = voltageData[current][Math.round(SoC*10)];
-    if (voltage === undefined) { //undefined if would be under cut-off; for display use 0
+    if (voltage === undefined) { //undefined if voltage would be under cut-off; for display use 0
         voltage = 0;
     }
 
     let newSoC;
+
+    drawBackground();
+
     stroke(0);
     strokeWeight(5);
     fill(100);
 
-    drawElectrode(posElec.x,posElec.y,posElec.width,posElec.height,SoC*0.01);
-    drawElectrode(negElec.x,negElec.y,negElec.width,negElec.height,1-SoC*0.01);
+    drawElectrode(negElec.x,negElec.y,negElec.width,negElec.height,SoC*0.01);
+    drawElectrode(posElec.x,posElec.y,posElec.width,posElec.height,1-SoC*0.01);
     drawLoad(current * voltage);
 
     updateVoltagePlot(current, SoC, socPlot);
 
     if (isRunning) {
         newSoC = (SoC - (timeScale * current));
-        generateIons(current*2);
+        if (frameCounter >= 41 - Math.abs(current*4)){ //TODO: Redo the counter; it's too non-linear in rate
+            generateIon();
+            frameCounter = 0;
+        }
+        frameCounter++;
     } else {
         newSoC = SoC;
     }
@@ -117,6 +134,9 @@ function draw() {
         }
         // current = 0;
     }
+
+    LithiumSystem.run(isRunning);
+    ElectronSystem.run(isRunning);
 
     //Update all of the slider displays each frame
     $("#voltageDisplay").text(Math.round(voltage*100)/100 +"V");
@@ -140,16 +160,29 @@ function draw() {
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  Functions for dynamic drawing of visualisation images
+//  Functions for initial setup (and/or reset) of canvas
 
 //Sets up the canvas
 function prepareBackground() {
+
+    myCanvas = canvasSetup();
+
+    drawBackground();
+
+    return myCanvas;
+}
+
+function canvasSetup() {
     // Have Canvas replace loading message
     let myCanvas = createCanvas(canvasWidth, canvasHeight);
     let loadMessage = document.getElementById("loadingMessage");
     loadMessage.parentNode.removeChild(loadMessage);
     myCanvas.parent('canvasWrapper');
 
+    return myCanvas;
+}
+
+function drawBackground() {
     // Draw background schematic; visualisation will be with animation above this
     background(255);
 
@@ -169,14 +202,29 @@ function prepareBackground() {
     stroke(0);
     fill(100);
     strokeWeight(3);
-    line(posElec.x + (posElec.width/2),posElec.y,posElec.x + (posElec.width/2),canvasHeight*0.1);
-    line(posElec.x + (posElec.width/2),canvasHeight*0.1,canvasWidth*0.45,canvasHeight*0.1);
+    line(negElec.x + (negElec.width/2),negElec.y,negElec.x + (negElec.width/2),canvasHeight*0.1);
+    line(negElec.x + (negElec.width/2),canvasHeight*0.1,canvasWidth*0.45,canvasHeight*0.1);
 
-    line(canvasWidth*0.55,canvasHeight*0.1,negElec.x + (negElec.width/2),canvasHeight*0.1);
-    line(negElec.x + (negElec.width/2),canvasHeight*0.1,negElec.x + (negElec.width/2),negElec.y);
-
-    return myCanvas;
+    line(canvasWidth*0.55,canvasHeight*0.1,posElec.x + (posElec.width/2),canvasHeight*0.1);
+    line(posElec.x + (posElec.width/2),canvasHeight*0.1,posElec.x + (posElec.width/2),posElec.y);
 }
+
+// Places 100 lithium ions randomly in the space between the electrodes
+function initialiseParticles() {
+    let x_range = [negElec.x + negElec.width, posElec.x];
+    let y_range = [negElec.y, negElec.y + negElec.height];
+
+    let x_location;
+    let y_location;
+    for (let i = 0; i<100; i++) {
+        x_location = map(Math.random(),0,1,x_range[0],x_range[1]);
+        y_location = map(Math.random(),0,1,y_range[0],y_range[1]);
+        LithiumSystem.addParticle(x_location,y_location);
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  Functions for dynamic drawing of visualisation images
 
 //Draws a single electrode based on location and current state of charge (effectively an extended rect() function)
 function drawElectrode(x,y,width,height,SoC) {
@@ -262,17 +310,15 @@ function updateVoltagePlot(current, SoC, socPlot) {
 //  Particle functions
 
 //Generates a number of Li+ ions at the negative electrode
-function generateIons(number) {
-    let x = negElec.x + negElec.width;
+function generateIon() {
+    let x = negElec.x + negElec.width + 5;
     let y = negElec.y;
     let range = negElec.height;
     let location;
 
-    for (i = 1; i <= number; i++) {
-        //Put each generated ion in a random vertical position on the negative electrode
-        location = map(Math.random(),0,1,y,y+range);
-        LithiumSystem.addParticle(x,y);
-    }
+    //Put generated ion in a random vertical position on the negative electrode
+    location = map(Math.random(),0,1,y,y+range);
+    LithiumSystem.addParticle(x,location);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

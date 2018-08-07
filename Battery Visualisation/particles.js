@@ -1,4 +1,5 @@
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ParticleSystem object to contain either Lithiums or Electrons
 // Needed properties:
 //      particles (array of Lithiums or Electrons)
@@ -16,10 +17,10 @@ class ParticleSystem {
         }
     }
 
-    run(){
-        for (var i=0; i<this.particles.length; i++) {
+    run(isRunning){
+        for (let i=0; i<this.particles.length; i++) {
             //Do something to each particle
-            let dead = this.particles[i].run();
+            let dead = this.particles[i].run(isRunning);
             if (dead) {
                 this.particles.splice(i,1);
             }
@@ -35,6 +36,7 @@ class ParticleSystem {
     }
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Particle object to hold info on a particle
 // Needed properties:
 //      charge
@@ -54,8 +56,11 @@ class Particle {
         this.acceleration = 0;
     }
 
-    run() {
-        let isDead = this.update();
+    run(isRunning) {
+        let isDead = 0;
+        if (isRunning) {
+            isDead = this.update();
+        }
         if (!isDead) {
             this.render();
         }
@@ -71,10 +76,12 @@ class Particle {
     }
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class Electron extends Particle {
     constructor(x,y) {
         super(x,y);
         this.charge = -1;
+        this.pathLength = 2;
     }
 
     update() {
@@ -91,6 +98,7 @@ class Electron extends Particle {
     }
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class Lithium extends Particle {
     constructor(x,y, split) {
         super(x,y);
@@ -104,13 +112,17 @@ class Lithium extends Particle {
 
     update() {
         //TODO: Implement this
-        let isDead = 0;
+        let isDead = false;
+        this.position.x++;
+        if (this.position.x >= posElec.x || this.position.x <= negElec.x + negElec.width) {
+            isDead = true;
+        }
         return isDead;
     }
 
     render() {
         //TODO: Implement this
-        textAlign(CENTRE,CENTRE);
+        textAlign("CENTRE","CENTRE");
         textSize(3);
         if (this.isSplit) {
             fill('#ff0100');
