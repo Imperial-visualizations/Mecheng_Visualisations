@@ -114,11 +114,14 @@ function draw() {
 
     if (isRunning) {
         newSoC = (SoC - (timeScale * current));
-        if (frameCounter >= 41 - Math.abs(current*4)){ //TODO: Redo the counter; it's too non-linear in rate
-            generateIon();
-            frameCounter = 0;
+        if (current !== 0) {
+            if (frameCounter >= 41 - Math.abs(current * 4)) { //TODO: Redo the counter; doesn't make physical sense atm
+                // TODO: have a new ion be generated every time one dies so charge is conserved
+                generateIon();
+                frameCounter = 0;
+            }
+            frameCounter++;
         }
-        frameCounter++;
     } else {
         newSoC = SoC;
     }
@@ -216,7 +219,7 @@ function initialiseParticles() {
 
     let x_location;
     let y_location;
-    for (let i = 0; i<100; i++) {
+    for (let i = 0; i<25; i++) {
         x_location = map(Math.random(),0,1,x_range[0],x_range[1]);
         y_location = map(Math.random(),0,1,y_range[0],y_range[1]);
         LithiumSystem.addParticle(x_location,y_location);

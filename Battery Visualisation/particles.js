@@ -48,12 +48,15 @@ class ParticleSystem {
 //      run()
 
 class Particle {
-    constructor(x,y) {
+    constructor(x,y,parent) {
         this.charge = 0;
 
         this.position = {x: x, y: y};
         this.velocity = 0;
         this.acceleration = 0;
+        this.size = 2;
+        this.colour = ('#000000');
+        this.parent = parent;
     }
 
     run(isRunning) {
@@ -72,16 +75,21 @@ class Particle {
     }
 
     render() {
-        // Empty function; overwritten in subclasses
+        //TODO: Implement this
+        fill(this.colour);
+        strokeWeight(1);
+        ellipse(this.position.x, this.position.y,this.size);
     }
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class Electron extends Particle {
-    constructor(x,y) {
-        super(x,y);
+    constructor(x,y,parent) {
+        super(x,y,parent);
         this.charge = -1;
         this.pathLength = 2;
+        this.color = '#fffc00';
+        this.size = 2;
     }
 
     update() {
@@ -89,29 +97,24 @@ class Electron extends Particle {
         let isDead = 0;
         return isDead;
     }
-
-    render() {
-        //TODO: Implement this
-        fill('#fffc00');
-        strokeWeight(0.1);
-        ellipse(this.position.x, this.position.y,2,2);
-    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class Lithium extends Particle {
-    constructor(x,y, split) {
-        super(x,y);
+    constructor(x,y,split,parent) {
+        super(x,y,parent);
         if (split){
             this.charge = 1;
         } else {
             this.charge = 0;
         }
         this.isSplit = split;
+        this.colour = '#ff0100';
+        this.size = 10;
     }
 
     update() {
-        //TODO: Implement this
+        //TODO: Implement this properly - currently non-physical
         let isDead = false;
         this.position.x++;
         if (this.position.x >= posElec.x || this.position.x <= negElec.x + negElec.width) {
@@ -120,22 +123,21 @@ class Lithium extends Particle {
         return isDead;
     }
 
-    render() {
-        //TODO: Implement this
-        textAlign("CENTRE","CENTRE");
-        textSize(3);
-        if (this.isSplit) {
-            fill('#ff0100');
-            text('Li+',this.position.x,this.position.y);
-        } else {
-            fill('#000000');
-            text('Li',this.position.x,this.position.y);
-        }
-
-        strokeWeight(0.1);
-        ellipse(this.position.x, this.position.y,4,4);
-
-    }
+    // render() {
+    //     textAlign("CENTRE","CENTRE");
+    //     textSize(3);
+    //     if (this.isSplit) {
+    //         fill('#ff0100');
+    //         text('Li+',this.position.x,this.position.y);
+    //     } else {
+    //         fill('#000000');
+    //         text('Li',this.position.x,this.position.y);
+    //     }
+    //
+    //     strokeWeight(0.1);
+    //     ellipse(this.position.x, this.position.y,4,4);
+    //
+    // }
 
     split(Electrons) {
         if (this.isSplit === false) {
