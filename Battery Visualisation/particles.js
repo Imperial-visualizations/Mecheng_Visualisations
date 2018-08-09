@@ -17,10 +17,10 @@ class ParticleSystem {
         }
     }
 
-    run(isRunning){
+    run(current,isRunning){
         for (let i=0; i<this.particles.length; i++) {
             //Do something to each particle
-            let dead = this.particles[i].run(isRunning);
+            let dead = this.particles[i].run(current,isRunning);
             if (dead) {
                 this.particles.splice(i,1);
             }
@@ -33,6 +33,10 @@ class ParticleSystem {
         } else if (this.particleType === "Lithium") {
             this.particles.push(new Lithium(x,y));
         }
+    }
+
+    clear() {
+        this.particles.splice(0,this.particles.length)
     }
 }
 
@@ -48,25 +52,22 @@ class ParticleSystem {
 //      run()
 
 class Particle {
-    constructor(x,y,parent) {
-        this.charge = 0;
-
+    constructor(x,y) {
         this.position = {x: x, y: y};
-        this.velocity = 0;
-        this.acceleration = 0;
         this.size = 2;
         this.colour = ('#000000');
-        this.parent = parent;
     }
 
-    run(isRunning) {
+    run(current,isRunning) {
         let isDead = 0;
         if (isRunning) {
-            isDead = this.update();
+            isDead = this.update(current);
         }
         if (!isDead) {
             this.render();
         }
+
+        return isDead;
     }
 
     update() {
@@ -75,7 +76,6 @@ class Particle {
     }
 
     render() {
-        //TODO: Implement this
         fill(this.colour);
         strokeWeight(1);
         ellipse(this.position.x, this.position.y,this.size);
@@ -92,7 +92,7 @@ class Electron extends Particle {
         this.size = 2;
     }
 
-    update() {
+    update(current) {
         //TODO: Implement this
         let isDead = 0;
         return isDead;
@@ -113,12 +113,18 @@ class Lithium extends Particle {
         this.size = 10;
     }
 
-    update() {
-        //TODO: Implement this properly - currently non-physical
+    update(current) {
         let isDead = false;
-        this.position.x++;
+        this.position.x += parseFloat(current/5) + (Math.random() - 0.5);
+        debugger;
+        this.position.y += (Math.random() - 0.5); //add some wobble!
         if (this.position.x >= posElec.x || this.position.x <= negElec.x + negElec.width) {
             isDead = true;
+        }
+        if (this.position.y < canvasHeight*0.3) { //TODO: Remove magic numbers
+            this.position.y += 2;
+        } else if (this.position.y > canvasHeight*0.9) {
+            this.position.y -= 2;
         }
         return isDead;
     }

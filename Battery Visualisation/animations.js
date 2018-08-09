@@ -33,19 +33,19 @@ let LithiumSystem = new ParticleSystem("Lithium");
 // var coefficients = eval("(" +json.responseText + ")");
 // let coefficients = JSON.parse(json);
 
-let batteryCurve = new Polynomial([4.19330830928672,-0.0127201842105800,-0.000625938577852004,-0.000171517745926117,
+const batteryCurve = new Polynomial([4.19330830928672,-0.0127201842105800,-0.000625938577852004,-0.000171517745926117,
     8.08129863878882e-05,-1.19718299176456e-05,9.68038403508205e-07,-4.93818733617536e-08,1.69682312038018e-09,
     -4.05858298573674e-11,6.84730179880260e-13,-8.12370593060948e-15,6.63471674421775e-17,-3.55205161076871e-19,
     1.12236392174576e-21,-1.58668725017118e-24]); //Data fitted from Matlab battery example (15th degree polynomial)
 // Highest order term adjusted to give slightly more drop-off at low SoC
+
+const n_Lithium = 100; //Number of Lithium ions in the electrolyte at any given time
 
 let socPlot = [];
 
 for (let i = 0; i<1001; i++){socPlot.push(i/10);}
 
 let voltagePlot = document.getElementById("VoltagePlot");
-
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  Top-level p5.js functions
@@ -88,8 +88,6 @@ function setup() {
         {displayModeBar: false} );
 }
 
-let frameCounter = 0;
-
 function draw() {
     let SoC = document.getElementById("SoCslider").value;
     let current = document.getElementById("currentSlider").value;
@@ -115,12 +113,9 @@ function draw() {
     if (isRunning) {
         newSoC = (SoC - (timeScale * current));
         if (current !== 0) {
-            if (frameCounter >= 41 - Math.abs(current * 4)) { //TODO: Redo the counter; doesn't make physical sense atm
-                // TODO: have a new ion be generated every time one dies so charge is conserved
-                generateIon();
-                frameCounter = 0;
+            while (LithiumSystem.particles.length < n_Lithium) {
+                generateIon(current);
             }
-            frameCounter++;
         }
     } else {
         newSoC = SoC;
@@ -138,8 +133,8 @@ function draw() {
         // current = 0;
     }
 
-    LithiumSystem.run(isRunning);
-    ElectronSystem.run(isRunning);
+    LithiumSystem.run(current,isRunning);
+    ElectronSystem.run(current,isRunning);
 
     //Update all of the slider displays each frame
     $("#voltageDisplay").text(Math.round(voltage*100)/100 +"V");
@@ -219,7 +214,7 @@ function initialiseParticles() {
 
     let x_location;
     let y_location;
-    for (let i = 0; i<25; i++) {
+    for (let i = 0; i<n_Lithium; i++) {
         x_location = map(Math.random(),0,1,x_range[0],x_range[1]);
         y_location = map(Math.random(),0,1,y_range[0],y_range[1]);
         LithiumSystem.addParticle(x_location,y_location);
@@ -313,8 +308,14 @@ function updateVoltagePlot(current, SoC, socPlot) {
 //  Particle functions
 
 //Generates a number of Li+ ions at the negative electrode
-function generateIon() {
-    let x = negElec.x + negElec.width + 5;
+function generateIon(current) {
+    let x;
+    if (current >= 0) {
+        x = negElec.x + negElec.width + 5;
+    } else {
+        x = posElec.x;
+    }
+
     let y = negElec.y;
     let range = negElec.height;
     let location;
@@ -343,6 +344,11 @@ $("#runButton").on('click', function runButtonCallback() {
 //Reset button callback
 $("#resetButton").on('click', function () {
     isRunning = false;
+
+    ElectronSystem.clear();
+    LithiumSystem.clear();
+    initialiseParticles();
+
     $("#SoCslider").val("75");
     $("#SoCDisplay").text("75%");
 
