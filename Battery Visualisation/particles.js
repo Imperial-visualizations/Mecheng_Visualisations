@@ -56,6 +56,7 @@ class Particle {
         this.position = {x: x, y: y};
         this.size = 2;
         this.colour = ('#000000');
+        this.pathLength = undefined;
     }
 
     run(current,isRunning) {
@@ -66,7 +67,6 @@ class Particle {
         if (!isDead) {
             this.render();
         }
-
         return isDead;
     }
 
@@ -86,16 +86,26 @@ class Particle {
 class Electron extends Particle {
     constructor(x,y,parent) {
         super(x,y,parent);
-        this.charge = -1;
-        this.pathLength = 2;
+        this.pathLength = (2*wire.height) + (wire.posX-wire.negX);
+        this.positionOnPath = 0;
         this.color = '#fffc00';
         this.size = 2;
     }
 
     update(current) {
         //TODO: Implement this
-        let isDead = 0;
+        let isDead = false;
+        if (this.positionOnPath >= this.pathLength) {
+            isDead = true
+        }
+        this.positionOnPath += parseFloat(current/5)*this.pathLength/200;
+        this.position = this.pathToAbsolutePosition();
         return isDead;
+    }
+
+    // Method to convert location from pathLength space to absolute space
+    pathToAbsolutePosition() {
+
     }
 }
 
@@ -109,18 +119,20 @@ class Lithium extends Particle {
             this.charge = 0;
         }
         this.isSplit = split;
+        this.pathLength = posElec.x -(negElec.x+negElec.width);
         this.colour = '#ff0100';
         this.size = 10;
     }
 
     update(current) {
         let isDead = false;
-        this.position.x += parseFloat(current/5) + (Math.random() - 0.5);
+        this.position.x += parseFloat(current/5)*this.pathLength/200; //+ (Math.random() - 0.5);
         debugger;
         this.position.y += (Math.random() - 0.5); //add some wobble!
-        if (this.position.x >= posElec.x || this.position.x <= negElec.x + negElec.width) {
+        if (this.position.x >= posElec.x - this.size || this.position.x <= negElec.x + negElec.width + this.size) {
             isDead = true;
         }
+        //Make sure they don't wobble outside the battery casing...
         if (this.position.y < canvasHeight*0.3) { //TODO: Remove magic numbers
             this.position.y += 2;
         } else if (this.position.y > canvasHeight*0.9) {
@@ -128,22 +140,6 @@ class Lithium extends Particle {
         }
         return isDead;
     }
-
-    // render() {
-    //     textAlign("CENTRE","CENTRE");
-    //     textSize(3);
-    //     if (this.isSplit) {
-    //         fill('#ff0100');
-    //         text('Li+',this.position.x,this.position.y);
-    //     } else {
-    //         fill('#000000');
-    //         text('Li',this.position.x,this.position.y);
-    //     }
-    //
-    //     strokeWeight(0.1);
-    //     ellipse(this.position.x, this.position.y,4,4);
-    //
-    // }
 
     split(Electrons) {
         if (this.isSplit === false) {

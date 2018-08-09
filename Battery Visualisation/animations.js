@@ -14,7 +14,7 @@ const voltageCutoff = 2.45; //Arbitrary voltage cutoff
 const negElec = {x: canvasWidth*0.15, y: canvasHeight*0.4, width: canvasWidth*0.1, height: canvasHeight*0.3};
 const posElec = {x: canvasWidth*0.75, y: canvasHeight*0.4, width: canvasWidth*0.1, height: canvasHeight*0.3};
 const wire = {
-    negX: negElec.y + 0.5*negElec.width,
+    negX: negElec.x + 0.5*negElec.width,
     negY: negElec.y,
     height: canvasHeight*0.1-negElec.y,
     posX: posElec.x + 0.5*posElec.width};
@@ -125,7 +125,7 @@ function draw() {
         if (isRunning) {
             isRunning = false;
             $("#runButton").val("Run");
-            newSoC = parseInt(SoC, 10);
+            newSoC = parseFloat(SoC, 10);
             while (voltageData[current][Math.round(newSoC*10)] === undefined) {
                 newSoC += 0.01;
             }
@@ -200,6 +200,7 @@ function drawBackground() {
     stroke(0);
     fill(100);
     strokeWeight(3);
+    //TODO: Make these not magic!
     line(negElec.x + (negElec.width/2),negElec.y,negElec.x + (negElec.width/2),canvasHeight*0.1);
     line(negElec.x + (negElec.width/2),canvasHeight*0.1,canvasWidth*0.45,canvasHeight*0.1);
 
@@ -338,8 +339,6 @@ $("#runButton").on('click', function runButtonCallback() {
         $("#runButton").val("Run");
     }
 });
-
-
 
 //Reset button callback
 $("#resetButton").on('click', function () {
