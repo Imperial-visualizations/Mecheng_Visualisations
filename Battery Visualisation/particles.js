@@ -85,19 +85,19 @@ class Particle {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class Electron extends Particle {
     constructor(pathLocation) {
-        super(NaN,NaN); //TODO: revise this declaration so we call it with a positionOnPath rather than x,y
+        super(NaN,NaN);
         this.pathLength = wire.pathLength;
         this.positionOnPath = pathLocation;
         this.position = this.getAbsolutePosition();
-        this.colour = '#fffc00';
-        this.size = 4;
+        this.colour = '#ffff00';
+        this.size = 7;
     }
 
     update(current) {
         let isDead = false;
         this.positionOnPath += parseFloat(current/5)*this.pathLength/200;
         this.position = this.getAbsolutePosition();
-        if (this.positionOnPath >= this.pathLength - this.size) {
+        if ((this.positionOnPath >= this.pathLength - 5) || this.positionOnPath <= 5) {
             isDead = true
         }
         return isDead;
@@ -105,7 +105,6 @@ class Electron extends Particle {
 
     // Method to convert location from pathLength space to absolute space
     getAbsolutePosition() {
-        //TODO: Fix this absolute garbage non-working shite
         let position = {x: undefined, y: undefined};
         if (this.positionOnPath <= wire.height) { //If it's on the left...
             debugger;
@@ -115,7 +114,7 @@ class Electron extends Particle {
             position.x = wire.posX;
             position.y = wire.negY - (this.pathLength - this.positionOnPath);
         } else { //Otherwise it's in the middle!
-            position.x = wire.negX - (this.positionOnPath-wire.height);
+            position.x = wire.negX + (this.positionOnPath-wire.height);
             position.y = wire.negY - wire.height;
         }
 

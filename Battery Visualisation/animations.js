@@ -12,13 +12,33 @@ let isRunning = false;
 const timeScale = 0.015; //Arbitrary scaling on discharge speed
 const voltageCutoff = 2.45; //Arbitrary voltage cutoff
 
-const negElec = {x: canvasWidth*0.15, y: canvasHeight*0.4, width: canvasWidth*0.1, height: canvasHeight*0.3};
-const posElec = {x: canvasWidth*0.75, y: canvasHeight*0.4, width: canvasWidth*0.1, height: canvasHeight*0.3};
+const box = { //dimensions for external battery box
+    x: canvasWidth*0.01,
+    y: canvasHeight*0.25,
+    width: canvasWidth*0.98,
+    height: canvasHeight*0.7
+};
+
+const negElec = {
+    x: canvasWidth*0.15,
+    y: canvasHeight*0.4,
+    width: canvasWidth*0.1,
+    height: canvasHeight*0.3
+};
+
+const posElec = {
+    x: canvasWidth*0.75,
+    y: canvasHeight*0.4,
+    width: canvasWidth*0.1,
+    height: canvasHeight*0.3
+};
+
 let wire = {
-    negX: negElec.x + 0.5*negElec.width,
-    negY: negElec.y,
-    height: negElec.y - canvasHeight*0.1,
-    posX: posElec.x + 0.5*posElec.width};
+    negX: negElec.x + 0.5*negElec.width, //x position of negative electrode connection
+    negY: negElec.y, //y position of electrode connections (same pos and neg)
+    height: negElec.y - canvasHeight*0.1, //Distance between neg electrode y and horizontal part y
+    posX: posElec.x + 0.5*posElec.width //x position of positive electrode connection
+};
 
 wire.pathLength = (2*wire.height) + (wire.posX-wire.negX);
 
@@ -42,7 +62,7 @@ const batteryCurve = new Polynomial([4.19330830928672,-0.0127201842105800,-0.000
     1.12236392174576e-21,-1.58668725017118e-24]); //Data fitted from Matlab battery example (15th degree polynomial)
 // Highest order term adjusted to give slightly more drop-off at low SoC
 
-const n_Lithium = 1; //Number of Lithium ions in the electrolyte at any given time
+const n_Lithium = 100; //Number of Lithium ions in the electrolyte at any given time
 
 let socPlot = [];
 
@@ -58,7 +78,7 @@ const fr = 30; //Frame rate in fps
 //  draw() runs repeatedly to animate the canvas in response to user input
 
 function setup() {
-    let myCanvas = prepareBackground(); //TODO: Consider removing returning myCanvas
+    prepareBackground(); //TODO: Consider removing returning myCanvas
 
     frameRate(fr);
 
@@ -113,9 +133,8 @@ function draw() {
 
     drawElectrode(negElec.x,negElec.y,negElec.width,negElec.height,SoC*0.01);
     drawElectrode(posElec.x,posElec.y,posElec.width,posElec.height,1-SoC*0.01);
-    drawLoad(current * voltage);
 
-    updateVoltagePlot(current, SoC, socPlot);
+
 
     if (isRunning) {
         newSoC = (SoC - (timeScale * current));
@@ -128,7 +147,10 @@ function draw() {
         newSoC = SoC;
     }
 
-    // if (LithiumSystem.particles.length !== ElectronSystem.particles.length) {debugger;}
+    LithiumSystem.run(current,isRunning);
+    ElectronSystem.run(current,isRunning);
+    drawLoad(current * voltage);
+    updateVoltagePlot(current, SoC, socPlot);
 
     if (voltage === 0) {
         if (isRunning) {
@@ -139,11 +161,9 @@ function draw() {
                 newSoC += 0.01;
             }
         }
-        // current = 0;
     }
 
-    LithiumSystem.run(current,isRunning);
-    ElectronSystem.run(current,isRunning);
+
 
     //Update all of the slider displays each frame
     $("#voltageDisplay").text(Math.round(voltage*100)/100 +"V");
@@ -195,10 +215,11 @@ function drawBackground() {
     strokeWeight(5);
     stroke(0);
     fill('#00b2ff');
-    rect(canvasWidth*0.01,canvasHeight*0.25,canvasWidth*0.98,canvasHeight*0.7);
+    rect(box.x,box.y,box.width,box.height);
 
     strokeWeight(10);
     stroke(50);
+    //TODO: make separator size automatic
     line(canvasWidth*0.5,canvasHeight*0.25 + 5,canvasWidth*0.5,canvasHeight*0.95 - 5);
 
     p.noFill();
@@ -208,12 +229,12 @@ function drawBackground() {
     stroke(0);
     fill(100);
     strokeWeight(3);
-    //TODO: Make these not magic!
-    line(negElec.x + (negElec.width/2),negElec.y,negElec.x + (negElec.width/2),canvasHeight*0.1);
-    line(negElec.x + (negElec.width/2),canvasHeight*0.1,canvasWidth*0.45,canvasHeight*0.1);
 
-    line(canvasWidth*0.55,canvasHeight*0.1,posElec.x + (posElec.width/2),canvasHeight*0.1);
-    line(posElec.x + (posElec.width/2),canvasHeight*0.1,posElec.x + (posElec.width/2),posElec.y);
+    line(wire.negX,wire.negY,wire.negX,wire.negY-wire.height);
+    line(wire.negX,wire.negY-wire.height,canvasWidth*0.45,wire.negY-wire.height);
+
+    line(canvasWidth*0.55,wire.negY-wire.height,wire.posX,wire.negY-wire.height);
+    line(wire.posX,wire.negY-wire.height,wire.posX,wire.negY);
 }
 
 // Places 100 lithium ions randomly in the space between the electrodes
@@ -252,6 +273,7 @@ function drawElectrode(x,y,width,height,SoC) {
 
 //Changes colour of battery load based on charge/discharge power from the battery
 function drawLoad(power) {
+    //TODO: Make display more effective - currently almost always dark, would like it to have a cut-off
     p.stroke(100);
     p.strokeWeight(5);
     if (isRunning) {
@@ -327,10 +349,10 @@ function generateIon(current) {
     let xLithium;
     if (current >= 0) {
         xLithium = negElec.x + negElec.width + 5;
-        ElectronSystem.addParticle(null,null,0);
+        ElectronSystem.addParticle(null,null,5);
     } else {
         xLithium = posElec.x - 5;
-        ElectronSystem.addParticle(null,null,wire.pathLength);
+        ElectronSystem.addParticle(null,null,wire.pathLength - 5);
     }
 
     let yLithium = negElec.y;
