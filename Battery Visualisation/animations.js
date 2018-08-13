@@ -20,26 +20,26 @@ const box = { //dimensions for external battery box
 };
 
 const negElec = {
-    x: canvasWidth*0.15,
-    y: canvasHeight*0.4,
-    width: canvasWidth*0.1,
-    height: canvasHeight*0.3
+    x: box.x,
+    y: box.y,
+    width: 0.2*box.width,
+    height: box.height
 };
 
-const posElec = {
-    x: canvasWidth*0.75,
-    y: canvasHeight*0.4,
-    width: canvasWidth*0.1,
-    height: canvasHeight*0.3
+const posElec = { //Negative electrode dimensions
+    x: box.width + 10 - negElec.width,
+    y: box.y,
+    width: negElec.width,
+    height: negElec.height
 };
 
-let wire = {
+let wire = { //Current collector dimensions
     negX: negElec.x + 0.5*negElec.width, //x position of negative electrode connection
-    negY: negElec.y, //y position of electrode connections (same pos and neg)
-    height: negElec.y - canvasHeight*0.1, //Distance between neg electrode y and horizontal part y
+    negY: negElec.y + 0.1*negElec.height, //y position of electrode connections (same pos and neg)
     posX: posElec.x + 0.5*posElec.width //x position of positive electrode connection
 };
 
+wire.height = wire.negY - canvasHeight*0.1; //Distance between neg electrode y and horizontal part y
 wire.pathLength = (2*wire.height) + (wire.posX-wire.negX);
 
 let p = new p5(); //TODO: figure out if it's possible to remove this
@@ -62,7 +62,7 @@ const batteryCurve = new Polynomial([4.19330830928672,-0.0127201842105800,-0.000
     1.12236392174576e-21,-1.58668725017118e-24]); //Data fitted from Matlab battery example (15th degree polynomial)
 // Highest order term adjusted to give slightly more drop-off at low SoC
 
-const n_Lithium = 100; //Number of Lithium ions in the electrolyte at any given time
+const n_Lithium = 50; //Number of Lithium ions in the electrolyte at any given time
 
 let socPlot = [];
 
@@ -127,14 +127,10 @@ function draw() {
 
     drawBackground();
 
-    stroke(0);
-    strokeWeight(5);
-    fill(100);
-
     drawElectrode(negElec.x,negElec.y,negElec.width,negElec.height,SoC*0.01);
     drawElectrode(posElec.x,posElec.y,posElec.width,posElec.height,1-SoC*0.01);
 
-
+    drawWire();
 
     if (isRunning) {
         newSoC = (SoC - (timeScale * current));
@@ -163,9 +159,8 @@ function draw() {
         }
     }
 
-
-
     //Update all of the slider displays each frame
+    //TODO: Is there a better way of doing this?
     $("#voltageDisplay").text(Math.round(voltage*100)/100 +"V");
     if (newSoC < 0){
         document.getElementById("SoCslider").value = 0;
@@ -217,7 +212,7 @@ function drawBackground() {
     fill('#00b2ff');
     rect(box.x,box.y,box.width,box.height);
 
-    strokeWeight(10);
+    strokeWeight(5);
     stroke(50);
     //TODO: make separator size automatic
     line(canvasWidth*0.5,canvasHeight*0.25 + 5,canvasWidth*0.5,canvasHeight*0.95 - 5);
@@ -225,7 +220,9 @@ function drawBackground() {
     p.noFill();
     stroke(0);
     rect(canvasWidth*0.01,canvasHeight*0.25,canvasWidth*0.98,canvasHeight*0.7);
+}
 
+function drawWire() {
     stroke(0);
     fill(100);
     strokeWeight(3);
@@ -264,6 +261,10 @@ function initialiseParticles() {
 function drawElectrode(x,y,width,height,SoC) {
     let fill = height * SoC;
     let empty = height - fill;
+
+    stroke(0);
+    strokeWeight(5);
+    p.fill(100);
     strokeWeight(5);
     p.fill(255);
     rect(x,y,width,empty);
