@@ -1,3 +1,4 @@
+"use strict";
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  Global variables
 
@@ -13,11 +14,13 @@ const voltageCutoff = 2.45; //Arbitrary voltage cutoff
 
 const negElec = {x: canvasWidth*0.15, y: canvasHeight*0.4, width: canvasWidth*0.1, height: canvasHeight*0.3};
 const posElec = {x: canvasWidth*0.75, y: canvasHeight*0.4, width: canvasWidth*0.1, height: canvasHeight*0.3};
-const wire = {
+let wire = {
     negX: negElec.x + 0.5*negElec.width,
     negY: negElec.y,
-    height: canvasHeight*0.1-negElec.y,
+    height: negElec.y - canvasHeight*0.1,
     posX: posElec.x + 0.5*posElec.width};
+
+wire.pathLength = (2*wire.height) + (wire.posX-wire.negX);
 
 let p = new p5(); //TODO: figure out if it's possible to remove this
 
@@ -39,13 +42,15 @@ const batteryCurve = new Polynomial([4.19330830928672,-0.0127201842105800,-0.000
     1.12236392174576e-21,-1.58668725017118e-24]); //Data fitted from Matlab battery example (15th degree polynomial)
 // Highest order term adjusted to give slightly more drop-off at low SoC
 
-const n_Lithium = 100; //Number of Lithium ions in the electrolyte at any given time
+const n_Lithium = 1; //Number of Lithium ions in the electrolyte at any given time
 
 let socPlot = [];
 
 for (let i = 0; i<1001; i++){socPlot.push(i/10);}
 
 let voltagePlot = document.getElementById("VoltagePlot");
+
+const fr = 30; //Frame rate in fps
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  Top-level p5.js functions
@@ -54,6 +59,8 @@ let voltagePlot = document.getElementById("VoltagePlot");
 
 function setup() {
     let myCanvas = prepareBackground(); //TODO: Consider removing returning myCanvas
+
+    frameRate(fr);
 
     for (currentTemp = -10; currentTemp<10.5; currentTemp += 0.5) {
         voltageData[currentTemp] = [];
@@ -121,11 +128,13 @@ function draw() {
         newSoC = SoC;
     }
 
+    // if (LithiumSystem.particles.length !== ElectronSystem.particles.length) {debugger;}
+
     if (voltage === 0) {
         if (isRunning) {
             isRunning = false;
             $("#runButton").val("Run");
-            newSoC = parseFloat(SoC, 10);
+            newSoC = parseFloat(SoC);
             while (voltageData[current][Math.round(newSoC*10)] === undefined) {
                 newSoC += 0.01;
             }
@@ -154,7 +163,6 @@ function draw() {
         $("#currentDisplay").text(current + "C");
         // $("#currentSlider").val(current);
     }
-
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -163,7 +171,7 @@ function draw() {
 //Sets up the canvas
 function prepareBackground() {
 
-    myCanvas = canvasSetup();
+    let myCanvas = canvasSetup();
 
     drawBackground();
 
@@ -213,12 +221,18 @@ function initialiseParticles() {
     let x_range = [negElec.x + negElec.width, posElec.x];
     let y_range = [negElec.y, negElec.y + negElec.height];
 
-    let x_location;
-    let y_location;
+    let lithiumXLocation;
+    let lithiumYLocation;
+    let electronPositionOnPath;
+    let sharedRandom; //One random coordinate is shared so the electrons are absorbed at the same time as the lithiums
     for (let i = 0; i<n_Lithium; i++) {
-        x_location = map(Math.random(),0,1,x_range[0],x_range[1]);
-        y_location = map(Math.random(),0,1,y_range[0],y_range[1]);
-        LithiumSystem.addParticle(x_location,y_location);
+        sharedRandom = Math.random();
+        lithiumXLocation = map(sharedRandom,0,1,x_range[0],x_range[1]);
+        lithiumYLocation = map(Math.random(),0,1,y_range[0],y_range[1]);
+        LithiumSystem.addParticle(lithiumXLocation,lithiumYLocation);
+
+        electronPositionOnPath = map(sharedRandom,0,1,0,wire.pathLength);
+        ElectronSystem.addParticle(null,null,electronPositionOnPath);
     }
 }
 
@@ -264,7 +278,7 @@ function updateVoltagePlot(current, SoC, socPlot) {
         name: "Open Circuit Voltage",
         marker: {color: "#5f5c5b"},
         line: {dash: "dot"}};
-    let currentStatus = {
+    let operatingPoint = {
         x: [SoC],
         y: [voltageData[current][Math.round(SoC*10)]],
         name: "Current Operating Point",
@@ -302,7 +316,7 @@ function updateVoltagePlot(current, SoC, socPlot) {
             }
         ]
     };
-    Plotly.react(voltagePlot, [plot,OCV, currentStatus],layout);
+    Plotly.react(voltagePlot, [plot,OCV, operatingPoint],layout);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -310,20 +324,22 @@ function updateVoltagePlot(current, SoC, socPlot) {
 
 //Generates a number of Li+ ions at the negative electrode
 function generateIon(current) {
-    let x;
+    let xLithium;
     if (current >= 0) {
-        x = negElec.x + negElec.width + 5;
+        xLithium = negElec.x + negElec.width + 5;
+        ElectronSystem.addParticle(null,null,0);
     } else {
-        x = posElec.x;
+        xLithium = posElec.x - 5;
+        ElectronSystem.addParticle(null,null,wire.pathLength);
     }
 
-    let y = negElec.y;
+    let yLithium = negElec.y;
     let range = negElec.height;
     let location;
 
     //Put generated ion in a random vertical position on the negative electrode
-    location = map(Math.random(),0,1,y,y+range);
-    LithiumSystem.addParticle(x,location);
+    location = map(Math.random(),0,1,yLithium,yLithium+range);
+    LithiumSystem.addParticle(xLithium,location);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

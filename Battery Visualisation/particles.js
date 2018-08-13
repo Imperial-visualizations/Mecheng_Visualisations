@@ -27,9 +27,9 @@ class ParticleSystem {
         }
     };
 
-    addParticle(x,y) {
+    addParticle(x,y,positionOnPath) {
         if (this.particleType === "Electron"){
-            this.particles.push(new Electron(x,y));
+            this.particles.push(new Electron(positionOnPath));
         } else if (this.particleType === "Lithium") {
             this.particles.push(new Lithium(x,y));
         }
@@ -84,41 +84,49 @@ class Particle {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class Electron extends Particle {
-    constructor(x,y,parent) {
-        super(x,y,parent);
-        this.pathLength = (2*wire.height) + (wire.posX-wire.negX);
-        this.positionOnPath = 0;
-        this.color = '#fffc00';
-        this.size = 2;
+    constructor(pathLocation) {
+        super(NaN,NaN); //TODO: revise this declaration so we call it with a positionOnPath rather than x,y
+        this.pathLength = wire.pathLength;
+        this.positionOnPath = pathLocation;
+        this.position = this.getAbsolutePosition();
+        this.colour = '#fffc00';
+        this.size = 4;
     }
 
     update(current) {
-        //TODO: Implement this
         let isDead = false;
-        if (this.positionOnPath >= this.pathLength) {
+        this.positionOnPath += parseFloat(current/5)*this.pathLength/200;
+        this.position = this.getAbsolutePosition();
+        if (this.positionOnPath >= this.pathLength - this.size) {
             isDead = true
         }
-        this.positionOnPath += parseFloat(current/5)*this.pathLength/200;
-        this.position = this.pathToAbsolutePosition();
         return isDead;
     }
 
     // Method to convert location from pathLength space to absolute space
-    pathToAbsolutePosition() {
+    getAbsolutePosition() {
+        //TODO: Fix this absolute garbage non-working shite
+        let position = {x: undefined, y: undefined};
+        if (this.positionOnPath <= wire.height) { //If it's on the left...
+            debugger;
+            position.x = wire.negX;
+            position.y = wire.negY - this.positionOnPath;
+        } else if (this.positionOnPath >= (this.pathLength - wire.height)) { //If it's on the right...
+            position.x = wire.posX;
+            position.y = wire.negY - (this.pathLength - this.positionOnPath);
+        } else { //Otherwise it's in the middle!
+            position.x = wire.negX - (this.positionOnPath-wire.height);
+            position.y = wire.negY - wire.height;
+        }
 
+        return position;
     }
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class Lithium extends Particle {
-    constructor(x,y,split,parent) {
-        super(x,y,parent);
-        if (split){
-            this.charge = 1;
-        } else {
-            this.charge = 0;
-        }
-        this.isSplit = split;
+    constructor(x,y) {
+        super(x,y);
         this.pathLength = posElec.x -(negElec.x+negElec.width);
         this.colour = '#ff0100';
         this.size = 10;
@@ -126,10 +134,9 @@ class Lithium extends Particle {
 
     update(current) {
         let isDead = false;
-        this.position.x += parseFloat(current/5)*this.pathLength/200; //+ (Math.random() - 0.5);
-        debugger;
+        this.position.x += parseFloat(current/5) * this.pathLength/200;
         this.position.y += (Math.random() - 0.5); //add some wobble!
-        if (this.position.x >= posElec.x - this.size || this.position.x <= negElec.x + negElec.width + this.size) {
+        if (this.position.x >= posElec.x || this.position.x <= negElec.x + negElec.width) {
             isDead = true;
         }
         //Make sure they don't wobble outside the battery casing...
@@ -141,13 +148,4 @@ class Lithium extends Particle {
         return isDead;
     }
 
-    split(Electrons) {
-        if (this.isSplit === false) {
-            Electrons.add(new Electron(this.position));
-            this.isSplit = true;
-            this.charge++;
-        } else {
-            console.log("Lithium atom is already ionised - cannot generate another electron!");
-        }
-    }
 }
