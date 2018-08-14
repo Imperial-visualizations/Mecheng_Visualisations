@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1f98102a-a7b2-4c5d-82f9-050e76c4d609" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/animations.js" beforeDir="false" afterPath="$PROJECT_DIR$/animations.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/animations.js" beforeDir="false" afterPath="$PROJECT_DIR$/interactive_display.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/battery.html" beforeDir="false" afterPath="$PROJECT_DIR$/battery.html" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -89,14 +91,14 @@
         <counts>
           <entry key="JavaScript Console" value="34" />
           <entry key="html" value="176" />
-          <entry key="js" value="11374" />
+          <entry key="js" value="11715" />
           <entry key="txt" value="188" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="HTML" value="176" />
-          <entry key="JavaScript" value="11408" />
+          <entry key="JavaScript" value="11749" />
           <entry key="PLAIN_TEXT" value="188" />
         </counts>
       </usages-collector>
@@ -134,10 +136,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/animations.js">
+        <entry file="file://$PROJECT_DIR$/interactive_display.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="527">
-              <caret line="64" column="20" selection-start-line="64" selection-start-column="20" selection-end-line="64" selection-end-column="20" />
+            <state relative-caret-position="357">
+              <caret line="36" column="75" selection-start-line="36" selection-start-column="75" selection-end-line="36" selection-end-column="75" />
             </state>
           </provider>
         </entry>
@@ -145,7 +147,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/battery.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="850">
+            <state relative-caret-position="1105">
               <caret line="83" column="20" selection-start-line="83" selection-start-column="20" selection-end-line="83" selection-end-column="20" />
               <folding>
                 <element signature="n#style#0;n#div#0;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
@@ -227,6 +229,7 @@
         <option value="$PROJECT_DIR$/battery.html" />
         <option value="$PROJECT_DIR$/particles.js" />
         <option value="$PROJECT_DIR$/animations.js" />
+        <option value="$PROJECT_DIR$/interactive_display.js" />
       </list>
     </option>
   </component>
@@ -243,10 +246,10 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="737" />
-    <option name="y" value="-1100" />
+    <option name="x" value="799" />
+    <option name="y" value="-1106" />
     <option name="width" value="148" />
-    <option name="height" value="60" />
+    <option name="height" value="40" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -290,17 +293,17 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Node.js.animations.js">
+  <component name="RunManager" selected="Node.js.interactive_display.js">
     <configuration name="DataGeneration.js" type="NodeJSConfigurationType" factoryName="Node.js" temporary="true" nameIsGenerated="true" path-to-js-file="DataGeneration.js" working-dir="$PROJECT_DIR$">
       <method v="2" />
     </configuration>
     <configuration name="DataTest.js" type="NodeJSConfigurationType" factoryName="Node.js" temporary="true" nameIsGenerated="true" path-to-js-file="DataTest.js" working-dir="$PROJECT_DIR$">
       <method v="2" />
     </configuration>
-    <configuration name="animations.js" type="NodeJSConfigurationType" factoryName="Node.js" temporary="true" nameIsGenerated="true" path-to-js-file="animations.js" working-dir="$PROJECT_DIR$">
+    <configuration name="ide-scripting.js" type="NodeJSConfigurationType" factoryName="Node.js" temporary="true" nameIsGenerated="true" path-to-js-file="$APPLICATION_CONFIG_DIR$/consoles/ide/ide-scripting.js" working-dir="$PROJECT_DIR$">
       <method v="2" />
     </configuration>
-    <configuration name="ide-scripting.js" type="NodeJSConfigurationType" factoryName="Node.js" temporary="true" nameIsGenerated="true" path-to-js-file="$APPLICATION_CONFIG_DIR$/consoles/ide/ide-scripting.js" working-dir="$PROJECT_DIR$">
+    <configuration name="interactive_display.js" type="NodeJSConfigurationType" factoryName="Node.js" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/interactive_display.js" working-dir="$PROJECT_DIR$">
       <method v="2" />
     </configuration>
     <configuration name="particles.js" type="NodeJSConfigurationType" factoryName="Node.js" temporary="true" nameIsGenerated="true" path-to-js-file="particles.js" working-dir="$PROJECT_DIR$">
@@ -308,14 +311,14 @@
     </configuration>
     <list>
       <item itemvalue="Node.js.ide-scripting.js" />
-      <item itemvalue="Node.js.animations.js" />
+      <item itemvalue="Node.js.interactive_display.js" />
       <item itemvalue="Node.js.DataGeneration.js" />
       <item itemvalue="Node.js.DataTest.js" />
       <item itemvalue="Node.js.particles.js" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Node.js.animations.js" />
+        <item itemvalue="Node.js.interactive_display.js" />
         <item itemvalue="Node.js.DataGeneration.js" />
         <item itemvalue="Node.js.particles.js" />
         <item itemvalue="Node.js.DataTest.js" />
@@ -345,7 +348,7 @@
       <workItem from="1533068178809" duration="626000" />
       <workItem from="1533120233478" duration="2858000" />
       <workItem from="1533123111093" duration="113482000" />
-      <workItem from="1533909241201" duration="25986000" />
+      <workItem from="1533909241201" duration="28740000" />
     </task>
     <task id="LOCAL-00001" summary="Minor changes: voltage display now adjusts based on cell status, title changed, started writing functions to allow generation and destruction of ions and electrons">
       <created>1533313680813</created>
@@ -358,7 +361,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="196031000" />
+    <option name="totallyTimeSpent" value="198785000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -442,16 +445,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/battery.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="850">
-          <caret line="83" column="20" selection-start-line="83" selection-start-column="20" selection-end-line="83" selection-end-column="20" />
-          <folding>
-            <element signature="n#style#0;n#div#0;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/particles.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="663">
@@ -459,10 +452,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/animations.js">
+    <entry file="file://$PROJECT_DIR$/battery.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="527">
-          <caret line="64" column="20" selection-start-line="64" selection-start-column="20" selection-end-line="64" selection-end-column="20" />
+        <state relative-caret-position="1105">
+          <caret line="83" column="20" selection-start-line="83" selection-start-column="20" selection-end-line="83" selection-end-column="20" />
+          <folding>
+            <element signature="n#style#0;n#div#0;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/interactive_display.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="36" column="75" selection-start-line="36" selection-start-column="75" selection-end-line="36" selection-end-column="75" />
         </state>
       </provider>
     </entry>

@@ -1,4 +1,12 @@
 "use strict";
+
+//TODO: Update design of diagram (colours, etc.)
+//TODO: Add upper voltage cut-off
+//TODO: Make separator visually porous
+//TODO: Transient effects?
+//TODO: Introductory animations
+//TODO: Uniform distribution of ions
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  Global variables
 
@@ -19,14 +27,15 @@ const box = { //dimensions for external battery box
     height: canvasHeight*0.7
 };
 
-const negElec = {
+const negElec = { //Negative electrode dimensions
     x: box.x,
     y: box.y,
     width: 0.2*box.width,
     height: box.height
 };
 
-const posElec = { //Negative electrode dimensions
+//TODO: Graphical error in this definition; it's not always the right width
+const posElec = { //Positive electrode dimensions
     x: box.width + 10 - negElec.width,
     y: box.y,
     width: negElec.width,
