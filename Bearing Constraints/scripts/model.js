@@ -1,23 +1,54 @@
+/* Default class to render the bearing-shaft arrangement */
 class Default {
-  // Includes functions to render the default bearing-shaft arrangement
-  constructor() {
+  constructor(layer) {
+    let updateRender = function() {};
+
+    this.init = function() {
+      switch(basic.layer[layer]) {
+        case 'back':
+          updateRender = function() {
+            drawBack(basic.stepped, basic.merged);
+          }
+        break
+        case 'bearing':
+          updateRender = function() {
+            drawBearing(pos.offset.left, false);
+            drawBearing(pos.offset.right, basic.stepped);
+          }
+        break
+        case 'housing':
+          updateRender = function() {
+            drawBasicHousing(pos.offset.left, basic.merged);
+            drawBasicHousing(pos.offset.right, basic.merged);
+          }
+        break
+        case 'shaft':
+          updateRender = function() {
+            drawShaft(basic.stepped);
+          }
+        break
+        case 'line':
+          updateRender = function() {
+            drawCentreline(pos.centre.y, canvas.dim.x * 0.95);
+          }
+        break
+      }
+    }
+    this.init();
+
     this.render = function() {
-      drawBearing(offset.left, shaft.diameter);
-      drawBearing(offset.right, shaft.diameter);
-      drawShaft('default');
-      drawShoulder(offset.left, shaft.diameter, 'default');
-      drawShoulder(offset.right, shaft.diameter, 'default');
-      drawCentreline(centre.horizontal, shaft.long);
+      updateRender();
     }
   }
 }
 
+/* Constraint class to render all constraint types at each location */
 class Constraint {
-  // Includes functions to render all constraint types at each location
   constructor(type, location) {
-    var updateRender = function() {}, 
-        updatePosition = function() {};
-    var pos, typeColour, rate, redRGB;
+    let updateRender = function() {}, 
+        updatePosition = function() {},
+        updatePreview = function() {};
+    let position, rate, redRGB;
 
     this.resetHighlight = function() {
       rate = 5, redRGB = 45;
@@ -28,56 +59,92 @@ class Constraint {
       switch(type) {
         case 'circlip':
           updateRender = function() {
-            drawCirclip(location, false);
+            fill(100, 100, 100);
+            drawCirclip(location, basic.stepped);
+          }
+          updatePreview = function() {
+            if (!basic.stepped || location != 2) {
+              drawCirclip(location, basic.stepped);
+            }
           }
           updatePosition = function() {
-            return pos = drawCirclip(location, true);
+            return position = drawCirclip(location, basic.stepped, true);
           }
-          typeColour = 100;
         break
         case 'collar':
           updateRender = function() {
-            drawCollar(location, false);
+            fill('white');
+            if ((location == 1 && state[2] == 'collar') || (location == 2 && state[1] == 'collar')) {
+              drawCollar(location, true);
+            }
+            else {
+              drawCollar(location, false);
+            }
+          }
+          updatePreview = function() {
+            if (!basic.stepped || location == 0) {
+              drawCollar(location, false);
+            }
           }
           updatePosition = function() {
-            return pos = drawCollar(location, true);
+            return position = drawCollar(location, false, true);
           }
-          typeColour = 255;
-        break
-        case 'shoulder':
-          updateRender = function() {
-            drawShoulder(location);
-          }
-          typeColour = 255;
         break
         case 'spacer':
           updateRender = function() {
-            drawSpacer(false);
+            let stateIndex = 0;
+            if (location > 3) {
+              stateIndex = 4;
+              basic.merged = true;
+            } 
+            fill(100, 100, 100);
+            drawSpacer(location, basic.stepped);
+            state[2 + stateIndex] = 'spacer';
+          }
+          updatePreview = function() {
+            let stateIndex = 0;
+            if (location > 3) {
+              stateIndex = 4;
+            } 
+            if(state[1 + stateIndex] == 'empty' && state[2 + stateIndex] == 'empty') {
+              drawSpacer(location, basic.stepped)
+            }
           }
           updatePosition = function() {
-            return pos = drawSpacer(true);
+            return position = drawSpacer(location, basic.stepped, true);
           }
-          typeColour = 100;
+        break
+        case 'shoulder':
+          updateRender = function() {
+            fill(200, 200, 200)
+            drawCustomHousing(location, basic.stepped);
+          }
+          updatePreview = function() {
+            drawShoulder(location, basic.stepped);
+          }
+          updatePosition = function() {
+            return position = drawShoulder(location, basic.stepped, true);
+          }
         break
       }
     }
     this.init();
 
     this.render = function() {
-      fill(typeColour, typeColour, typeColour)
       updateRender();
     }
 
+    this.preview = function() {
+      updatePreview();
+    }
+
     this.highlight = function() {
-      if (state[location] == 'empty' && !(type == 'spacer' && (state[1] != 'empty' || state[2] != 'empty'))) {
-        [redRGB, rate] = highlightConstraint([redRGB, rate], updateRender);
+      if (state[location] == 'empty') {
+        [redRGB, rate] = highlightConstraint([redRGB, rate], updatePreview);
         if (held) {
           if (checkHover(updatePosition())) {
-            model.run = model.run.concat(this);
+            design.run[location] = this;
             state[location] = type;
-            if (type == 'spacer') {
-              state[2] = 'spacer';
-            }
           }
         }
       }
@@ -85,228 +152,194 @@ class Constraint {
   }
 }
 
+/* Setup function runs once on startup */
 function setup() {
-  // Canvas setup
+  // Model dimensioning (to scale with screen width)
   canvas = {
-    width: 0.95 * document.getElementById('model.ID').offsetWidth,
-    height: 400,
-  }
-  canvas.dimensions = createCanvas(canvas.width, canvas.height);
+    dim: {
+      x: 0.95 * document.getElementById('model.ID').offsetWidth,
+      y: 400,
+    },
+  };
+  canvas.dimensions = createCanvas(canvas.dim.x, canvas.dim.y);
   canvas.dimensions.parent('model.ID');
 
-  // Dimensioning and location
   shaft = {
-    long: canvas.width * 0.9,
-    diameter: 60,
-  }
-  centre = {
-    horizontal: canvas.height * 0.5,
-    vertical: canvas.width * 0.5,
-  }
-  offset = {
-    top: centre.horizontal + shaft.diameter/2 + 20,
-    bottom: centre.horizontal - shaft.diameter/2 - 20,
-    left: canvas.width * 0.25,
-    right: canvas.width * 0.75,
-  }
+    dim: {
+      x: canvas.dim.x * 0.9,
+    },
+    dia: {
+      straight: 70,
+      stepped: 38,
+    },
+  };
+
+  pos = {
+    centre: {
+      x: canvas.dim.x * 0.5,
+      y: canvas.dim.y * 0.5,
+    },
+    offset: {
+      up: canvas.dim.y * 0.5 - shaft.dia.straight - 20,
+      down: canvas.dim.y * 0.5 + shaft.dia.straight + 20, 
+      left: canvas.dim.x * 0.25,
+      right: canvas.dim.x * 0.75,
+    },
+  };
+
+  basic = {
+    stepped: false,
+    merged: false,
+    layer: ['back', 'bearing', 'housing', 'shaft', 'line'],
+  };
 
   // Initialising model
   rectMode(CENTER);
   ellipseMode(CENTER);
 
   held = false;
-  state = [], hover = [];
-  model.circlip = [], model.collar = [], model.spacer = [], model.shoulder = [];
+  state = [];
 
-  for (let i=0; i<8; i++) {
-    model.circlip[i] = new Constraint('circlip', i);
-    model.collar[i] = new Constraint('collar', i);
-    model.spacer[i] = new Constraint('spacer', i);
-    model.shoulder[i] = new Constraint('shoulder', i);
+  design = [];
+  design.default = [], design.run = [];
+  typeName = ['circlip', 'collar', 'spacer', 'shoulder'];
+
+  for (let i=0; i<typeName.length; i++) {
+    design[typeName[i]] = [];
+    for (let j=0; j<8; j++) {
+      design[typeName[i]][j] = new Constraint(typeName[i], j);
+    }
   }
 
-  model.default = [new Default()];
-  resetModel();
+  initialise();
+  reset();
 }
 
+/* Draw function loops indefinitely following setup */
 function draw() {
-  background(240, 240, 255)
+  background(240, 240, 255);
 
-  // Display run array
-  for (let i=0; i<model.run.length; i++) {
-    model.run[i].render();
-  }
-  for (let i=0; i<model.runHighlight.length; i++){
-    model.runHighlight[i].highlight();
+  for (let i=0; i<basic.layer.length; i++) {
+    design.default[i].render();
   }
 
-  // Resets held status at the end of each cycle
+  for (let i=0; i<design.run.length; i++) {
+    if (design.run[i] != undefined) {
+      design.run[i].render();
+    }
+  }
+
+  for (let i=0; i<design.runHighlight.length; i++) {
+    design.runHighlight[i].highlight();
+  }
+
   if (held) {
     held = false;
   }
+
+  updateBearingTable();
 }
 
+/* Initialises design models with latest parameters */
+function initialise() {
+  for (let i=0; i<basic.layer.length; i++) {
+    design.default[i] = new Default(i);
+  }
+}
+
+/* Resets design model */
+function reset() {
+  design.run = [];
+  design.runHighlight = [];
+  basic.merged = false;
+  for (let i =0; i<8; i++) {
+    state[i] = 'empty';   
+  }
+  updateStyle();
+}
+
+/* Assigns constraint type */
+function feature(type) {
+  design.runHighlight = [];
+  switch (type) {
+    case 'intCirclip':
+      design.runHighlight = design.circlip.slice(4,8);
+    break
+    case 'extCirclip':
+      design.runHighlight = design.circlip.slice(0,4);
+    break
+    case 'collar':
+      design.runHighlight = design.collar.slice(0,4);
+    break
+    case 'inSpacer':
+      design.runHighlight = design.spacer.slice(1,2);
+    break
+    case 'outSpacer':
+      design.runHighlight = design.spacer.slice(5,6);
+    break
+    case 'shoulder':
+      design.runHighlight = design.shoulder.slice(4,8);
+    break
+  }
+}
+
+/* Updates the chosen shaft style */
+function updateStyle() {
+  let shaftCheckbox = document.getElementById("shaft");
+  if (shaftCheckbox.checked) {
+    basic.stepped = true;
+    removeConstraint('collar', [1, 3]);
+    removeConstraint('spacer', [1]);
+    removeConstraint('all', [2]);
+    state[2] = 'collar';
+  }
+  else {
+    basic.stepped = false;
+    state[2] = 'empty';
+  }
+  
+  for (let i=0; i<typeName.length; i++) {
+    for (let j=0; j<8; j++) {
+      design[typeName[i]][j].resetHighlight();
+    }
+  }
+  initialise();
+}
+
+/* Removes a constraint at a given array of locations */ 
+function removeConstraint(type, locations) {
+  for (let i=0; i<locations.length; i++) {
+    if (type == 'all' || state[locations[i]] == type) {
+      state[locations[i]] = 'empty';
+      design.run[locations[i]] = undefined;
+    }
+  }
+}
+
+/* p5 function that triggers when the mouse is pressed and released */
 function mouseClicked() {
-  // p5 function that triggers when the mouse is pressed and released
   held = true;
 }
 
-function resetModel() {
-  // Reset model render
-  model.run = model.default;
-  model.runHighlight = [];
-  for (let i =0; i<8; i++) {
-    state[i] = 'empty';
-    model.circlip[i].resetHighlight();
-    model.collar[i].resetHighlight();
-    model.spacer[i].resetHighlight();
-    model.shoulder[i].resetHighlight();    
-  }
-}
-
-function feature(type) {
-  // Assigns constraint type
-  model.runHighlight = [];
-  switch (type) {
-    case 'intCirclip':
-      model.runHighlight = model.circlip.slice(0,4);
-    break
-    case 'extCirclip':
-      model.runHighlight = model.circlip.slice(4,8);
-    break
-    case 'collar':
-      model.runHighlight = model.collar.slice(0,4);
-    break
-    case 'spacer':
-      model.runHighlight = model.spacer.slice(1,2);
-    break
-    case 'shoulder':
-      model.runHighlight = model.shoulder.slice(4,8);
-    break
-  }
-}
-
-function highlightConstraint(colour, render) {
-  // Updates constraint highlight colour
-  stroke('red');
-  fill(255, colour[0] += colour[1], 45, 150);
-  render();
-  stroke('black');
-  if (colour[0] >= 255) {
-    colour[1] = -5;
-  }
-  if (colour[0] <= 45) {
-    colour[1] = 5;
-  }
-  return colour;
-}
-
-function checkHover(pos) {
-  // Returns true if the mouse is within the position object parameters
+/* Returns true if the mouse is within the position object parameters */
+function checkHover(position) {
   let margin = 5;
-  if (mouseX > pos.x - pos.long/2 - margin && mouseX < pos.x + pos.long/2 + margin &&
-        mouseY > centre.horizontal - pos.shift - pos.high/2 - margin &&
-          mouseY < centre.horizontal + pos.shift + pos.high/2 + margin) {
+  if (mouseX > position.x - position.long/2 - margin && mouseX < position.x + position.long/2 + margin &&
+        mouseY > pos.centre.y - position.shift - position.high/2 - margin &&
+          mouseY < pos.centre.y + position.shift + position.high/2 + margin) {
     held = false;
     return true;
   }
 }
 
-function drawBearing(x, diameter) {
-  // Draws the bearing and default housing at a given x location
-  let shapeColor = ['black', 'white'], outlineSize = [2, 0],
-      y = [centre.horizontal + diameter/2 + 21, centre.horizontal - diameter/2 - 20];
-  fill(240, 240, 240);
-    rect(x, centre.horizontal, 70, 160, 2, 2, 2, 2);
-  noStroke();
-  for (let i=0; i<=1; i++) {
-    for (let j=0; j<=1; j++) {
-      fill(shapeColor[i]);
-        rect(x + 0.5, y[j] - 16, 40 + outlineSize[i], 12  + outlineSize[i], 1, 1, 1, 1);
-        rect(x + 0.5, y[j] + 16, 40 + outlineSize[i], 12 + outlineSize[i], 1, 1, 1, 1);
-        ellipse(x + 0.5, y[j], 24 + outlineSize[i], 24 + outlineSize[i]);
-    }
-  }
-  fill('white');
+/* Updates constraint highlight colour */
+function highlightConstraint(colour, preview) {
+  stroke('red');
+  fill(255, colour[0] += colour[1], 45, 150);
+  preview();
   stroke('black');
-}
-
-function drawCentreline(y, length) {
-  // Draws centreline at y for a given length
-  let prev = canvas.width * 0.025 - 4;
-  stroke('black');
-  for (let i=0; i<length+20; i+=20) {
-    line(prev + 4, y, prev + 16, y)
-    point(prev + 20, y)
-    prev += 20;
+  if (colour[0] >= 255 || colour[0] <= 45) {
+    colour[1] *= -1;
   }
-  line(prev + 4, y, prev + 16, y)
-}
-
-function drawCirclip(location, returnPos) {
-  // Draws circlip at x for a given location
-  let x = [offset.left - 24, offset.left + 24, offset.right - 24, offset.right + 24],
-      shift = 30;
-  if (location > 3) {
-    shift = 72;
-    location -= 4;
-  }
-  if (returnPos) {
-    return {x: x[location], shift: shift, long: 6, high: 12};
-  }
-  else {
-    rect(x[location], centre.horizontal + shift, 6, 12, 1, 1, 1, 1);
-    rect(x[location], centre.horizontal - shift, 6, 12, 1, 1, 1, 1);
-  }
-}
-
-function drawCollar(location, returnPos) {
-  // Draws collar at x for a given location
-  let long = canvas.width * 0.2 - 20,
-      x = [offset.left - 20.5 - long/2, offset.left + 20.5 + long/2,
-           offset.right - 20.5 - long/2, offset.right + 20.5 + long/2];
-  if ((location == 1 && state[2] == 'collar') || (location == 2 && state[1] == 'collar')) {
-    x[location] = centre.vertical;
-    long = canvas.width * 0.5 - 41;
-  }
-  if (returnPos) {
-    return {x: x[location], shift: 0, long: long, high: shaft.diameter + 30};
-  }
-  else {
-    rect(x[location], centre.horizontal, long, shaft.diameter + 30, 1, 1, 1, 1);
-    drawCentreline(centre.horizontal, shaft.long);
-  }
-}
-
-function drawShaft(stepped) {
-  if (stepped == 'default') {
-    rect(centre.vertical, centre.horizontal, shaft.long, shaft.diameter, 3, 3, 3, 3);
-  }
-  else {
-  }
-}
-
-function drawShoulder(x, diameter, location) {
-  // Draws bearing housing and shoulder at x for a given shaft diameter and location
-  if (location == 'default') {
-    fill(200, 200, 200);
-      rect(x, centre.horizontal + diameter/2 + 54, 70, 24, 2, 2, 0, 0);
-      rect(x, centre.horizontal - diameter/2 - 54, 70, 24, 0, 0, 2, 2);
-    fill('white')
-  }
-  else {
-
-  }
-}
-
-function drawSpacer(returnPos) {
-  // Draws spacer at location 1 and 2
-  if (returnPos) {
-    return {x:centre.vertical, shift: 0, high: shaft.diameter + 25, long: canvas.width * 0.5 - 41};
-  }
-  else {
-    rect(centre.vertical, centre.horizontal - shaft.diameter/2 - 7.5, canvas.width * 0.5 - 41, 15, 1, 1, 1, 1);
-    rect(centre.vertical, centre.horizontal + shaft.diameter/2 + 7.5, canvas.width * 0.5 - 41, 15, 1, 1, 1, 1);
-    drawCentreline(centre.horizontal, shaft.long);
-  }
+  return colour;
 }
