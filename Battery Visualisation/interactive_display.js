@@ -88,7 +88,7 @@ const fr = 30; //Frame rate in fps
 //  draw() runs repeatedly to animate the canvas in response to user input
 
 function setup() {
-    prepareBackground(); //TODO: Consider removing returning myCanvas
+    prepareBackground();
 
     frameRate(fr);
 
