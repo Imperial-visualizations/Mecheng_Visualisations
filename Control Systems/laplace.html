@@ -6,9 +6,15 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!--css link-->
-        <link rel ="stylesheet" href="https://rawgit.com/cydcowley/public-test-data/master/Style2.css">
+        <link rel="stylesheet" href="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/skeleton.css">
+        <link rel="stylesheet" href="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/style.css">
         <!--PLOTLY.JS-->
         <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>  
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/5.0.4/math.js"></script>
+
+        <!--J QUERY SHOW AND HIDE FUNCTION-->
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script> <!-- need this to be on top for the toggle button function to work-->  
+
         <style>
             /*This code overwrite Style2.css setting on checkbox*/
             input[type="checkbox"]
@@ -24,68 +30,115 @@
                 width: 3%;/* Style2.css  set this to 100%, this means every checkbox occupy one line*/
                 height: 12px;
             }
+            
+                       /*This code allows part of the page to be scrollable*/
+            #chartDiv{
+                position:relative;
+                width: 100%;
+                top: 0;
+                right:0;
+
+            }
         </style>
     </head>
 
 
-    <body>
+    <body> 
         <div class="container"> <!--linked to css-->            
-            <h1>1st Order Process</h1>   
+            <!--    <h1>1st Order Process</h1>   -->
+            <br> <!--need a space here else, css header blocks content -->
 
             <div class="row"> <!--implementing columns-->
 
                 <div class="four columns"> <!--left column--> <!--four because want to divide the page to 3 sections, and in the css the style is set to 12, so for division, it needs to be 4 to have 3 columns-->
-                    <p><b>Process Parameter Settings </b>
-                        <br>
-                        Process Gain K<sub>H</sub> &nbsp <input type="number" name="kH" value="2" id= "kH"> 
-                        <br>
-                        Process time constant τ<sub>H</sub>&nbsp<input type="number" name="tauH" value="1" id= "tauH" min="0" ></p>
-                </div><!--end of column 1-->
+                    <h5 class="Title">Process Parameter Settings</h5>
+                <table>
+                    <tr>
+                        <td> Process Gain K<sub>H</sub></td>
+                        <td> <input type="number" name="kH" value="2" id= "kH" min="0"> </td>
+                    </tr>
+                    <tr>
+                        <td>  Process time constant τ<sub>H</sub></td>
+                        <td> <input type="number" name="tauH" value="1.5" id= "tauH" min="0" ></td>
+                    </tr>
+                </table>
 
-                <div class="four columns"> <!--middle column-->
-                    <p><b>Step and Plotting Time Setting &nbsp</b>
-                        <br>
-                        Setting (step function) &nbsp<input type="number" name="c" value="1" id= "c"  > &nbsp          
-                        <br>
-                        Total time to plot (s) &nbsp<input type="number" name="totalTime" value="20" min="0" id= "totalTime">&nbsp
-                        <br>
-                        Time step (s) &nbsp<input type="number" name="dt" value="0.1"  step="0.1"  min="0" id="dt"></p>
-                </div> <!-- end of 2nd column-->
 
-                <div class="four columns"> <!-- last column-->
-                    <p><b>Feedback Gain Setting &nbsp</b><br>
-                        Proportional control (K <sub>P</sub>) &nbsp <input type="number" name="kp" value="1" id= "kp" step="0.05" >&nbsp
-                        <br>
-                        integral control (K <sub>I</sub>) &nbsp<input type="number" name="ki" value="1" id= "ki" step="0.05" >&nbsp
-                        <br>
-                        differential control (K <sub>D</sub>) &nbsp<input type="number" name="kd" value="1" id= "kd" step="0.05" ><br></p>
-                </div><!--end of last column-->
-                
-            </div>  <!--end of implementing columns-->
-
-            <input type="checkbox" id="plotStep" checked class="new">Plot Step Setting &nbsp
-            <input type="checkbox" id="plotOpen" checked>Plot Open loop &nbsp
-            <input type="checkbox" id="plotKp" checked>Plot Proportional &nbsp
-            <input type="checkbox" id="plotKi" checked>Plot Integral &nbsp
-            <input type="checkbox" id="plotKd" checked>Plot Differential &nbsp
-            <input type="checkbox" id="plotKpKi" checked>Plot PI &nbsp
-            <input type="checkbox" id="plotKpKd" checked>Plot PD &nbsp
-            <input type="checkbox" id="plotKpKiKd" >Plot PID &nbsp
-            <br> 
-
-            <input type="button" onclick= "do1stOrder();"  value="Click to plot graph">   <!--Button to do plot-->
-            <br>
-            <a href="index.html">Back</a> <!--linking home, allow user to go back-->
-            <br>
-            <a href="laplace2nd.html">Second Order Systems</a> <!--linking second order page-->
-            
-            <!--PLOT STEP RESPONSE-->
-            <div id="chartDiv"> </div> <!--PLOTLY CHART-->
-
-        </div>
+                    <h5 class="Title">Feedback Gain Setting &nbsp</h5>                
+                    <table>
+                    <tr>
+                        <td>Proportional control (K <sub>P</sub>)</td>
+                        <td><input type="number" name="kp" value="1" id= "kp" step="0.05" min="0"> </td>
+                    </tr>
+                    <tr>
+                        <td>Integral control (K <sub>I</sub>)</td>
+                        <td><input type="number" name="ki" value="1" id= "ki" step="0.05" min="0" ></td>
+                    </tr>
+                    <tr>
+                        <td>Differential control (K <sub>D</sub>)</td>
+                        <td> <input type="number" name="kd" value="1" id= "kd" step="0.05" min="0"></td>
+                    </tr>
+                </table>
         
-        <!--calling the js files-->
-        <script src=firstOrderHsV2.js></script>  
-        <script src=laplaceHelper.js></script>  
+           
+                    <h5 class="Title">Step and Plotting Time Setting &nbsp</h5>
+                    <table>
+                    <tr>
+                        <td> Setting (step function)</td>
+                        <td><input type="number" name="c" value="1" id= "c"  > </td>
+                    </tr>
+                    <tr>
+                        <td>Total time to plot (s)</td>
+                        <td><input type="number" name="totalTime" value="20" min="0" id= "totalTime"></td>
+                    </tr>
+                    <tr>
+                        <td>Time step (s)</td>
+                        <td><input type="number" name="dt" value="0.1"  step="0.1"  min=dt id="dt"></td>
+                    </tr>
+                </table>
+                             
+
+                </div>  <!--end of implementing columns-->
+
+                <!--PLOT STEP RESPONSE-->
+                <div class="eight columns">
+                    <div id="chartDiv"> </div> <!--PLOTLY CHART-->
+                    
+                    
+                <input type="checkbox" id="plotStep" checked class="new">Plot Step Setting &nbsp
+                <input type="checkbox" id="plotOpen" checked>Plot Open loop &nbsp
+                <input type="checkbox" id="plotKp" checked>Plot Proportional &nbsp
+                <input type="checkbox" id="plotKi" checked>Plot Integral &nbsp
+                <input type="checkbox" id="plotKd" checked>Plot Differential &nbsp
+                <input type="checkbox" id="plotKpKi" >Plot PI &nbsp
+                <input type="checkbox" id="plotKpKd">Plot PD &nbsp
+                <input type="checkbox" id="plotKpKiKd" >Plot PID &nbsp
+                <br> 
+
+                <input type="button" onclick= "do1stOrder();"  value="Click to plot graph">   <!--Button to do plot-->
+                <br>
+
+
+                </div> <!--end of chart-->
+
+
+                <a href="index.html">Back</a> <!--linking home, allow user to go back-->
+                <br>
+                <a href="laplace2nd.html">Second Order Systems</a> <!--linking second order page-->
+                <br>
+                <a href="FirstOrderWaterTank.html">First Order Water Tank Volume Control</a>
+                <br>
+                <a href="SecondOrderPositionControl.html">Second Order Lift Position Control</a>
+            </div>
+
+            <!--calling the js files-->
+            <script src="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/navigator.js"></script>
+            <script src=firstOrderHs.js></script>  
+            <script src=laplaceHelper.js></script>  
+            
+            <script src="guidance.js"></script>
+    <!--<script>
+        let pages=[" index.html","laplace.html","laplace2nd.html", "FirstOrderWaterTank.html", "SecondOrderPositionControl.html"];
+    </script>-->
     </body>
 </html>
