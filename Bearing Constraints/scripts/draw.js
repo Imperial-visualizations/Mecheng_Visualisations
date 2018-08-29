@@ -16,7 +16,14 @@ function drawBearing(x, stepped) {
   let shapeColour = ['black', 'white'], 
       outline = [2, 0],
       y = [pos.centre.y + (shaft.dia.straight - shaft.dia.stepped)/2 + 42, 
-           pos.centre.y - (shaft.dia.straight - shaft.dia.stepped)/2 - 41];    
+           pos.centre.y - (shaft.dia.straight - shaft.dia.stepped)/2 - 41];
+
+  if (x < pos.centre.x) {
+    x = constraintLogic(x, 'leftBearing');
+  }
+  else if (x > pos.centre.x) {
+    x = constraintLogic(x, 'rightBearing');
+  }
 
   noStroke();
   if (stepped) {
@@ -59,13 +66,15 @@ function drawBasicHousing(x, merged) {
 }
 
 /* Draws shaft for stepped and non-stepped modes */
-function drawShaft(stepped) {
+function drawShaft(x, stepped) {
+  x = constraintLogic(x, 'shaft');
+
   if (stepped) {
-    rect(pos.centre.x, pos.centre.y, shaft.dim.x, shaft.dia.stepped, 3, 3, 3, 3);
-    rect(pos.centre.x - canvas.dim.x * 0.1 - 12.5, pos.centre.y, canvas.dim.x * 0.7 - 25, shaft.dia.straight, 3, 3, 3, 3);
+    rect(x, pos.centre.y, shaft.dim.x, shaft.dia.stepped, 3, 3, 3, 3);
+    rect(x - canvas.dim.x * 0.1 - 12.5, pos.centre.y, canvas.dim.x * 0.7 - 25, shaft.dia.straight, 3, 3, 3, 3);
   }
   else {
-    rect(pos.centre.x, pos.centre.y, shaft.dim.x, shaft.dia.straight, 3, 3, 3, 3);
+    rect(x, pos.centre.y, shaft.dim.x, shaft.dia.straight, 3, 3, 3, 3);
   }
 }
 
@@ -87,6 +96,8 @@ function drawCentreline(y, length) {
 function drawCirclip(location, stepped, returnPosition) {
   let x = [pos.offset.left - 24, pos.offset.left + 24, pos.offset.right - 24, pos.offset.right + 24],
       shift = shaft.dia.straight/2;
+
+  x[location] = constraintLogic(x[location], 'shaft');
 
   if (location == 3 && stepped) {
     shift -= (shaft.dia.straight - shaft.dia.stepped)/2; 
@@ -117,6 +128,8 @@ function drawCollar(location, common, returnPosition) {
       x = [pos.offset.left - 20.5 - length/2, pos.offset.left + 20.5 + length/2,
            pos.offset.right - 20.5 - length/2, pos.offset.right + 20.5 + length/2];
 
+  x[location] = constraintLogic(x[location], 'shaft');
+
   if (common) {
     x[location] = pos.centre.x;
     length = canvas.dim.x * 0.5 - 41;
@@ -135,21 +148,23 @@ function drawCollar(location, common, returnPosition) {
 /* Draws spacer at locations 1 or 5 */
 function drawSpacer(location, stepped, returnPosition) {
   let shift = shaft.dia.straight/2 + 7.5,
+      x = pos.centre.x,
       step = 0;
 
   if (location > 3) {
     shift += 30;
     if (stepped) {
       step = 4.5;
+      x -= step/2;
     }
   }
 
   if (returnPosition) {
-    return {x: pos.centre.x - step/2, shift: shift, long: canvas.dim.x * 0.5 - 41 - step, high: 15};
+    return {x: x, shift: shift, long: canvas.dim.x * 0.5 - 41 - step, high: 15};
   }
   else {
-    rect(pos.centre.x - step/2, pos.centre.y - shift, canvas.dim.x * 0.5 - 41 - step, 15, 2, 2, 2, 2);
-    rect(pos.centre.x - step/2, pos.centre.y + shift, canvas.dim.x * 0.5 - 41 - step, 15, 2, 2, 2, 2);
+    rect(x, pos.centre.y - shift, canvas.dim.x * 0.5 - 41 - step, 15, 2, 2, 2, 2);
+    rect(x, pos.centre.y + shift, canvas.dim.x * 0.5 - 41 - step, 15, 2, 2, 2, 2);
   }
 }
 
@@ -176,8 +191,8 @@ function drawShoulder(location, stepped, returnPosition) {
   }
 }
 
-/* Draws a custom housing with shoulders */
-function drawCustomHousing(location, stepped) {
+/* Draws a custom housing with shoulders and merges common central shoulders */
+function drawCustomHousing(location, stepped, common) {
   let shapeColour = ['black', 200], 
       outline = [0, -2],
       step = {x: 0, y: 0},
@@ -192,10 +207,21 @@ function drawCustomHousing(location, stepped) {
   }
 
   noStroke()
-    for (let i=0; i<outline.length; i++) {
-      fill(shapeColour[i]);
-      rect(x[location], pos.centre.y + shaft.dia.straight/2 + 38.5 - outline[i] - step.y/2, 21 + outline[i] - step.x, 13 - outline[i] + step.y);
-      rect(x[location], pos.centre.y - shaft.dia.straight/2 - 37.5 + outline[i] + step.y/2, 21 + outline[i] - step.x, 13 - outline[i] + step.y);
+    if (common && location == 2) {
+      for (let i=0; i<outline.length; i++) {
+        fill(shapeColour[i]);
+        rect(pos.centre.x + 0.5 - step.x/2, pos.centre.y + shaft.dia.straight/2 + 38.5 - outline[i] - step.y/2, canvas.dim.x*0.5 - 39 + outline[i] - step.x, 13 - outline[i] + step.y);
+        rect(pos.centre.x + 0.5 - step.x/2, pos.centre.y - shaft.dia.straight/2 - 37.5 + outline[i] + step.y/2, canvas.dim.x*0.5 - 39 + outline[i] - step.x, 13 - outline[i] + step.y);
+      }
+    }
+    else {
+      if (!common && (location == 1 || location == 2) || location == 0 || location == 3) {
+        for (let i=0; i<outline.length; i++) {
+          fill(shapeColour[i]);
+          rect(x[location], pos.centre.y + shaft.dia.straight/2 + 38.5 - outline[i] - step.y/2, 21 + outline[i] - step.x, 13 - outline[i] + step.y);
+          rect(x[location], pos.centre.y - shaft.dia.straight/2 - 37.5 + outline[i] + step.y/2, 21 + outline[i] - step.x, 13 - outline[i] + step.y);
+        }
+      }
     }
   stroke('black');
 }
