@@ -1,0 +1,216 @@
+<!doctype html>
+<html>
+    <head>
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+        <title>Water Tank First Order System</title>
+        <link rel="stylesheet" href="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/skeleton.css">
+        <link rel="stylesheet" href="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/style.css">
+
+        <style type="text/css">
+            #canvasWrapper{
+                width: 100%;
+                margin: 0 auto;
+            }
+            input[type=range]{
+            }
+            .Title{
+                padding-left: 8px;
+                font-weight:400;
+                border-left: 8px solid #006EAF; /* Same colour as bottom bar */
+            }
+
+
+            /*This code allows part of the page to be scrollable*/
+            #scrollable{
+                width: 100%;
+                height: 50vh;
+                margin: 0 auto;
+                overflow-y:auto;
+                overflow-x:auto;
+            }
+
+        </style>  
+
+        <!--J QUERY SHOW AND HIDE FUNCTION-->
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script> <!-- need this to be on top for the toggle button function to work-->  
+        <script>
+            $(document).ready(function () {
+                $("button").click(function () {
+                    // $(div id = "toggle").toggle(); wrong use # for id
+                    $("#toggle").toggle();
+                });
+            });
+        </script>
+
+        <!--MATHJAX-->
+        <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+        </script>
+        <script type="text/x-mathjax-config">
+            MathJax.Hub.Config({
+            tex2jax: {
+            inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+            processEscapes: true
+            }
+            });</script>
+
+
+    </head>
+    <body>
+
+        <div class="container">
+            <!--  <h1>First Order Volume Control System </h1> --> 
+            <br>
+            <div class="row">
+
+                <!--------------LOAD IMAGE AND P5.JS FILE HERE------------->
+                <div class="three columns">
+                    <div id="canvasWrapper"></div>
+                </div> <!--end for image column-->
+
+                <div class="six columns">
+                    <div id="chartarea"></div>
+                    <div>
+                        <table>
+                            <tr>
+                                <td>Time (s)</td>
+                                <td><p id="TimeUpdate">-</p></td>
+                            </tr>
+                            <tr>
+                                <td>Error</td>
+                                <td><p id="ErrorUpdate">-</p></td>
+                            </tr>
+                            <tr>
+                                <td> State of system</td>
+                                <td><p id="StateUpdate">-</p></td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <a href="index.html"> Concepts</a>
+                    <br>
+                    <a href="laplace.html">First Order Systems</a> <!--providing a link to go to first order laplace page-->
+                    <br>
+                    <a href="laplace2nd.html">Second Order Systems</a><!--link to got the second order page-->
+                    <br>
+                    <a href="SecondOrderPositionControl.html">Second Order Lift Position Control</a>
+                   
+                </div><!--end of chart area-->
+
+                <!-- -------------SLIDERS FOR ALL INPUT PARAMETERS------------ -->
+                <div class="three columns">
+                    <label>Volume of water in the tank is controlled by changing the parameters of the system.</label>
+                    <!--<input type="checkbox" id="plotStep" checked class="new">Plot Step Setting &nbsp-->
+                    <input type="radio" id="plotOpen" checked name="group1">Open loop &nbsp
+                    <input type="radio" id="plotKp" name="group1">Proportional &nbsp
+                    <input type="radio" id="plotKi"name="group1">Integral &nbsp
+                    <input type="radio" id="plotKd" name="group1">Differential &nbsp
+                    <input type="radio" id="plotKpKi"name="group1" >PI &nbsp
+                    <input type="radio" id="plotKpKd"name="group1">PD &nbsp
+                    <input type="radio" id="plotKpKiKd"name="group1" >PID &nbsp
+
+                    <br> 
+
+                    <div id="scrollable"> <!--allow this part to scroll-->
+                        <h6 class="Title">Process Parameter Settings</h6>
+
+                        <label class="sliderTitle">Process Gain (K<sub>H</sub>):
+                        </label>
+                        <label class="slider">
+                            <span class="sliderMin">0</span>
+                            <input id="KhSlider" class="inputs" type="range" value="1" min ="0" max="10" step ="0.5"/>
+                            <span class="sliderMax">10</span>
+                        </label>
+
+                        <br>
+
+                        <label class="sliderTitle">Time constant (τ):
+                        </label>
+                        <label class="slider">
+                            <span class="sliderMin">1</span>
+                            <input id="tauHSlider" class="inputs" type="range" value="5" min ="1" max="10" step ="0.5"/>
+                            <span class="sliderMax">10</span>
+                        </label>
+
+                        <br>
+
+                        <label class="sliderTitle">Setting(step function):
+                        </label>
+                        <label class="slider">
+                            <span class="sliderMin">1</span>
+                            <input id="cSlider" class="inputs" type="range" value="3" min ="1" max="5" step ="0.25"/>
+                            <span class="sliderMax">5</span>
+                        </label>
+
+
+                        <h6 class="Title">Feedback Gain Settings</h6>
+
+                        <label class="sliderTitle">Proportional control (K<sub>P</sub>):
+                        </label>
+                        <label class="slider">
+                            <span class="sliderMin">0</span>
+                            <input id="KpSlider" class="inputs" type="range" value="1" min ="0" max="20" step ="0.1"/>
+                            <span class="sliderMax">20</span>
+                        </label>
+
+                        <br>
+
+                        <label class="sliderTitle">Integral control (K<sub>I</sub>):
+                        </label>
+                        <label class="slider">
+                            <span class="sliderMin">0</span>
+                            <input id="KiSlider" class="inputs" type="range" value="0.5" min ="0" max="5" step ="0.1"/>
+                            <span class="sliderMax">5</span>
+                        </label>
+
+                        <br>
+
+                        <label class="sliderTitle">Differential control (K<sub>D</sub>):
+                        </label>
+                        <label class="slider">
+                            <span class="sliderMin">0</span>
+                            <input id="KdSlider" class="inputs" type="range" value="1" min ="0" max="10" step ="0.1"/>
+                            <span class="sliderMax">10</span>
+                        </label>
+                    </div><!--end of scrolling section-->
+                    <br>
+                    <span>
+                        <input type="button" onclick= "doRun();"  value="Run" id="runbutton">                      
+                        <input type="button" onclick= "doStop();"  value="Stop" id="stopbutton">  
+                    </span>
+                    <br>
+
+
+                    <button>Hide/Show Equations</button>
+                    <div id="toggle">
+                        <p><strong>First Order System</strong></p>
+                        <p>
+                            Fluid flowing in: ${q_i (t)}$ <br>
+                            Fluid flowing out: ${q_o (t)}$ <br>
+                            Volume of fluid in the tank: ${v(t)}$ <br>
+                            The system can be represented as:
+                            $${d v(t) \over dt}= q_i (t) - q_o (t)$$
+                            $${d v(t) \over dt}= q_i (t) -A v(t)$$
+
+                            Time domain: $${d v(t) \over dt }+  A v(t) = q_i (t)$$ <br>
+                            s domain: $$s V(s) + A V(s) =Q_i (s)$$ <br>
+                            rearrange: $$H(s) = {V \over Q_i}= {1 \over s+A} $$<br>
+                            In canonical form, the process can be written as: $$H(s) = {Y(s) \over U(s) }= {K \over 1 + \tau s}$$ <br>
+
+                        </p>
+                    </div> <!--end of toggle-->
+
+                </div>
+            </div>
+        </div>
+
+
+        <script src="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/navigator.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/p5.min.js"></script>
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>      
+        <script src=firstOrderHs.js></script>  
+        <script src=laplaceHelper.js></script> 
+        <script src="firstOrderWaterTank.js"></script>
+    </body>
+</html>

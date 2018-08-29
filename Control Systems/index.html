@@ -9,147 +9,242 @@ and open the template in the editor.
         <title>Control Systems</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <!--css link-->
-        <link rel ="stylesheet" href="https://rawgit.com/cydcowley/public-test-data/master/Style2.css">
-        <!--PLOTLY.JS-->
-        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
-        <!--TABLE STYLE (CAN BE DONE IN CSS)-->
-        <style>
-            table, th, td {
-                border: 1px solid black;
-                border-collapse: collapse;
+        <!--css link-->
+        <link rel="stylesheet" href="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/skeleton.css">
+        <link rel="stylesheet" href="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/style.css">
+        <!--PLOTLY.JS-->
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>  
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/5.0.4/math.js"></script>
+
+        <!--J QUERY SHOW AND HIDE FUNCTION-->
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script> <!-- need this to be on top for the toggle button function to work-->  
+
+        <!--MATHJAX-->
+        <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+        </script>
+        <script type="text/x-mathjax-config">
+            MathJax.Hub.Config({
+            tex2jax: {
+            inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+            processEscapes: true
             }
-        </style>
-        
+            });</script>
+
+
     </head>
 
 
 
     <body>
-        <div class="container"> <!--linked to css-->
-                    <h1>P-I-D Control Systems</h1> 
+        <!--<div class="container">-->  
+        <h1>P-I-D Control Systems</h1> 
+        <!--for block diagram-->
+        <div class="container">
+            <a href="laplace.html">First Order Systems</a> <!--providing a link to go to first order laplace page-->
+            <br>
+            <a href="laplace2nd.html">Second Order Systems</a><!--link to got the second order page-->
 
-             <a href="laplace.html">First Order Systems</a> <!--providing a link to go to first order laplace page-->
-             <br>
-             <a href="laplace2nd.html">Second Order Systems</a><!--link to got the second order page-->
 
-             
-        <div> <!--EXPLANATION-->
+            <!--EXPLANATION--> 
 
             <p> Control systems are used in many applications that require control of physical variables such as position, temperature and speed. 
-            It is widely used in robots, aircrafts, chemical processing plants and many more.
-            <br>
-            
-            <br>
-            <br>
-            
-            <div class="eight columns"> <!--left column--> 
-                 <!--BLOCK DIAGRAM-->
-            <img src="FlowDiagram.png"  alt="Diagram of a typical P-I-D Control System">
-            <p>Block diagram is used to represent a system based on transfer functions and signal flows.</p>
+                It is widely used in robots, aircrafts, chemical processing plants and many more.
+                <br>
+
+            <div class="six columns"><!--left column--> 
+                <!--BLOCK DIAGRAM-->
+                <img src="FlowDiagram.png"  alt="Diagram of a typical P-I-D Control System">
+                <p>Block diagram is used to represent a system based on the transfer functions and signal flows.</p>
                 <br>
             </div> <!--end of left column-->
-            
-            <div class="four columns"> <!--left column--> 
-            <table>
-                <tr>
-                    <td>H(s)</td>
-                    <td>First / Second order process</td>
-                </tr>
-                <tr>
-                    <td> u(t)</td>
-                    <td>input signal </td>
-                </tr>
-                <tr>
-                    <td>y(t)</td>
-                    <td>output signal</td>
-                </tr>
-                <tr>
-                    <td>K<sub>p</sub></td>
-                    <td>Proportional control</td>
-                </tr>
-                <tr>
-                    <td>K<sub>I</sub></td>
-                    <td>Integral control</td>
-                </tr>
-                <td>K<sub>D</sub></td>
-                <td>Derivative control</td>
-            </tr>
-            </table>
-            </div> <!--end of right column-->    
-            
+
+            <div class="four columns"> <!--left column-->
+                <table>
+                    <tr>
+                        <td>H(s)</td>
+                        <td>First / Second order process</td>
+                    </tr>
+                    <tr>
+                        <td> u(t)</td>
+                        <td>input signal </td>
+                    </tr>
+                    <tr>
+                        <td>y(t)</td>
+                        <td>output signal</td>
+                    </tr>
+                    <tr>
+                        <td>K<sub>p</sub></td>
+                        <td>Proportional control</td>
+                    </tr>
+                    <tr>
+                        <td>K<sub>I</sub></td>
+                        <td>Integral control</td>
+                    </tr>
+                    <td>K<sub>D</sub></td>
+                    <td>Derivative control</td>
+                    </tr>
+                </table>
+            </div> <!--end of right column--> 
+
+        </div> <!--end of block diagram-->
+
+        <div class="container"> <!-- Concepts-->
             <h3>Open-loop control</h3>
             <br>
-            <img src="OpenLoopControl.png"  alt="Diagram of a Open-loop Control">
+            <img src="OpenLoopControl.png"  alt="Diagram of a Open-loop control system">
             <br>
-            Open-loop control computes the input without continuous variable measurements. It is simple to implement however every variables need to be known for it to work.
+            Systems where the output quantity has no effect on the input quantity are known as open-loop control systems. It is simple to implement, however, every variables need to be known for it to work.
             Open-loop control will fail when there are changes or errors.
             <br>
-            
+
+
             <h3>Closed-loop control</h3>
             <br>
-            <img src="ClosedLoopControl.png"  alt="Diagram of a Closed-loop control">
+            <img src="ClosedLoopControl.png"  alt="Diagram of a Closed-loop control system">
             <br>
-            Closed-loop control measures the variables continuously and uses it to compute the control input.
+            Systems where output quantity of the control is fed back and compared with the input is known as closed-loop control systems. It measures the variables continuously and uses it to compute the control input.
             It is more complicated to implement. However, closed-loop control allows the system to obtain the desired outcome without knowing all the variables and when there are disturbance.
-            
+
+
             <br>
-            <h4>Advantages of using feedback control</h4> 
+            <h5>Advantages of using feedback control</h5> 
             <ul>
                 <li>Adaptive resource management heuristics</li>
                 <li>Systematic theoretical approach for analysis and design</li>
                 <li>Predict system response and stability to input</li>
             </ul>
             <br>
-            
+
+
             <h3>First order systems </h3>
+            First order systems are systems that can be described by a first order differential equation.
+            They can be described by 2 parameters : Gain (steady state value) and time constant (transient response) <br>
+           
+           First order process is represented by:
+            $$H(s)={Y(s) \over U(s)}={ K \over 1+ \tau s}$$ <br>
+            The output of a system:
+            $$Y(s) = H(s)  U(s)$$
+            While the input of a system is: $$ U(s) = {c \over s}$$
+            
+            <strong>Response of a first order system: Steady State</strong>
+            <br>
+            The steady state value is the output value, Y(s), when time approaches infinity:
+            $$y_{ss} = {lim}\displaystyle_{t \to \infty} y(t) = Kc$$
+            From this, it shows that the steady state value depends on the gain, K.
+            <br>
             <strong>Proportional control of a first order system: </strong>
             <br>
-            Increasing the K<sub>P</sub> value increase the transient response. As K<sub>P</sub> approach infinity, the system would react instantaneously.
+            Increasing the K<sub>P</sub>  value increase the transient response. As K<sub>P</sub> approach infinity, the system would react instantaneously.
             <br>
-            The steady state error reduces as the K<sub>P</sub> value increase. This can be proven as below:
-<!--include equations on page 18-->
+            The steady state error reduces as the K<sub>P</sub> value increase. 
+            <!--include equations on page 18-->
+            The closed loop transfer function with unity feedback is represented by:
+            $$G(s) ={ Y(s) \over U(s)}= {K_p H(s) \over 1+K_p H(s)}$$
 
-<br>
-          <h3>Second order systems</h3>
-                First order system responds to the step input smoothly with an exponential rise till the steady state value is reached. 
-                Second order systems can overshoot the targeted value and even oscillate.
-                <br>
-                Increase in K<sub>P</sub> reduces the overall damping ratio, ζ<sub>G</sub>. This allows the system to have a faster response but also causes higher overshooting.
-                Increase in K<sub>P</sub> also increases the natural frequency of the system,  ω <sub>G</sub>, causing the system to be more oscillatory in the transient region.
-           </p>
-            
-           
 
-            <!--TABLE EXPLAINING USES OF PID-->
-            <table style="width:90%" , th, td>
-                   <tr>
-                    <th>Control</th>
-                    <th>Steady State Response</th> 
-                    <th>Transient Response</th>
-                </tr>
-                <tr>
-                    <td>Proportional <br>K<sub>P</sub></td>
-                    <td>Increasing K<sub>P</sub> reduces steady state error</td>
-                    <td>Increasing K<sub>P</sub> speeds up response of the system</td>
-                </tr>
-                <tr>
-                    <td>Integral <br>K<sub>I</sub></td>
-                    <td>K<sub>I</sub> eliminates steady state error</td>
-                    <td>K<sub>I</sub> use to tune the of dynamics of the transient response</td>
-                </tr>
-                <tr>
-                    <td>Derivative <br>K<sub>D</sub></td>
-                    <td>K<sub>D</sub> has no effect on steady state error</td>
-                    <td>K<sub>D</sub> use to tune the dynamics of the transient response</td>
-                </tr>
-            </table>
-           
-        </div> <!--end of EXPLANATION-->
 
-    </div>
-    <!--calling the js files-->
-    <script src=ControlSystemJavascript.js></script>
+
+            <br>
+            <h3>Second order systems</h3>
+            First order system responds to the step input smoothly with an exponential rise till the steady state value is reached. 
+            Second order systems can overshoot the targeted value and even oscillate.
+            <br>
+            Second order systems have different response depending on ζ, ω and K.
+
+            The gain, K, will determine the steady state behaviour while the damping ratio, ζ, and natural frequency, ω, affects the transient behaviour.
+            <br>
+            Increase in K<sub>P</sub> reduces the overall damping ratio, ζ<sub>G</sub>. This allows the system to have a faster response but also causes higher overshooting.
+            Increase in K<sub>P</sub> also increases the natural frequency of the system,  ω <sub>G</sub>, causing the system to be more oscillatory in the transient region.
+     
+
+        <p>
+        <h4>Standard inputs for control systems</h4>
+        There are many types of inputs for control systems and are used as a basis of comparisons. They are used to check the response of a system.
+        <br>
+        Some examples include: <br>
+        <ul>
+            <li>Sinusoidal function</li>
+            <li>Step function</li>
+            <li>Ramp function</li>
+            <li>Impulse function</li>
+        </ul>
+
+    <h4> Summary of PID equations</h4>
+    <p> The general equation to PID of any order is : </p>
+    $$G(s)= {Y(s) \over U(S) } ={H (K_p + {K_i \over s} + K_d s) \over  1+K_b H  (K_p + {K_i\over s} + K_d s)  }$$
+
+    Step response:
+    $$U(s) ={c \over s}$$
+    The output of the signal:
+    $$Y(s) = G(s) U(s)$$
+
+    <p>For first order process: </p>
+    $$H = {K_h \over 1+ \tau s}$$
+
+    <p>The general equation becomes :</p>
+    $$G(s)= {K_d s^2 + K_p s + K_i \over {s \over H} + K_b (K_d s^2 + K_p s + K_i)  }$$
+    $$G(s)= {K_h (K_d s^2 + K_p s + K_i) \over (\tau +K_h K_b K_d) s^2 +(1+ K_h K_b K_p) s + K_i K_h)  }$$
+    $$Y(s)= {c \over s} {K_h (K_d s^2 + K_p s + K_i) \over (\tau +K_h K_b K_d) s^2 +(1+ K_h K_b K_p) s + K_i K_h)  }$$
+    <br>
+<!--
+    <table>
+        <caption>Conversion between Time domain and Laplace domain</caption>
+        <tr>
+            <th>Type of system</th>
+            <th>s-domain</th>
+            <th>time-domain</th>
+        </tr>
+        <tr>
+            <td>Open loop</td>
+            <td>$$Y={K \over s(1+\tau s)}$$</td>
+            <td>$$y= {K \over 1- e^-{t \over \tau} }$$</td>
+        </tr>
+        <tr>
+            <td> K<sub>P</sub> only</td>
+            <td>$$Y={K_p K_h \over s(1+ K_p K_h +\tau  s)}$$</td>
+            <td>$$y={K_g c (1- {e^{- \zeta \omega_n t} \over {\sqrt {1- \zeta ^2}}} sin[\omega_n \sqrt{1- \zeta ^2}t +cos^{-1} \zeta])}$$</td>
+        </tr>
+        <tr>
+            <td>K<sub>I</sub> only</td>
+            <td>$$Y= {c \over s} {1 \over {\tau \over K_i K_h} s^2 + {1 \over K_i K_h} +1 }$$</td>
+            <td></td>
+        </tr>
+
+    </table>
+-->
+
+    <h4>Effects of PID on system</h4>
+    <!--TABLE EXPLAINING USES OF PID-->
+    <table style="width:90%" , th, td>
+           <tr>
+            <th>Control</th>
+            <th>Steady State Response</th> 
+            <th>Transient Response</th>
+        </tr>
+        <tr>
+            <td>Proportional <br>K<sub>P</sub></td>
+            <td>Increasing K<sub>P</sub> reduces steady state error</td>
+            <td>Increasing K<sub>P</sub> speeds up response of the system</td>
+        </tr>
+        <tr>
+            <td>Integral <br>K<sub>I</sub></td>
+            <td>K<sub>I</sub> eliminates steady state error</td>
+            <td>K<sub>I</sub> can be used to tune the of dynamics of the transient response</td>
+        </tr>
+        <tr>
+            <td>Derivative <br>K<sub>D</sub></td>
+            <td>K<sub>D</sub> has no effect on the steady state error</td>
+            <td>K<sub>D</sub> can be used to tune the dynamics of the transient response</td>
+        </tr>
+    </table>
+</div> <!--end of concept div-->
+
+<!-- </div> <!--end of EXPLANATION-->
+
+<!--</div>-->
+<!--calling the js files-->
+<script src="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/navigator.js"></script>
+<script src=ControlSystemJavascript.js></script>
 </body>
 </html>

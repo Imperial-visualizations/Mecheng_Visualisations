@@ -19,6 +19,7 @@ canvasHeight = canvasHeight * window.devicePixelRatio;
 let isRunning = false;
 const timeScale = 0.015; //Arbitrary scaling on discharge speed
 const voltageCutoff = 2.45; //Arbitrary voltage cutoff
+const voltageUpperCutoff = 4.90; //Arbitrary higher voltage cutoff
 
 const box = { //dimensions for external battery box
     x: canvasWidth*0.01,
@@ -71,7 +72,7 @@ const batteryCurve = new Polynomial([4.19330830928672,-0.0127201842105800,-0.000
     1.12236392174576e-21,-1.58668725017118e-24]); //Data fitted from Matlab battery example (15th degree polynomial)
 // Highest order term adjusted to give slightly more drop-off at low SoC
 
-const n_Lithium = 50; //Number of Lithium ions in the electrolyte at any given time
+const n_Lithium = 80; //Number of Lithium ions in the electrolyte at any given time
 
 let socPlot = [];
 
@@ -87,7 +88,7 @@ const fr = 30; //Frame rate in fps
 //  draw() runs repeatedly to animate the canvas in response to user input
 
 function setup() {
-    prepareBackground(); //TODO: Consider removing returning myCanvas
+    prepareBackground();
 
     frameRate(fr);
 
@@ -96,7 +97,8 @@ function setup() {
         for (soc = 0; soc < 1001; soc++) {
             voltageData[currentTemp][soc] = batteryCurve.eval(100-soc/10) - 0.084 * currentTemp;
             //Delete anything below the arbitrary 2.45V cut-off
-            if (voltageData[currentTemp][soc] < voltageCutoff) {
+            if ((voltageData[currentTemp][soc] < voltageCutoff) ||
+                (voltageData[currentTemp][soc] > voltageUpperCutoff)) {
                 voltageData[currentTemp][soc] = undefined; //So that the curve under the cutoff isn't shown on the plot
             }
         }
@@ -163,7 +165,12 @@ function draw() {
             $("#runButton").val("Run");
             newSoC = parseFloat(SoC);
             while (voltageData[current][Math.round(newSoC*10)] === undefined) {
-                newSoC += 0.01;
+                if (current > 0) {
+                    newSoC += 0.01;
+                } else {
+                    newSoC -= 0.01;
+                }
+
             }
         }
     }
@@ -251,14 +258,15 @@ function initialiseParticles() {
     let lithiumXLocation;
     let lithiumYLocation;
     let electronPositionOnPath;
-    let sharedRandom; //One random coordinate is shared so the electrons are absorbed at the same time as the lithiums
-    for (let i = 0; i<n_Lithium; i++) {
-        sharedRandom = Math.random();
-        lithiumXLocation = map(sharedRandom,0,1,x_range[0],x_range[1]);
+    let sharedXLocation; //One random coordinate is shared so the electrons are absorbed at the same time as the lithiums
+    for (let i = 1; i<=n_Lithium; i++) {
+        sharedXLocation = (i/n_Lithium) * (x_range[1]-x_range[0]) + x_range[0]; //uniform distribution
+
+        lithiumXLocation = sharedXLocation;
         lithiumYLocation = map(Math.random(),0,1,y_range[0],y_range[1]);
         LithiumSystem.addParticle(lithiumXLocation,lithiumYLocation);
 
-        electronPositionOnPath = map(sharedRandom,0,1,0,wire.pathLength);
+        electronPositionOnPath = map(sharedXLocation,x_range[0],x_range[1],0,wire.pathLength);
         ElectronSystem.addParticle(null,null,electronPositionOnPath);
     }
 }
@@ -340,6 +348,19 @@ function updateVoltagePlot(current, SoC, socPlot) {
                 y0: 2.45,
                 x1: 100,
                 y1: 2.45,
+                line: {
+                    color: '#bb0000',
+                    width: 2,
+                    dash: 'dashdot'
+                }
+            },
+            {
+                name: "Voltage Upper Cut-off",
+                type: "line",
+                x0: 0,
+                y0: 4.90,
+                x1: 100,
+                y1: 4.90,
                 line: {
                     color: '#bb0000',
                     width: 2,
