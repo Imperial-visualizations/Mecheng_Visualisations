@@ -8,7 +8,7 @@
 //      run()
 //      addParticle()
 
-class ParticleSystem {
+class AnimationParticleSystem {
     constructor(type){
         this.particles = [];
         this.particleType = type;
@@ -27,11 +27,11 @@ class ParticleSystem {
         }
     };
 
-    addParticle(x,y,positionOnPath) {
+    addParticle(x,y) {
         if (this.particleType === "Electron"){
-            this.particles.push(new Electron(positionOnPath));
+            this.particles.push(new AnimationElectron(x,y));
         } else if (this.particleType === "Lithium") {
-            this.particles.push(new Lithium(x,y));
+            this.particles.push(new AnimationLithium(x,y));
         }
     }
 
@@ -41,7 +41,7 @@ class ParticleSystem {
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Particle object to hold info on a particle
+// AnimationParticle object to hold info on a particle
 // Needed properties:
 //      charge
 //      mass
@@ -51,12 +51,11 @@ class ParticleSystem {
 // Needed methods:
 //      run()
 
-class Particle {
+class AnimationParticle {
     constructor(x,y) {
         this.position = {x: x, y: y};
         this.size = 2;
         this.colour = ('#000000');
-        this.pathLength = undefined;
     }
 
     run(current,isRunning) {
@@ -83,7 +82,7 @@ class Particle {
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-class Electron extends Particle {
+class AnimationElectron extends AnimationParticle {
     constructor(pathLocation) {
         super(NaN,NaN);
         this.pathLength = wire.pathLength;
@@ -123,7 +122,7 @@ class Electron extends Particle {
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-class Lithium extends Particle {
+class AnimationLithium extends AnimationParticle {
     constructor(x,y) {
         super(x,y);
         this.pathLength = posElec.x -(negElec.x+negElec.width);

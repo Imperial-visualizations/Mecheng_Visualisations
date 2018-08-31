@@ -373,7 +373,7 @@ function updateVoltagePlot(current, SoC, socPlot) {
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  Particle functions
+//  AnimationParticle functions
 
 //Generates a number of Li+ ions at the negative electrode
 function generateIon(current) {
