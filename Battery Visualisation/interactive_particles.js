@@ -1,8 +1,8 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// ParticleSystem object to contain either Lithiums or Electrons
+// ParticleSystem object to contain either StoredLithiums or Electrons
 // Needed properties:
-//      particles (array of Lithiums or Electrons)
+//      particles (array of StoredLithiums or Electrons)
 //      particleType (either "Electron" or "Lithium", so we can tell the difference - might end up being unnecessary)
 // Needed methods:
 //      run()

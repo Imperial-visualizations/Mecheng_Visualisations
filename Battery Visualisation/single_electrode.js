@@ -10,8 +10,9 @@ canvasHeight = canvasHeight * window.devicePixelRatio;
 
 let fr = 30;
 
-let Electrons = new AnimationParticleSystem("AnimationElectron");
-let Lithiums = new AnimationParticleSystem("AnimationLithium");
+let Electrons = new AnimationParticleSystem("Electron");
+let StoredLithiums = new AnimationParticleSystem("Lithium");
+let FreeLithiums = new AnimationParticleSystem("Lithium");
 
 let isRunning = false;
 
@@ -29,30 +30,33 @@ const negElec = { //Negative electrode dimensions
     height: box.height
 };
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  Class Declarations - extending base ones
+const documentText = [
 
-class AnimationElectron extends AnimationParticle {
-    constructor(x,y) {
-        super(x,y);
-    }
+    "<p>The diagram to the left represents a single negative electrode surrounded by an electrolyte. The electrode " +
+    "contains a number of lithium atoms which are contained inside the structure of the electrode material. At this " +
+    "stage, the electrode is in a fully-lithiated state; all the available spaces are filled by Li atoms. ",
 
-    update() {
+    "<p>When the negative electrode is immersed in an electrolyte, it becomes energetically favourable for " +
+    "the lithium in the electrode material to de-intercalate and enter solution in the " +
+    "electrolyte, and an electron, which is released into the current collector.</p>",
 
-    }
-}
+    "<p>This production of free electrons, and the loss of " +
+    "the positive ions, causes the electrode to have a net positive charge.<\p>" +
+    "<p>This positive charge causes an excess of lithium ions to congregate near the electrode surface, forming " +
+    "a \"double layer\". Like a capacitor, this separation of charges causes an electrostatic potential " +
+    "to emerge.</p>" +
+    "<p>However, with only a single electrode, this electrical potential cannot be used as there is no path " +
+    "available for the electrons and ions to move and provide a current.</p>",
 
-class AnimationLithium extends Lithium {
-    constructor(x,y) {
-        super(x,y);
-        this.isSplit = 0;
-    }
+    "<p>The loss of lithium atoms into solution creates a concentration gradient inside the electrode; in the current " +
+    "state the electrochemical reaction cannot take place as there is no lithium at the surface. The concentration " +
+    "gradient causes the lithium atoms to rearrange and diffuse into a more evenly-distributed state. <p/>" +
+    "<p>This diffusion is very slow compared to the reaction rates possible with electrochemistry, which means " +
+    "that the maximum steady-state current draw achievable is dominated by the availability of lithium at the " +
+    "electrode surface. </p>"];
 
-    split(electrons) {
-
-    }
-}
-
+let animationStep = 0;
+let explanatoryText = document.getElementById("explanatoryText");
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  Top-level p5.js functions
 //  setup() sets up the canvas and draws the background
@@ -63,19 +67,17 @@ function setup() {
 
     frameRate(fr);
 
-    for (let i=1; i<6; i++) {
-        for (let j=1; j<11; j++) {
-            Lithiums.addParticle((i*box.width/7)+box.x,(j*box.height/12)+box.y,null)
-            Lithiums.particles[Lithiums.particles.length-1].run();
-        }
-    }
+    initialiseParticles();
 
+    explanatoryText.innerHTML = documentText[animationStep];
 }
 
-function draw() {
+// function draw() {
+//     drawBackground();
+//     StoredLithiums.run();
+//     Electrons.run();
+// }
 
-
-}
 
 //Sets up the canvas
 function prepareBackground() {
@@ -117,26 +119,66 @@ function drawBackground() {
     text("Electrolyte", (negElec.x + negElec.width) + 0.5*(box.width - negElec.width), negElec.y + 20);
 }
 
-function startSecondStage() {
-    document.getElementById("explanatoryText").innerHTML = "<p>This production of free electrons, and the loss of " +
-        "the positive ions, causes the electrode to have a net positive charge.<\p>" +
-        "<p>This positive charge causes an excess of lithium ions to congregate near the electrode surface, forming " +
-        "a \"double layer\". Like a capacitor, this separation of charges causes an electrostatic potential " +
-        "to emerge.</p>" +
-        "<p>However, with only a single electrode, this electrical potential cannot be used as there is no path " +
-        "available for the electrons and ions to move and provide a current.</p>";
+function drawFrame() {
+    // drawBackground();
+    StoredLithiums.run();
+    FreeLithiums.run();
+    Electrons.run();
+}
+
+function initialiseParticles() {
+    for (let i=1; i<6; i++) {
+        for (let j=1; j<11; j++) {
+            StoredLithiums.addParticle((i*negElec.width/6)+box.x,(j*box.height/11)+box.y + 10,null);
+            StoredLithiums.particles[StoredLithiums.particles.length-1].run();
+        }
+    }
+}
+
+function animate(step) {
+    if (step === 1) {
+
+        FreeLithiums.particles = StoredLithiums.particles.splice(40,10);
+        let initialXPosition = FreeLithiums.particles[0].position.x;
+        for (let i=0; i<FreeLithiums.particles.length; i++) {
+            FreeLithiums.particles[i].split(Electrons);
+        }
+        FreeLithiums.run();
+
+        let finishingXPosition = initialXPosition + 50;
+        while (FreeLithiums.particles[FreeLithiums.particles.length-1].position.x < finishingXPosition) {
+            for (let i=0; i<FreeLithiums.particles.length; i++) {
+                FreeLithiums.particles[i].position.x += 0.5;
+                drawFrame();
+                //TODO: Have electrons move somewhere...
+            }
+        }
+
+
+    }
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  Button callbacks
 
 //Play/pause button toggling
-$("#playButton").on('click', function playButtonCallback() {
-    if (!isRunning) {
-        isRunning = true;
-        $("#playButton").val("Pause");
-    } else if (isRunning) {
-        isRunning = false;
-        $("#playButton").val("Play");
+$("#nextButton").on('click', function nextButtonCallback() {
+    animationStep++;
+    if (documentText[animationStep] !== undefined) {
+        explanatoryText.innerHTML = documentText[animationStep];
+    } else {
+        //TODO: Load next page
+        window.location.href = "positive_electrode.html";
     }
+    animate(animationStep)
 });
+
+$("#resetButtonButton").on('click', function resetButtonCallback() {
+    FreeLithiums.clear();
+    Electrons.clear();
+    StoredLithiums.clear();
+    initialiseParticles();
+
+});
+

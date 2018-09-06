@@ -1,8 +1,8 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// ParticleSystem object to contain either Lithiums or Electrons
+// ParticleSystem object to contain either StoredLithiums or Electrons
 // Needed properties:
-//      particles (array of Lithiums or Electrons)
+//      particles (array of StoredLithiums or Electrons)
 //      particleType (either "Electron" or "Lithium", so we can tell the difference - might end up being unnecessary)
 // Needed methods:
 //      run()
@@ -17,13 +17,10 @@ class AnimationParticleSystem {
         }
     }
 
-    run(current,isRunning){
+    run(){
         for (let i=0; i<this.particles.length; i++) {
             //Do something to each particle
-            let dead = this.particles[i].run(current,isRunning);
-            if (dead) {
-                this.particles.splice(i,1);
-            }
+            this.particles[i].render();
         }
     };
 
@@ -58,11 +55,8 @@ class AnimationParticle {
         this.colour = ('#000000');
     }
 
-    run(current,isRunning) {
+    run() {
         let isDead = 0;
-        if (isRunning) {
-            isDead = this.update(current);
-        }
         if (!isDead) {
             this.render();
         }
@@ -83,67 +77,39 @@ class AnimationParticle {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class AnimationElectron extends AnimationParticle {
-    constructor(pathLocation) {
-        super(NaN,NaN);
-        this.pathLength = wire.pathLength;
-        this.positionOnPath = pathLocation;
-        this.position = this.getAbsolutePosition();
+    constructor(x,y) {
+        super(x,y);
         this.colour = '#ffff00';
         this.size = 7;
     }
 
     update(current) {
         let isDead = false;
-        this.positionOnPath += parseFloat(current/5)*this.pathLength/200;
-        this.position = this.getAbsolutePosition();
-        if ((this.positionOnPath >= this.pathLength - 5) || this.positionOnPath <= 5) {
-            isDead = true
-        }
+
         return isDead;
     }
 
-    // Method to convert location from pathLength space to absolute space
-    getAbsolutePosition() {
-        let position = {x: undefined, y: undefined};
-        if (this.positionOnPath <= wire.height) { //If it's on the left...
-            debugger;
-            position.x = wire.negX;
-            position.y = wire.negY - this.positionOnPath;
-        } else if (this.positionOnPath >= (this.pathLength - wire.height)) { //If it's on the right...
-            position.x = wire.posX;
-            position.y = wire.negY - (this.pathLength - this.positionOnPath);
-        } else { //Otherwise it's in the middle!
-            position.x = wire.negX + (this.positionOnPath-wire.height);
-            position.y = wire.negY - wire.height;
-        }
 
-        return position;
-    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class AnimationLithium extends AnimationParticle {
     constructor(x,y) {
         super(x,y);
-        this.pathLength = posElec.x -(negElec.x+negElec.width);
-        this.colour = '#ff0100';
-        this.size = 10;
+        this.colour = '#adaaad';
+        this.size = 12;
     }
 
     update(current) {
         let isDead = false;
-        this.position.x += parseFloat(current/5) * this.pathLength/200;
-        this.position.y += (Math.random() - 0.5); //add some wobble!
-        if (this.position.x >= posElec.x || this.position.x <= negElec.x + negElec.width) {
-            isDead = true;
-        }
-        //Make sure they don't wobble outside the battery casing...
-        if (this.position.y < canvasHeight*0.3) { //TODO: Remove magic numbers
-            this.position.y += 2;
-        } else if (this.position.y > canvasHeight*0.9) {
-            this.position.y -= 2;
-        }
+
         return isDead;
     }
 
+    split(ElectronSystem) {
+        if (!this.isSplit) {
+            this.colour = '#ff0100';
+            ElectronSystem.addParticle(this.position.x,this.position.y);
+        }
+    }
 }
