@@ -57,6 +57,8 @@ const documentText = [
 
 let animationStep = 0;
 let explanatoryText = document.getElementById("explanatoryText");
+let finishingXPosition;
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  Top-level p5.js functions
 //  setup() sets up the canvas and draws the background
@@ -71,15 +73,36 @@ function setup() {
 
     explanatoryText.innerHTML = documentText[animationStep];
 
-    noLoop();
 }
 
-
 function draw() {
-    drawBackground();
-    StoredLithiums.run();
-    FreeLithiums.run();
-    Electrons.run();
+    //Need a different animation depending on the step...
+    if (isRunning){
+        switch (animationStep) {
+            case 1:
+
+                if (FreeLithiums.particles[FreeLithiums.particles.length - 1].position.x < finishingXPosition) {
+                    for (let i = 0; i < FreeLithiums.particles.length; i++) {
+                        FreeLithiums.particles[i].position.x += 1;
+                        //TODO: Have electrons move somewhere...
+                    }
+                } else {
+                    isRunning = false;
+                }
+                break;
+            case 2:
+                isRunning = false;
+                break;
+            case 3:
+                isRunning = false;
+                break;
+        }
+
+        drawBackground();
+        StoredLithiums.run();
+        FreeLithiums.run();
+        Electrons.run();
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -132,34 +155,20 @@ function initialiseParticles() {
     }
 }
 
-function animate(step) {
-    //Need a different animation depending on the step...
+function setupAnimation(step) {
     switch (step) {
         case 1:
-            FreeLithiums.particles = StoredLithiums.particles.splice(40,10);
+            FreeLithiums.particles = StoredLithiums.particles.splice(40, 10);
             let initialXPosition = FreeLithiums.particles[0].position.x;
-            for (let i=0; i<FreeLithiums.particles.length; i++) {
+            for (let i = 0; i < FreeLithiums.particles.length; i++) {
                 FreeLithiums.particles[i].split(Electrons);
             }
             FreeLithiums.run();
 
-            let finishingXPosition = initialXPosition + 50;
-            while (FreeLithiums.particles[FreeLithiums.particles.length-1].position.x < finishingXPosition) {
-                for (let i=0; i<FreeLithiums.particles.length; i++) {
-                    FreeLithiums.particles[i].position.x += 0.1;
-                    debugger;
-                    redraw();
-                    //TODO: Have electrons move somewhere...
-                }
-            }
-            break;
-        case 2:
-
-            break;
-        case 3:
-
+            finishingXPosition = initialXPosition + 50;
             break;
     }
+
 }
 
 function sleep(milliseconds) {
@@ -179,14 +188,17 @@ $("#nextButton").on('click', function nextButtonCallback() {
     if (!isRunning) {
         isRunning = true;
         animationStep++;
+
         if (documentText[animationStep] !== undefined) {
             explanatoryText.innerHTML = documentText[animationStep];
+            if (documentText[animationStep+1] === undefined) {
+                $("#nextButton").val("Next Page");
+            }
         } else {
-            //TODO: Load next page
+            //TODO: Make next page
             window.location.href = "positive_electrode.html";
         }
-        animate(animationStep);
-        isRunning = false;
+        setupAnimation(animationStep);
     }
 });
 
@@ -200,4 +212,3 @@ $("#resetButton").on('click', function resetButtonCallback() {
     animationStep = 0;
     explanatoryText.innerHTML = documentText[animationStep];
 });
-
