@@ -70,15 +70,19 @@ function setup() {
     initialiseParticles();
 
     explanatoryText.innerHTML = documentText[animationStep];
+
+    noLoop();
 }
 
-// function draw() {
-//     drawBackground();
-//     StoredLithiums.run();
-//     Electrons.run();
-// }
 
+function draw() {
+    drawBackground();
+    StoredLithiums.run();
+    FreeLithiums.run();
+    Electrons.run();
+}
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Sets up the canvas
 function prepareBackground() {
 
@@ -119,13 +123,6 @@ function drawBackground() {
     text("Electrolyte", (negElec.x + negElec.width) + 0.5*(box.width - negElec.width), negElec.y + 20);
 }
 
-function drawFrame() {
-    // drawBackground();
-    StoredLithiums.run();
-    FreeLithiums.run();
-    Electrons.run();
-}
-
 function initialiseParticles() {
     for (let i=1; i<6; i++) {
         for (let j=1; j<11; j++) {
@@ -136,27 +133,42 @@ function initialiseParticles() {
 }
 
 function animate(step) {
-    if (step === 1) {
-
-        FreeLithiums.particles = StoredLithiums.particles.splice(40,10);
-        let initialXPosition = FreeLithiums.particles[0].position.x;
-        for (let i=0; i<FreeLithiums.particles.length; i++) {
-            FreeLithiums.particles[i].split(Electrons);
-        }
-        FreeLithiums.run();
-
-        let finishingXPosition = initialXPosition + 50;
-        while (FreeLithiums.particles[FreeLithiums.particles.length-1].position.x < finishingXPosition) {
+    //Need a different animation depending on the step...
+    switch (step) {
+        case 1:
+            FreeLithiums.particles = StoredLithiums.particles.splice(40,10);
+            let initialXPosition = FreeLithiums.particles[0].position.x;
             for (let i=0; i<FreeLithiums.particles.length; i++) {
-                FreeLithiums.particles[i].position.x += 0.5;
-                drawFrame();
-                //TODO: Have electrons move somewhere...
+                FreeLithiums.particles[i].split(Electrons);
             }
-        }
+            FreeLithiums.run();
 
+            let finishingXPosition = initialXPosition + 50;
+            while (FreeLithiums.particles[FreeLithiums.particles.length-1].position.x < finishingXPosition) {
+                for (let i=0; i<FreeLithiums.particles.length; i++) {
+                    FreeLithiums.particles[i].position.x += 0.1;
+                    debugger;
+                    redraw();
+                    //TODO: Have electrons move somewhere...
+                }
+            }
+            break;
+        case 2:
 
+            break;
+        case 3:
+
+            break;
     }
+}
 
+function sleep(milliseconds) {
+    let start = new Date().getTime();
+    for (let i = 0; i < 1e7; i++) {
+        if ((new Date().getTime() - start) > milliseconds){
+            break;
+        }
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -164,21 +176,28 @@ function animate(step) {
 
 //Play/pause button toggling
 $("#nextButton").on('click', function nextButtonCallback() {
-    animationStep++;
-    if (documentText[animationStep] !== undefined) {
-        explanatoryText.innerHTML = documentText[animationStep];
-    } else {
-        //TODO: Load next page
-        window.location.href = "positive_electrode.html";
+    if (!isRunning) {
+        isRunning = true;
+        animationStep++;
+        if (documentText[animationStep] !== undefined) {
+            explanatoryText.innerHTML = documentText[animationStep];
+        } else {
+            //TODO: Load next page
+            window.location.href = "positive_electrode.html";
+        }
+        animate(animationStep);
+        isRunning = false;
     }
-    animate(animationStep)
 });
 
-$("#resetButtonButton").on('click', function resetButtonCallback() {
+$("#resetButton").on('click', function resetButtonCallback() {
+    isRunning = false;
     FreeLithiums.clear();
     Electrons.clear();
     StoredLithiums.clear();
+    drawBackground();
     initialiseParticles();
-
+    animationStep = 0;
+    explanatoryText.innerHTML = documentText[animationStep];
 });
 
