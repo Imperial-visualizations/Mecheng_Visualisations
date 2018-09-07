@@ -6,15 +6,14 @@ canvasHeight = canvasHeight * window.devicePixelRatio;
 
 const documentText = [
 
-    ];
-
-const nextPage = "../single_electrode/negative_electrode.html";
+];
 
 function runAnimation(step) {
 
 }
 
 function setupAnimation(step) {
+
 
 }
 

@@ -88,7 +88,6 @@
         </div>
     </div>
 </div>
-<br><br><br>
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/p5.min.js"></script>
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
@@ -96,7 +95,7 @@
 <script src="interactive_particles.js"></script>
 <script src="interactive_display.js"></script>
 <script>
-    var version = detectIE();
+    let version = detectIE();
     if (version === false || version >= 12) {
     } else {
         alert("It's interesting that you are still using IE "+version+"...\n we suggest you try modern browsers like Chrome.");

@@ -2,33 +2,14 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  Global variables
 
-let canvasWidth = 425;
-let canvasHeight = 275;
-
-canvasWidth = canvasWidth * window.devicePixelRatio;
-canvasHeight = canvasHeight * window.devicePixelRatio;
-
 let fr = 30;
 
 let Electrons = new AnimationParticleSystem("Electron");
 let StoredLithiums = new AnimationParticleSystem("Lithium");
 let FreeLithiums = new AnimationParticleSystem("Lithium");
+let Anions = new AnimationParticleSystem("Anion");
 
 let isRunning = false;
-
-const box = { //dimensions for external battery box
-    x: canvasWidth*0.01,
-    y: canvasHeight*0.01,
-    width: canvasWidth*0.75,
-    height: canvasHeight*0.9
-};
-
-const negElec = { //Negative electrode dimensions
-    x: box.x,
-    y: box.y,
-    width: 0.4*box.width,
-    height: box.height
-};
 
 let animationStep = 0;
 let explanatoryText = document.getElementById("explanatoryText");
@@ -39,7 +20,6 @@ let finishingXPosition;
 //  setup() sets up the canvas and draws the background
 //  draw() runs repeatedly to animate the canvas
 
-//TODO: Consider re-writing all these functions to work for different pages; should be able to send the needed functions
 function setup() {
     prepareBackground();
 
@@ -49,6 +29,9 @@ function setup() {
 
     explanatoryText.innerHTML = documentText[animationStep];
 
+    if (documentText.length === 1) {
+        $("#nextButton").val("Next Page");
+    }
 }
 
 function draw() {
@@ -84,35 +67,6 @@ function canvasSetup() {
     return myCanvas;
 }
 
-function drawBackground() {
-    // Draw background schematic; visualisation will be with animation above this
-    background(255);
-
-    strokeWeight(5);
-    stroke(0);
-    fill('#00b2ff');
-    rect(box.x,box.y,box.width,box.height);
-
-    fill(100);
-    rect(negElec.x,negElec.y,negElec.width,negElec.height);
-
-    textAlign(CENTER, CENTER);
-    textSize(16);
-    fill(255);
-    text("Electrode", negElec.x +(0.5*negElec.width), negElec.y + 20);
-
-    text("Electrolyte", (negElec.x + negElec.width) + 0.5*(box.width - negElec.width), negElec.y + 20);
-}
-
-function initialiseParticles() {
-    for (let i=1; i<6; i++) {
-        for (let j=1; j<11; j++) {
-            StoredLithiums.addParticle((i*negElec.width/6)+box.x,(j*box.height/11)+box.y + 10,null);
-            StoredLithiums.particles[StoredLithiums.particles.length-1].run();
-        }
-    }
-}
-
 function sleep(milliseconds) {
     let start = new Date().getTime();
     for (let i = 0; i < 1e7; i++) {
@@ -138,7 +92,7 @@ $("#nextButton").on('click', function nextButtonCallback() {
             }
         } else {
             //TODO: Make next page
-            window.location.href = "positive_electrode.html";
+            window.location.href = nextPage;
         }
         setupAnimation(animationStep);
     }

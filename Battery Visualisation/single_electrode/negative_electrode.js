@@ -1,3 +1,23 @@
+let canvasWidth = 425;
+let canvasHeight = 275;
+
+canvasWidth = canvasWidth * window.devicePixelRatio;
+canvasHeight = canvasHeight * window.devicePixelRatio;
+
+const box = { //dimensions for external battery box
+    x: canvasWidth*0.01,
+    y: canvasHeight*0.01,
+    width: canvasWidth*0.75,
+    height: canvasHeight*0.9
+};
+
+const negElec = { //Negative electrode dimensions
+    x: box.x,
+    y: box.y,
+    width: 0.4*box.width,
+    height: box.height
+};
+
 const documentText = [
 
     "<p>The diagram to the left represents a single negative electrode surrounded by an electrolyte. The electrode " +
@@ -22,6 +42,30 @@ const documentText = [
     "<p>This diffusion is very slow compared to the reaction rates possible with electrochemistry, which means " +
     "that the maximum steady-state current draw achievable is dominated by the availability of lithium at the " +
     "electrode surface. </p>"];
+
+const nextPage = "positive_electrode.html";
+
+function drawBackground() {
+
+
+    // Draw background schematic; visualisation will be with animation above this
+    background(255);
+
+    strokeWeight(5);
+    stroke(0);
+    fill('#00b2ff');
+    rect(box.x,box.y,box.width,box.height);
+
+    fill(100);
+    rect(negElec.x,negElec.y,negElec.width,negElec.height);
+
+    textAlign(CENTER, CENTER);
+    textSize(16);
+    fill(255);
+    text("Electrode", negElec.x +(0.5*negElec.width), negElec.y + 20);
+
+    text("Electrolyte", (negElec.x + negElec.width) + 0.5*(box.width - negElec.width), negElec.y + 20);
+}
 
 function runAnimation(step) {
     switch (step) {
@@ -59,4 +103,13 @@ function setupAnimation(step) {
             break;
     }
 
+}
+
+function initialiseParticles() {
+    for (let i=1; i<6; i++) {
+        for (let j=1; j<11; j++) {
+            StoredLithiums.addParticle((i*negElec.width/6)+box.x,(j*box.height/11)+box.y + 10,null);
+            StoredLithiums.particles[StoredLithiums.particles.length-1].render();
+        }
+    }
 }

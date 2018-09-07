@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="1f98102a-a7b2-4c5d-82f9-050e76c4d609" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/electrolyte/electrolyte.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/electrolyte/electrolyte.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/single_electrode/negative_electrode.js" afterDir="false" />
+    <list default="true" id="1f98102a-a7b2-4c5d-82f9-050e76c4d609" name="Default Changelist" comment="Refactored core animation code to make it re-usable.&#10;Added empty files for future animation sections">
+      <change afterPath="$PROJECT_DIR$/animation_minimum.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/single_electrode/positive_electrode.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/single_electrode/positive_electrode.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/battery.html" beforeDir="false" afterPath="$PROJECT_DIR$/interactive_display/interactive_display.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/interactive_display.js" beforeDir="false" afterPath="$PROJECT_DIR$/interactive_display/interactive_display.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/interactive_particles.js" beforeDir="false" afterPath="$PROJECT_DIR$/interactive_display/interactive_particles.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/single_electrode.html" beforeDir="false" afterPath="$PROJECT_DIR$/single_electrode/negative_electrode.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/single_electrode.js" beforeDir="false" afterPath="$PROJECT_DIR$/animations.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/animation_particles.js" beforeDir="false" afterPath="$PROJECT_DIR$/animation_particles.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/animations.js" beforeDir="false" afterPath="$PROJECT_DIR$/animations.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/electrolyte/electrolyte.html" beforeDir="false" afterPath="$PROJECT_DIR$/electrolyte/electrolyte.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/electrolyte/electrolyte.js" beforeDir="false" afterPath="$PROJECT_DIR$/electrolyte/electrolyte.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/interactive_display/interactive_display.html" beforeDir="false" afterPath="$PROJECT_DIR$/interactive_display/interactive_display.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/single_electrode/negative_electrode.html" beforeDir="false" afterPath="$PROJECT_DIR$/single_electrode/negative_electrode.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/single_electrode/negative_electrode.js" beforeDir="false" afterPath="$PROJECT_DIR$/single_electrode/negative_electrode.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -100,24 +101,24 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="JavaScript Console" value="34" />
-          <entry key="html" value="931" />
-          <entry key="js" value="16781" />
-          <entry key="txt" value="280" />
+          <entry key="html" value="947" />
+          <entry key="js" value="17214" />
+          <entry key="txt" value="387" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="HTML" value="946" />
-          <entry key="JavaScript" value="16800" />
-          <entry key="PLAIN_TEXT" value="280" />
+          <entry key="HTML" value="962" />
+          <entry key="JavaScript" value="17233" />
+          <entry key="PLAIN_TEXT" value="387" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="css" value="1" />
-          <entry key="html" value="3" />
+          <entry key="html" value="6" />
           <entry key="jpg" value="1" />
-          <entry key="js" value="9" />
+          <entry key="js" value="13" />
           <entry key="json" value="3" />
         </counts>
       </usages-collector>
@@ -125,53 +126,39 @@
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="CSS" value="1" />
-          <entry key="HTML" value="3" />
+          <entry key="HTML" value="6" />
           <entry key="Image" value="1" />
           <entry key="JSON" value="3" />
-          <entry key="JavaScript" value="9" />
+          <entry key="JavaScript" value="13" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/electrolyte/electrolyte.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="54" column="29" selection-start-line="54" selection-start-column="29" selection-end-line="54" selection-end-column="29" />
+            <state relative-caret-position="95">
+              <caret line="49" column="6" selection-start-line="49" selection-start-column="6" selection-end-line="49" selection-end-column="6" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/single_electrode/positive_electrode.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="136">
+              <caret line="50" column="6" selection-start-line="50" selection-start-column="6" selection-end-line="50" selection-end-column="6" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/electrolyte/electrolyte.js">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/animations.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="110">
-              <caret line="59" column="29" lean-forward="true" selection-start-line="59" selection-start-column="29" selection-end-line="59" selection-end-column="29" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/single_electrode/negative_electrode.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="106">
-              <caret line="25" column="26" selection-start-line="25" selection-start-column="26" selection-end-line="25" selection-end-column="26" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/animation_particles.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1067">
-              <caret line="28" column="53" selection-start-line="28" selection-start-column="53" selection-end-line="28" selection-end-column="53" />
+            <state relative-caret-position="272">
+              <caret line="16" column="31" selection-end-line="22" selection-end-column="1" />
             </state>
           </provider>
         </entry>
@@ -179,8 +166,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/interactive_display/interactive_display.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="93">
-              <caret line="96" column="46" selection-start-line="96" selection-start-column="46" selection-end-line="96" selection-end-column="46" />
+            <state relative-caret-position="1513">
+              <caret line="89" column="6" lean-forward="true" selection-start-line="89" selection-start-column="6" selection-end-line="89" selection-end-column="6" />
               <folding>
                 <element signature="n#style#0;n#div#0;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
               </folding>
@@ -189,19 +176,31 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/interactive_display/interactive_display.js">
+        <entry file="file://$PROJECT_DIR$/animation_minimum.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="140">
-              <caret line="404" column="8" selection-start-line="404" selection-start-column="8" selection-end-line="404" selection-end-column="36" />
+            <state relative-caret-position="17">
+              <caret line="1" column="83" selection-start-line="1" selection-start-column="83" selection-end-line="1" selection-end-column="83" />
+              <folding>
+                <element signature="n#!!doc" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../Control Systems/firstOrderHs.js">
+        <entry file="file://$PROJECT_DIR$/single_electrode/negative_electrode.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="14" column="2" selection-start-line="14" selection-start-column="2" selection-end-line="14" selection-end-column="2" />
+            <state relative-caret-position="194">
+              <caret line="45" selection-start-line="45" selection-end-line="45" selection-end-column="17" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/animation_particles.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="245">
+              <caret line="94" column="19" lean-forward="true" selection-start-line="94" selection-start-column="19" selection-end-line="94" selection-end-column="19" />
             </state>
           </provider>
         </entry>
@@ -209,8 +208,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/single_electrode/negative_electrode.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="177">
-              <caret line="54" column="13" lean-forward="true" selection-start-line="54" selection-start-column="13" selection-end-line="54" selection-end-column="33" />
+            <state relative-caret-position="109">
+              <caret line="50" column="6" selection-start-line="50" selection-start-column="6" selection-end-line="50" selection-end-column="6" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/animations.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="153">
+              <caret line="9" column="50" selection-start-line="9" selection-start-column="50" selection-end-line="9" selection-end-column="50" />
             </state>
           </provider>
         </entry>
@@ -252,15 +260,18 @@
         <option value="$PROJECT_DIR$/interactive_display.js" />
         <option value="$PROJECT_DIR$/particles.js" />
         <option value="$PROJECT_DIR$/single_electrode.html" />
-        <option value="$PROJECT_DIR$/animation_particles.js" />
         <option value="$PROJECT_DIR$/single_electrode.js" />
-        <option value="$PROJECT_DIR$/single_electrode/negative_electrode.js" />
-        <option value="$PROJECT_DIR$/animations.js" />
         <option value="$PROJECT_DIR$/battery.html" />
-        <option value="$PROJECT_DIR$/interactive_display/interactive_display.html" />
-        <option value="$PROJECT_DIR$/single_electrode/negative_electrode.html" />
+        <option value="$PROJECT_DIR$/single_electrode/positive_electrode.js" />
+        <option value="$PROJECT_DIR$/single_electrode/negative_electrode.js" />
         <option value="$PROJECT_DIR$/electrolyte/electrolyte.js" />
+        <option value="$PROJECT_DIR$/animation_minimum.js" />
+        <option value="$PROJECT_DIR$/single_electrode/negative_electrode.html" />
         <option value="$PROJECT_DIR$/electrolyte/electrolyte.html" />
+        <option value="$PROJECT_DIR$/single_electrode/positive_electrode.html" />
+        <option value="$PROJECT_DIR$/interactive_display/interactive_display.html" />
+        <option value="$PROJECT_DIR$/animation_particles.js" />
+        <option value="$PROJECT_DIR$/animations.js" />
       </list>
     </option>
   </component>
@@ -404,7 +415,7 @@
       <workItem from="1534942569868" duration="1752000" />
       <workItem from="1534944354544" duration="25711000" />
       <workItem from="1535725415397" duration="17130000" />
-      <workItem from="1536240988039" duration="16963000" />
+      <workItem from="1536240988039" duration="20196000" />
     </task>
     <task id="LOCAL-00001" summary="Minor changes: voltage display now adjusts based on cell status, title changed, started writing functions to allow generation and destruction of ions and electrons">
       <created>1533313680813</created>
@@ -420,11 +431,18 @@
       <option name="project" value="LOCAL" />
       <updated>1536328342418</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Refactored core animation code to make it re-usable.&#10;Added empty files for future animation sections">
+      <created>1536336999681</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1536336999681</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="279079000" />
+    <option name="totallyTimeSpent" value="282312000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -437,6 +455,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1295" height="695" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.19793323" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -452,7 +471,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.12811388" />
       <window_info anchor="bottom" id="Terminal" order="9" weight="0.3291815" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50158983" side_tool="true" weight="0.28113878" />
-      <window_info anchor="bottom" id="Messages" order="11" weight="0.14642082" />
+      <window_info anchor="bottom" id="Messages" order="11" visible="true" weight="0.14590748" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -487,7 +506,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Minor changes: voltage display now adjusts based on cell status, title changed, started writing functions to allow generation and destruction of ions and electrons" />
     <MESSAGE value="Animations now work - had to split out into two functions and re-enable draw() looping." />
-    <option name="LAST_COMMIT_MESSAGE" value="Animations now work - had to split out into two functions and re-enable draw() looping." />
+    <MESSAGE value="Refactored core animation code to make it re-usable.&#10;Added empty files for future animation sections" />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactored core animation code to make it re-usable.&#10;Added empty files for future animation sections" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/../Physics-Visualizations/visuals_mechanics/mechanics_collisions/twoBody.html" />
@@ -539,13 +559,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/animation_particles.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1067">
-          <caret line="28" column="53" selection-start-line="28" selection-start-column="53" selection-end-line="28" selection-end-column="53" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/interactive_display/interactive_display.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="140">
@@ -559,44 +572,79 @@
     <entry file="file://$PROJECT_DIR$/main.js">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/animations.js">
+    <entry file="file://$PROJECT_DIR$/single_electrode/positive_electrode.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="110">
-          <caret line="59" column="29" lean-forward="true" selection-start-line="59" selection-start-column="29" selection-end-line="59" selection-end-column="29" />
+        <state relative-caret-position="68">
+          <caret line="4" column="54" selection-start-line="4" selection-start-column="54" selection-end-line="4" selection-end-column="54" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/interactive_display/interactive_display.html">
+    <entry file="file://$PROJECT_DIR$/single_electrode/negative_electrode.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="93">
-          <caret line="96" column="46" selection-start-line="96" selection-start-column="46" selection-end-line="96" selection-end-column="46" />
+        <state relative-caret-position="194">
+          <caret line="45" selection-start-line="45" selection-end-line="45" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/electrolyte/electrolyte.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="16" column="31" selection-end-line="22" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/animation_minimum.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="83" selection-start-line="1" selection-start-column="83" selection-end-line="1" selection-end-column="83" />
           <folding>
-            <element signature="n#style#0;n#div#0;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#!!doc" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/single_electrode/negative_electrode.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="177">
-          <caret line="54" column="13" lean-forward="true" selection-start-line="54" selection-start-column="13" selection-end-line="54" selection-end-column="33" />
+        <state relative-caret-position="109">
+          <caret line="50" column="6" selection-start-line="50" selection-start-column="6" selection-end-line="50" selection-end-column="6" />
         </state>
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/single_electrode/negative_electrode.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="106">
-          <caret line="25" column="26" selection-start-line="25" selection-start-column="26" selection-end-line="25" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/electrolyte/electrolyte.js">
-      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/electrolyte/electrolyte.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="54" column="29" selection-start-line="54" selection-start-column="29" selection-end-line="54" selection-end-column="29" />
+        <state relative-caret-position="95">
+          <caret line="49" column="6" selection-start-line="49" selection-start-column="6" selection-end-line="49" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/single_electrode/positive_electrode.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="50" column="6" selection-start-line="50" selection-start-column="6" selection-end-line="50" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/interactive_display/interactive_display.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1513">
+          <caret line="89" column="6" lean-forward="true" selection-start-line="89" selection-start-column="6" selection-end-line="89" selection-end-column="6" />
+          <folding>
+            <element signature="n#style#0;n#div#0;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/animation_particles.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="245">
+          <caret line="94" column="19" lean-forward="true" selection-start-line="94" selection-start-column="19" selection-end-line="94" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/animations.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" column="50" selection-start-line="9" selection-start-column="50" selection-end-line="9" selection-end-column="50" />
         </state>
       </provider>
     </entry>
