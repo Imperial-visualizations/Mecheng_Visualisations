@@ -2,9 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1f98102a-a7b2-4c5d-82f9-050e76c4d609" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/electrolyte/electrolyte.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/electrolyte/electrolyte.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/single_electrode/negative_electrode.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/single_electrode.html" beforeDir="false" afterPath="$PROJECT_DIR$/single_electrode.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/single_electrode.js" beforeDir="false" afterPath="$PROJECT_DIR$/single_electrode.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/battery.html" beforeDir="false" afterPath="$PROJECT_DIR$/interactive_display/interactive_display.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/interactive_display.js" beforeDir="false" afterPath="$PROJECT_DIR$/interactive_display/interactive_display.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/interactive_particles.js" beforeDir="false" afterPath="$PROJECT_DIR$/interactive_display/interactive_particles.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/single_electrode.html" beforeDir="false" afterPath="$PROJECT_DIR$/single_electrode/negative_electrode.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/single_electrode.js" beforeDir="false" afterPath="$PROJECT_DIR$/animations.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -93,23 +100,24 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="JavaScript Console" value="34" />
-          <entry key="html" value="846" />
-          <entry key="js" value="16325" />
-          <entry key="txt" value="188" />
+          <entry key="html" value="931" />
+          <entry key="js" value="16781" />
+          <entry key="txt" value="280" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="HTML" value="861" />
-          <entry key="JavaScript" value="16344" />
-          <entry key="PLAIN_TEXT" value="188" />
+          <entry key="HTML" value="946" />
+          <entry key="JavaScript" value="16800" />
+          <entry key="PLAIN_TEXT" value="280" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="css" value="1" />
-          <entry key="html" value="1" />
-          <entry key="js" value="6" />
+          <entry key="html" value="3" />
+          <entry key="jpg" value="1" />
+          <entry key="js" value="9" />
           <entry key="json" value="3" />
         </counts>
       </usages-collector>
@@ -117,9 +125,10 @@
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="CSS" value="1" />
-          <entry key="HTML" value="1" />
+          <entry key="HTML" value="3" />
+          <entry key="Image" value="1" />
           <entry key="JSON" value="3" />
-          <entry key="JavaScript" value="6" />
+          <entry key="JavaScript" value="9" />
         </counts>
       </usages-collector>
     </session>
@@ -127,19 +136,33 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/single_electrode.html">
+        <entry file="file://$PROJECT_DIR$/electrolyte/electrolyte.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="561">
-              <caret line="46" selection-start-line="46" selection-end-line="46" />
+            <state relative-caret-position="255">
+              <caret line="54" column="29" selection-start-line="54" selection-start-column="29" selection-end-line="54" selection-end-column="29" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/single_electrode.js">
+        <entry file="file://$PROJECT_DIR$/electrolyte/electrolyte.js">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/animations.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2312">
-              <caret line="2" column="20" selection-start-line="2" selection-start-column="20" selection-end-line="2" selection-end-column="20" />
+            <state relative-caret-position="110">
+              <caret line="59" column="29" lean-forward="true" selection-start-line="59" selection-start-column="29" selection-end-line="59" selection-end-column="29" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/single_electrode/negative_electrode.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="106">
+              <caret line="25" column="26" selection-start-line="25" selection-start-column="26" selection-end-line="25" selection-end-column="26" />
             </state>
           </provider>
         </entry>
@@ -147,17 +170,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/animation_particles.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="476">
+            <state relative-caret-position="-1067">
               <caret line="28" column="53" selection-start-line="28" selection-start-column="53" selection-end-line="28" selection-end-column="53" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/battery.html">
+        <entry file="file://$PROJECT_DIR$/interactive_display/interactive_display.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1173">
-              <caret line="69" column="16" selection-start-line="69" selection-start-column="16" selection-end-line="69" selection-end-column="81" />
+            <state relative-caret-position="93">
+              <caret line="96" column="46" selection-start-line="96" selection-start-column="46" selection-end-line="96" selection-end-column="46" />
               <folding>
                 <element signature="n#style#0;n#div#0;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
               </folding>
@@ -166,10 +189,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/interactive_display.js">
+        <entry file="file://$PROJECT_DIR$/interactive_display/interactive_display.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1860">
-              <caret line="228" column="4" selection-start-line="228" selection-start-column="4" selection-end-line="228" selection-end-column="43" />
+            <state relative-caret-position="140">
+              <caret line="404" column="8" selection-start-line="404" selection-start-column="8" selection-end-line="404" selection-end-column="36" />
             </state>
           </provider>
         </entry>
@@ -179,6 +202,15 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="238">
               <caret line="14" column="2" selection-start-line="14" selection-start-column="2" selection-end-line="14" selection-end-column="2" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/single_electrode/negative_electrode.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="177">
+              <caret line="54" column="13" lean-forward="true" selection-start-line="54" selection-start-column="13" selection-end-line="54" selection-end-column="33" />
             </state>
           </provider>
         </entry>
@@ -217,13 +249,18 @@
         <option value="$PROJECT_DIR$/DataTest.js" />
         <option value="$PROJECT_DIR$/main.js" />
         <option value="$PROJECT_DIR$/DataGeneration.js" />
-        <option value="$PROJECT_DIR$/battery.html" />
-        <option value="$PROJECT_DIR$/animations.js" />
         <option value="$PROJECT_DIR$/interactive_display.js" />
         <option value="$PROJECT_DIR$/particles.js" />
         <option value="$PROJECT_DIR$/single_electrode.html" />
-        <option value="$PROJECT_DIR$/single_electrode.js" />
         <option value="$PROJECT_DIR$/animation_particles.js" />
+        <option value="$PROJECT_DIR$/single_electrode.js" />
+        <option value="$PROJECT_DIR$/single_electrode/negative_electrode.js" />
+        <option value="$PROJECT_DIR$/animations.js" />
+        <option value="$PROJECT_DIR$/battery.html" />
+        <option value="$PROJECT_DIR$/interactive_display/interactive_display.html" />
+        <option value="$PROJECT_DIR$/single_electrode/negative_electrode.html" />
+        <option value="$PROJECT_DIR$/electrolyte/electrolyte.js" />
+        <option value="$PROJECT_DIR$/electrolyte/electrolyte.html" />
       </list>
     </option>
   </component>
@@ -259,6 +296,21 @@
               <item name="Battery Visualisation" type="b2602c69:ProjectViewProjectNode" />
               <item name="Battery Visualisation" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="Battery Visualisation" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Battery Visualisation" type="462c0819:PsiDirectoryNode" />
+              <item name="electrolyte" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Battery Visualisation" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Battery Visualisation" type="462c0819:PsiDirectoryNode" />
+              <item name="interactive_display" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Battery Visualisation" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Battery Visualisation" type="462c0819:PsiDirectoryNode" />
+              <item name="single_electrode" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -269,11 +321,17 @@
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="javascript.nodejs.core.library.configured.version" value="8.11.3" />
-    <property name="last_opened_file_path" value="C:/Program Files/Git/bin/git.exe" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/interactive_display" />
     <property name="nodejs_interpreter_path" value="node" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="settings.editor.selected.configurable" value="vcs.Git" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Owen Heaney\Documents\GitHub\Mecheng_Visualisations\Battery Visualisation\interactive_display" />
+      <recent name="C:\Users\Owen Heaney\Documents\GitHub\Mecheng_Visualisations\Battery Visualisation\single_electrode" />
+    </key>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -297,10 +355,10 @@
     <configuration name="ide-scripting.js" type="NodeJSConfigurationType" factoryName="Node.js" temporary="true" nameIsGenerated="true" path-to-js-file="$APPLICATION_CONFIG_DIR$/consoles/ide/ide-scripting.js" working-dir="$PROJECT_DIR$">
       <method v="2" />
     </configuration>
-    <configuration name="interactive_display.js" type="NodeJSConfigurationType" factoryName="Node.js" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/interactive_display.js" working-dir="$PROJECT_DIR$">
+    <configuration name="interactive_display.js" type="NodeJSConfigurationType" factoryName="Node.js" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/interactive_display/interactive_display.js" working-dir="$PROJECT_DIR$">
       <method v="2" />
     </configuration>
-    <configuration name="interactive_particles.js" type="NodeJSConfigurationType" factoryName="Node.js" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/interactive_particles.js" working-dir="$PROJECT_DIR$">
+    <configuration name="interactive_particles.js" type="NodeJSConfigurationType" factoryName="Node.js" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/interactive_display/interactive_particles.js" working-dir="$PROJECT_DIR$">
       <method v="2" />
     </configuration>
     <list>
@@ -346,7 +404,7 @@
       <workItem from="1534942569868" duration="1752000" />
       <workItem from="1534944354544" duration="25711000" />
       <workItem from="1535725415397" duration="17130000" />
-      <workItem from="1536240988039" duration="10616000" />
+      <workItem from="1536240988039" duration="16963000" />
     </task>
     <task id="LOCAL-00001" summary="Minor changes: voltage display now adjusts based on cell status, title changed, started writing functions to allow generation and destruction of ions and electrons">
       <created>1533313680813</created>
@@ -355,11 +413,18 @@
       <option name="project" value="LOCAL" />
       <updated>1533313680813</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Animations now work - had to split out into two functions and re-enable draw() looping.">
+      <created>1536328342417</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1536328342418</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="272732000" />
+    <option name="totallyTimeSpent" value="279079000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -372,7 +437,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1295" height="695" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.19793323" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -383,7 +447,7 @@
       <window_info anchor="bottom" id="Debug" order="3" weight="0.24295011" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.49841017" weight="0.17136659" />
+      <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.49841017" weight="0.17081851" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.12811388" />
       <window_info anchor="bottom" id="Terminal" order="9" weight="0.3291815" />
@@ -422,7 +486,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Minor changes: voltage display now adjusts based on cell status, title changed, started writing functions to allow generation and destruction of ions and electrons" />
-    <option name="LAST_COMMIT_MESSAGE" value="Minor changes: voltage display now adjusts based on cell status, title changed, started writing functions to allow generation and destruction of ions and electrons" />
+    <MESSAGE value="Animations now work - had to split out into two functions and re-enable draw() looping." />
+    <option name="LAST_COMMIT_MESSAGE" value="Animations now work - had to split out into two functions and re-enable draw() looping." />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/../Physics-Visualizations/visuals_mechanics/mechanics_collisions/twoBody.html" />
@@ -460,10 +525,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main.js">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/interactive_particles.js">
+    <entry file="file://$PROJECT_DIR$/interactive_display/interactive_particles.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="306">
           <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
@@ -477,41 +539,64 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/battery.html">
+    <entry file="file://$PROJECT_DIR$/animation_particles.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1173">
-          <caret line="69" column="16" selection-start-line="69" selection-start-column="16" selection-end-line="69" selection-end-column="81" />
+        <state relative-caret-position="-1067">
+          <caret line="28" column="53" selection-start-line="28" selection-start-column="53" selection-end-line="28" selection-end-column="53" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/interactive_display/interactive_display.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="140">
+          <caret line="404" column="8" selection-start-line="404" selection-start-column="8" selection-end-line="404" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Visualisation Ideas from Greg.jpg">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.js">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/animations.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="110">
+          <caret line="59" column="29" lean-forward="true" selection-start-line="59" selection-start-column="29" selection-end-line="59" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/interactive_display/interactive_display.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="93">
+          <caret line="96" column="46" selection-start-line="96" selection-start-column="46" selection-end-line="96" selection-end-column="46" />
           <folding>
             <element signature="n#style#0;n#div#0;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/interactive_display.js">
+    <entry file="file://$PROJECT_DIR$/single_electrode/negative_electrode.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1860">
-          <caret line="228" column="4" selection-start-line="228" selection-start-column="4" selection-end-line="228" selection-end-column="43" />
+        <state relative-caret-position="177">
+          <caret line="54" column="13" lean-forward="true" selection-start-line="54" selection-start-column="13" selection-end-line="54" selection-end-column="33" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/single_electrode.js">
+    <entry file="file://$PROJECT_DIR$/single_electrode/negative_electrode.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2312">
-          <caret line="2" column="20" selection-start-line="2" selection-start-column="20" selection-end-line="2" selection-end-column="20" />
+        <state relative-caret-position="106">
+          <caret line="25" column="26" selection-start-line="25" selection-start-column="26" selection-end-line="25" selection-end-column="26" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/single_electrode.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="561">
-          <caret line="46" selection-start-line="46" selection-end-line="46" />
-        </state>
-      </provider>
+    <entry file="file://$PROJECT_DIR$/electrolyte/electrolyte.js">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/animation_particles.js">
+    <entry file="file://$PROJECT_DIR$/electrolyte/electrolyte.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="476">
-          <caret line="28" column="53" selection-start-line="28" selection-start-column="53" selection-end-line="28" selection-end-column="53" />
+        <state relative-caret-position="255">
+          <caret line="54" column="29" selection-start-line="54" selection-start-column="29" selection-end-line="54" selection-end-column="29" />
         </state>
       </provider>
     </entry>
