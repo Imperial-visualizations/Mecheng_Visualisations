@@ -1,0 +1,86 @@
+<!doctype html>
+<html>
+<head>
+    <!--<script>-->
+    <!--if (navigator.appName == 'Microsoft Internet Explorer' ||  !!(navigator.userAgent.match(/Trident/) || navigator.userAgent.match(/rv:11/)) || (typeof $.browser !== "undefined" && $.browser.msie == 1))-->
+    <!--{-->
+    <!--window.location.href = "unsupported.html";-->
+    <!--}-->
+    <!--</script>-->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Lithium-Ion Battery Operating Principles</title>
+    <link rel="stylesheet" href="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/skeleton.css">
+    <link rel="stylesheet" href="https://rawgit.com/Imperial-visualizations/Physics-Visualizations/master/css/style.css">
+    <link rel = "icon" href = "../images/favicon.ico" type="image/x-icon">
+    <style type="text/css">
+        #canvasWrapper{
+            width: 100%;
+            margin: 0 auto;
+        }
+        input[type=range]{
+        }
+        .Title{
+            padding-left: 8px;
+            font-weight:400;
+            border-left: 8px solid #006EAF; /* Same colour as bottom bar */
+        }
+    </style>
+
+</head>
+<body>
+
+<div class="container">
+
+    <div class="row">
+        <div class="seven columns">
+            <h1>Battery Charge/Discharge</h1>
+            <div id="canvasWrapper"><span id="loadingMessage">Error loading canvas</span></div>
+        </div>
+        <div class="four columns">
+            <h4 class="Title">Reaction at Negative Electrode</h4>
+
+            <span>
+                <input id="nextButton" class="buttons" type="button" value="Next"/>
+                <input id="resetButton" class="buttons" type="button" value="Restart"/>
+            </span>
+
+            <div id="explanatoryText"></div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/p5.min.js"></script>
+<script src="../single_electrode/positive_electrode.js"></script>
+<script src="../animation_particles.js"></script>
+<script src="../animations.js"></script>
+<script>
+    var version = detectIE();
+    if (version === false || version >= 12) {
+    } else {
+        alert("It's interesting that you are still using IE "+version+"...\n we suggest you try modern browsers like Chrome.");
+    }
+    function detectIE() {
+        var ua = window.navigator.userAgent;
+        var msie = ua.indexOf("MSIE ");
+        if (msie > 0) {
+            // IE 10 or older => return version number
+            return parseInt(ua.substring(msie + 5, ua.indexOf(".", msie)), 10);
+        }
+        var trident = ua.indexOf("Trident/");
+        if (trident > 0) {
+            // IE 11 => return version number
+            var rv = ua.indexOf("rv:");
+            return parseInt(ua.substring(rv + 3, ua.indexOf(".", rv)), 10);
+        }
+        var edge = ua.indexOf("Edge/");
+        if (edge > 0) {
+            // Edge (IE 12+) => return version number
+            return parseInt(ua.substring(edge + 5, ua.indexOf(".", edge)), 10);
+        }
+        // other browser
+        return false;
+    }
+</script>
+</body>
+</html>

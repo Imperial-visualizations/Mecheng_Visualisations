@@ -29,6 +29,8 @@ class AnimationParticleSystem {
             this.particles.push(new AnimationElectron(x,y));
         } else if (this.particleType === "Lithium") {
             this.particles.push(new AnimationLithium(x,y));
+        } else if (this.particleType === "Anion") {
+            this.particles.push(new AnimationAnion(x,y));
         }
     }
 
@@ -55,19 +57,6 @@ class AnimationParticle {
         this.colour = ('#000000');
     }
 
-    run() {
-        let isDead = 0;
-        if (!isDead) {
-            this.render();
-        }
-        return isDead;
-    }
-
-    update() {
-        // Empty function; overwritten in subclasses
-        return undefined
-    }
-
     render() {
         fill(this.colour);
         strokeWeight(1);
@@ -82,14 +71,6 @@ class AnimationElectron extends AnimationParticle {
         this.colour = '#ffff00';
         this.size = 7;
     }
-
-    update(current) {
-        let isDead = false;
-
-        return isDead;
-    }
-
-
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -100,16 +81,19 @@ class AnimationLithium extends AnimationParticle {
         this.size = 12;
     }
 
-    update(current) {
-        let isDead = false;
-
-        return isDead;
-    }
-
     split(ElectronSystem) {
         if (!this.isSplit) {
             this.colour = '#ff0100';
             ElectronSystem.addParticle(this.position.x,this.position.y);
         }
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+class AnimationAnion extends AnimationParticle {
+    constructor(x,y) {
+        super(x,y);
+        this.colour = '#0000ff';
+        this.size = 7;
     }
 }

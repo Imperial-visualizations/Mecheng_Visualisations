@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+<head>
+    <title>Filters</title>
+    <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=2">
+    <meta charset="utf-8">
+    <meta name="viewport" width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0>
+    <style type="text/css">
+        input[type=range] {
+        .graphs{
+            height: 300px;
+            border: 1px solid #EBEEEE;
+            box-sizing: border-box;
+            box-shadow: 1px 1px 0px 2px #EBEEEE;
+        }
+
+        }
+
+    </style>
+
+</head>
+<body>
+<div class="five columns">
+    <h1>Combining Filters<span> <button onclick="mute()">Mute/Unmute</button></span></h1>
+    <a>Multiple stages can be combined or 'cascaded' to produce a Band-Pass. This can be used to produce a range of frequencies with a lower and upper bound.</a>
+    <div id="sketch">
+    </div>
+    <!--buttons-->
+    <div class="row">
+        <div class="eight columns">
+            <button onclick="waveoff();onclick=setup1(2000)">Sine wave</button>
+            <button onclick="waveoff();onclick=setup2()">Triangle wave</button>
+            <button onclick="waveoff();onclick=setup3()">Square wave</button>
+
+              <!-- cutoff slider -->
+               <div class="slidecontainer">
+                   <label class="sliderTitle" style="padding-bottom: 10px">High Pass Cut-off Frequency:
+                      <span id="sliderValue">100</span><span>Hz</span>
+            </label>
+                   <form action="#" method="post">
+                     <input type="range" min="100" max="10000" value="100" step="100" class="slider" id="myRange" oninput="sliderChange()">
+                       <span class="sliderMin">100</span><span class="sliderMax">10,000</span>
+                   </form>
+                   <label class="sliderTitle" style="padding-bottom: 10px">Low Pass Cut-off Frequency:
+                      <span id="sliderValue2">10,000</span><span>Hz</span>
+            </label>
+                   <form action="#" method="post">
+                     <input type="range" min="100" max="10000" value="10000" step="100" class="slider" id="myRange2" oninput="sliderChange2()">
+                       <span class="sliderMin">100</span><span class="sliderMax">10,000</span>
+                   </form>
+            <button onclick="BodePlot()" id="Bode Plot">Plot</button><br><br>
+          </div>
+        </div>
+          </div>
+        </div>
+          <div id="chartBode" class="five columns"></div> <div id="chartPhase" class="five columns"></div>
+          </div>
+<script type="text/javascript" src="p5.min.js"></script>
+<script type="text/javascript" src="p5.dom.min.js"></script>
+<script type="text/javascript" src="p5.sound.min.js"></script>
+<script type="text/javascript" src="filters.js"></script>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+
+
+</body>
+
+</html>
