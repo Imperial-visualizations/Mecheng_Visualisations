@@ -3,12 +3,6 @@ var audioCtx = new AudioContext();
 var audio = document.getElementById("audio");
 var gainNode = new GainNode(audioCtx);
 gainNode.connect(audioCtx.destination);
-var filter;
-var filterhigh;
-var slider;
-var slider2;
-var cutoff;
-var cutoff2;
 
 var i;
 var a = 200;
@@ -21,12 +15,7 @@ const c1 = 10000;
 function setup(){
   var cnv = createCanvas(900,300);
   cnv.parent('sketch');
-  filter = new p5.LowPass();
-  filterhigh = new p5.HighPass();
   fft = new p5.FFT();
-  var high = document.getElementById("myRange").value;
-  var low = document.getElementById("myRange2").value;
-
 }
 function mute() {
     if (window.mute) {
@@ -56,13 +45,12 @@ function setup2() {
 function setup3() {
   wave.setType('square');
   wave.amp(0.5);
-  wave.freq(5000);
+  wave.freq();
   wave.start();
 }
-  function draw() {
+
+function draw() {
         background(255);
-        var high = document.getElementById("myRange").value;
-        var low = document.getElementById("myRange2").value;
         var spectrum = fft.analyze();
         noStroke();
         fill(255, 0, 0); // spectrum is red
@@ -86,32 +74,35 @@ function setup3() {
 
 }
 
-    function sliderChange() {
+// Update the current slider value when drag the slider handle)
+    function sliderChange(cutoff) {
 
         let slider = document.getElementById("myRange").value;
         document.getElementById("sliderValue").innerHTML = slider;
+        filter = new p5.HighPass(slider);
         }
-    // Update the current slider value when slider dragged)
+    // Update the current slider value when drag the slider handle)
 
-    function sliderChange2() {
+    function sliderChange2(cutoff2) {
 
-        let slider2 = document.getElementById("myRange2").value;
-        document.getElementById("sliderValue2").innerHTML = slider2;
+        let slider = document.getElementById("myRange2").value;
+        document.getElementById("sliderValue2").innerHTML = slider;
+        filter = new p5.LowPass(slider);
         }
 
         function BodePlot() {
           var select = document.getElementById('selectpassive');
-          var cutoff = document.getElementById("myRange").value;
-          var cutoffr2 = document.getElementById("myRange2").value;
-
-            var response = {
+          var cutoff = document.getElementById("sliderValue").innerHTML;
+          var cutoff2 = document.getElementById("sliderValue2").innerHTML;
+            /*******setup the object to pass to plotly here ******/
+            var response = {//1st cshart line the responce line
                 omega: [],
                 y: [],
                 mode: 'lines+markers',
                 type: 'scatter',
                 name: 'Magnitude/dB'
             };
-            var phase = {
+            var phase = {//1st chart line the responce line
                 omega: [],
                 y: [],
                 mode: 'lines+markers',
@@ -145,38 +136,39 @@ function setup3() {
                     zeroline: true
                 }
             };
-
+             //put xy lines data into data object to be pass to plotlZS
+            /*******begin to calculate data ******/
             var mid = (cutoff + cutoff2)/2;
             var r,c = cutoff^(-1/2)
             const totalTime = cutoff2*10;
-            var t = 0;
+            var t = 0;  // time start from 0 s
             var i = 0;
             while (t < mid) {
                 var omega = t;
-                var y = t;
+                var y = t;  // fill in the step line x,y data
                 var gain = t;
                 var shift = t;
-                response.omega[i] = t;
+                response.omega[i] = t; //fill in the responce line x,y data
                 phase.omega[i] = t
-                response.y[i] = 20*log(Math.sqrt(((omega*r*c)*(omega*r*c))/(1 + ((omega*r*c)*(omega*r*c)))));
+                gain[i] = Math.sqrt(((omega*r*c)*(omega*r*c))/(1 + ((omega*r*c)*(omega*r*c))));
+                response.y[i] = 20*log(gain);
                 phase.y[i] = 90 -atan(omega*r*c);
-                console.log(response.omega[i], response.y[i]);
-                t = t + 1;
-                i = i + 1;
+                t = t + 100;
+                i = i + 100;
 }
             while (mid < totalTime){
               var omega = t;
-              var y = t;
+              var y = t;  // fill in the step line x,y data
               var gain = t;
               var shift = t;
-              response.omega[i] = t;
+              response.omega[i] = t; //fill in the responce line x,y data
               phase.omega[i] = t
-              response.y[i] = 20*log(Math.sqrt(1/(1 + ((omega*r*c)*(omega*r*c)))));
+              gain[i] = Math.sqrt(1/(1 + ((omega*r*c)*(omega*r*c))));
+              response.y[i] = 20*log(gain);
               phase.y[i] = -atan(omega*r*c);
-              console.log(response.omega[i], response.y[i]);
-              t = t + 1;
-              mid = mid + 1;
-              i = i + 1;
+              t = t + 100;
+              mid = mid + 100;
+              i = i + 100;
             }
             var data = [response];
             Plotly.react('chartBode', data, layout);

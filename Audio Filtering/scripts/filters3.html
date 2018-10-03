@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+<head>
+    <title>Filters</title>
+    <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=2">
+    <meta charset="utf-8">
+    <meta name="viewport" width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0>
+    <style type="text/css">
+        input[type=range] {
+
+        .hidden {
+          display: none;
+      }
+        .shown {
+          display: true;
+        }
+      .showHideButton{
+          display: block;
+          color: #000;
+          background: #EBEEEE;
+          text-decoration: underline;
+          margin-top: 0;
+          text-align: right;
+          width: 100%;
+          border-top: 2px solid #e1e4e4;
+          margin-bottom: 8px;
+          font-weight: 500;
+          font-size: 0.8em;
+      }
+
+        }
+
+    </style>
+
+
+</head>
+<body>
+<div class="five columns">
+    <h1>Active Filter<span> <button onclick="mute()">Mute/Unmute</button></span></h1>
+
+
+      <a>Active filters contain passive components as well an active component: an op-amp.</a>
+      <form action="form-process.php" method="post" target="_self" id="formIdentifier">
+
+        <select id="selectactive" name="chkOther" onclick="changeimage();showform()">
+          <option value="none">-Choose Filter-</option>
+          <option value="Low Pass">Low Pass</option>
+          <option value="High Pass">High Pass</option>
+          <option value="Voltage Integrator">Voltage Integrator</option>
+          <option value="Voltage Differentiator">Voltage Differentiator</option>
+        </select><br>
+        <img id='diagram'><br>
+            <a id="text1" >Resistor value: <input type="value" id="resistorvalue" value="0"></input>Ω</a><br>
+            <a id="text2" >Resistor 2 value: <input type="value" id="resistor2value" value="0"></input>Ω</a><br>
+            <a id="text3" >Capacitor value: <input type="value" id="capacitorvalue" value="0"></input>F</a><br>
+            <a id="text4" >Capacitor 2 value: <input type="value" id="capacitor2value" value="0"></input>F</a>
+      </form>
+      <button onclick="BodePlot()" id="Bode Plot">Plot</button><br><br>
+    </div>
+    <div>
+    <div id="chartBode" class="five columns"></div> <div id="chartPhase" class="five columns"></div>
+    </div>
+
+
+
+<script type="text/javascript" src="p5.min.js"></script>
+<script type="text/javascript" src="p5.dom.min.js"></script>
+<script type="text/javascript" src="p5.sound.min.js"></script>
+<script type="text/javascript" src="filters3.js"></script>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+<head>
+    <title>Filters</title>
+    <link rel="stylesheet" href="https://manglekuo.com/i-v/styles.css?v=2">
+    <meta charset="utf-8">
+    <meta name="viewport" width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0>
+    <style type="text/css">
+        input[type=range] {
+        .graphs{
+            height: 300px;
+            border: 1px solid #EBEEEE;
+            box-sizing: border-box;
+            box-shadow: 1px 1px 0px 2px #EBEEEE;
+        }
+
+        }
+
+    </style>
+
+</head>
+<body>
+<div class="six columns">
+    <h1>Real life example<span> <button onclick="mute()">Mute/Unmute</button></span></h1>
+    <a><font size="-0.5">
+Rotational speed can be measured using a small generator producing a voltage which is proportional
+the rotational speed (as seen in ME2-HMTX Lab4). Due to the characteristics of the generator, there
+will always be a “ripple” on the voltage signal caused by construction of the coils (stator and rotor
+rubbing against each other cause a high frequency noise which disrupts the main voltage). This ripple
+can be removed using a low pass filter. The speed sensor used in the lab generates 15% ripple voltage
+(peak to peak) at 4 times the frequency of the speed measured. For a signal at 1,000rpm, the output
+of the sensor is 4V plus ripple (i.e. 4V DC plus ripple voltage).<br>
+a. Select a resistor which, in combination with a 36F capacitor, will reduce the ripple by 20dB.
+What will the peak-to-peak amplitude of the ripple voltage be after filtering?<br>
+b. Select a resistor which, in combination with a 36F capacitor, will reduce the ripple by 40dB.<br>
+c. Select a resistor which, in combination with a 36F capacitor, will reduce the ripple by 60dB.<br>
+d. What impact could this filter have on the control of the motor speed?<br></font>
+</a>
+    <img id="diagram" src="passl.png"><br>
+          <a id="text1" >Resistor value: <input type="value" id="resistorvalue" value="0"></input>>mΩ</a><br>
+          <a id="text2" >Capacitor value: <input type="value" id="capacitorvalue" value="0.0036"></input>mF</a><br>
+          <span> <button onclick="play()">Play</button> </span>
+    </div>
+    <div id="sketch">
+    </div>
+
+<script type="text/javascript" src="p5.min.js"></script>
+<script type="text/javascript" src="p5.dom.min.js"></script>
+<script type="text/javascript" src="p5.sound.min.js"></script>
+<script type="text/javascript" src="filters5.js"></script>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+
+
+</body>
+
+</html>
