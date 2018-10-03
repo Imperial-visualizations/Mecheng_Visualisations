@@ -13,7 +13,6 @@ let isRunning = false;
 
 let animationStep = 0;
 let explanatoryText = document.getElementById("explanatoryText");
-let finishingXPosition;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  Top-level p5.js functions

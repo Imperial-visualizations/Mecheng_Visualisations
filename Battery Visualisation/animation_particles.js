@@ -12,7 +12,8 @@ class AnimationParticleSystem {
     constructor(type){
         this.particles = [];
         this.particleType = type;
-        if (this.particleType !== ("Electron") && this.particleType !== ("Lithium")) {
+        if (this.particleType !== ("Electron") && this.particleType !== ("Lithium")
+            && this.particleType !== ("Anion")) {
             throw "Invalid input - class ParticleSystem requires can only be Lithium or Electron";
         }
     }
